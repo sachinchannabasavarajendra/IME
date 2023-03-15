@@ -4,7 +4,7 @@ package model;
  * This class represents a single pixel of an image which contains the red, green and blue
  * components respectively.
  */
-public class Pixel {
+public class Pixel implements IPixel {
 
   private final int redComponent;
   private final int greenComponent;

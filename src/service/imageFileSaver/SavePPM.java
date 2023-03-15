@@ -1,4 +1,4 @@
-package controller.imageFileSaver;
+package service.imageFileSaver;
 
 import java.io.File;
 import java.io.FileWriter;

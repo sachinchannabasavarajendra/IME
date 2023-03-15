@@ -1,7 +1,7 @@
 package controller.commands;
 
-import controller.imageFileLoader.LoadImage;
-import controller.imageFileLoader.LoadPPM;
+import service.imageFileLoader.LoadImage;
+import service.imageFileLoader.LoadPPM;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Map;
