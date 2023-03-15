@@ -48,7 +48,6 @@ public class SavePPM implements SaveImage {
           writer.write(imageData[i][j].getBlueComponent() + "\n");
         }
       }
-      writer.flush();
       writer.close();
     } catch (Exception e) {
       throw new IOException(String.format("Error saving ppm file: %s", imagePath));

@@ -163,20 +163,19 @@ public class IMEModelImpl implements IMEModel {
    * This is a method used to combine the three greyscale images into a single image that gets its
    * red, green and blue components from the three images respectively.
    *
-   * @param redScaleImage   the image from which the red component needs to be taken
    * @param greenScaleImage the image from which the green component needs to be taken
    * @param blueScaleImage  the image from which the blue component needs to be taken
    * @return combined greyscale image with all the three components
    */
   @Override
-  public IMEModel combineRGBImage(IMEModel redScaleImage, IMEModel greenScaleImage,
+  public IMEModel combineRGBImage(IMEModel greenScaleImage,
       IMEModel blueScaleImage) {
 
     Pixel[][] newImageData = new Pixel[height][width];
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
         newImageData[i][j] = new Pixel(
-            redScaleImage.getImageData()[i][j].getRedComponent(),
+            this.getImageData()[i][j].getRedComponent(),
             greenScaleImage.getImageData()[i][j].getGreenComponent(),
             blueScaleImage.getImageData()[i][j].getBlueComponent());
       }

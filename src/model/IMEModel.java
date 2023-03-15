@@ -73,13 +73,11 @@ public interface IMEModel {
    * This is a method used to combine the three greyscale images into a single image that gets its
    * red, green and blue components from the three images respectively.
    *
-   * @param redScaleImage   the image from which the red component needs to be taken
    * @param greenScaleImage the image from which the green component needs to be taken
    * @param blueScaleImage  the image from which the blue component needs to be taken
    * @return combined greyscale image with all the three components
    */
   IMEModel combineRGBImage(
-      IMEModel redScaleImage,
       IMEModel greenScaleImage,
       IMEModel blueScaleImage
   );

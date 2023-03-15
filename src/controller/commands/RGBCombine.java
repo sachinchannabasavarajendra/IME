@@ -41,7 +41,7 @@ public class RGBCombine extends AbstractIMECommand {
     IMEModel redImageComponent = getModelObject(objectMap, redImage);
     IMEModel greenImageComponent = getModelObject(objectMap, greenImage);
     IMEModel blueImageComponent = getModelObject(objectMap, blueImage);
-    IMEModel combinedImage = redImageComponent.combineRGBImage(redImageComponent,
+    IMEModel combinedImage = redImageComponent.combineRGBImage(
         greenImageComponent, blueImageComponent);
     objectMap.put(destinationImageName, combinedImage);
   }
