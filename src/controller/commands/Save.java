@@ -2,6 +2,8 @@ package controller.commands;
 
 import controller.imageFileSaver.SaveImage;
 import controller.imageFileSaver.SavePPM;
+
+import java.awt.geom.IllegalPathStateException;
 import java.io.IOException;
 import java.util.Map;
 import model.IMEModel;
@@ -17,7 +19,6 @@ public class Save extends AbstractIMECommand {
 
   @Override
   public void execute(Map<String, IMEModel> objectMap) {
-    IMEModel savedImageObject = null;
     String fileType = imagePath.substring(imagePath.lastIndexOf(".") + 1);
     IMEModel imageObjectToBeSaved = null;
     switch (fileType) {
@@ -25,19 +26,15 @@ public class Save extends AbstractIMECommand {
         SaveImage savePPM = new SavePPM();
         imageObjectToBeSaved = getModelObject(objectMap, imageName);
         try {
-          savePPM.save(imagePath, imageName, imageObjectToBeSaved);
+          savePPM.save(imagePath, imageObjectToBeSaved);
         } catch (IOException e) {
-          throw new IllegalArgumentException("Error saving ppm file");
+          throw new IllegalPathStateException(e.getMessage());
         }
         break;
 
       default:
         System.out.println("Given file type is not valid");
         break;
-    }
-
-    if (imageObjectToBeSaved != null) {
-      objectMap.put(imageName, imageObjectToBeSaved);
     }
   }
 }

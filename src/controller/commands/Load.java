@@ -3,15 +3,18 @@ package controller.commands;
 import controller.imageFileLoader.LoadImage;
 import controller.imageFileLoader.LoadPPM;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Map;
 import model.IMEModel;
 
 public class Load extends AbstractIMECommand {
 
+  private InputStream in;
   private final String imagePath;
   private final String imageName;
 
-  public Load(String imagePath, String imageName) {
+  public Load(InputStream in, String imagePath, String imageName) {
+    this.in = in;
     this.imagePath = imagePath;
     this.imageName = imageName;
   }
@@ -22,7 +25,7 @@ public class Load extends AbstractIMECommand {
     String fileType = imagePath.substring(imagePath.lastIndexOf(".") + 1);
     switch (fileType) {
       case "ppm":
-        LoadImage loadPPM = new LoadPPM();
+        LoadImage loadPPM = new LoadPPM(this.in);
         try {
           loadedImageObject = loadPPM.load(imagePath, imageName);
         } catch (FileNotFoundException e) {

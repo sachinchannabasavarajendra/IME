@@ -32,7 +32,8 @@ public class IMEModelImpl implements IMEModel {
     return this.width;
   }
 
-  private IMEModel greyScaleImage(Function<Pixel, Integer> func) {
+  @Override
+  public IMEModel greyScaleImage(Function<Pixel, Integer> func) {
     Pixel[][] newImageData = new Pixel[height][width];
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
@@ -41,36 +42,6 @@ public class IMEModelImpl implements IMEModel {
       }
     }
     return new IMEModelImpl(newImageData, height, width);
-  }
-
-  @Override
-  public IMEModel redGreyScaleImage() {
-    return greyScaleImage(Pixel::getRedComponent);
-  }
-
-  @Override
-  public IMEModel greenGreyScaleImage() {
-    return greyScaleImage(Pixel::getGreenComponent);
-  }
-
-  @Override
-  public IMEModel blueGreyScaleImage() {
-    return greyScaleImage(Pixel::getBlueComponent);
-  }
-
-  @Override
-  public IMEModel valueGreyScaleImage() {
-    return greyScaleImage(Pixel::getValue);
-  }
-
-  @Override
-  public IMEModel lumaGreyScaleImage() {
-    return greyScaleImage(Pixel::getLuma);
-  }
-
-  @Override
-  public IMEModel intensityGreyScaleImage() {
-    return greyScaleImage(Pixel::getIntensity);
   }
 
   @Override
@@ -125,9 +96,9 @@ public class IMEModelImpl implements IMEModel {
 
   @Override
   public List<IMEModel> rgbSplit() {
-    IMEModel redImage = this.redGreyScaleImage();
-    IMEModel greenImage = this.greenGreyScaleImage();
-    IMEModel blueImage = this.blueGreyScaleImage();
+    IMEModel redImage = this.greyScaleImage(Pixel::getRedComponent);
+    IMEModel greenImage = this.greyScaleImage(Pixel::getGreenComponent);
+    IMEModel blueImage = this.greyScaleImage(Pixel::getBlueComponent);
     return new ArrayList<>(Arrays.asList(redImage, greenImage, blueImage));
   }
 

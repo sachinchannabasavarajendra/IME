@@ -1,0 +1,14 @@
+#load koala.ppm and call it 'koala'
+load koala.ppm koala
+
+#brighten koala by adding 10  
+brighten -100 koala koala-brighter
+
+#flip koala vertically
+vertical-flip koala koala-vertical
+
+#save koala-brighter
+save koala-brighter.ppm koala-brighter
+
+#save koala-vertical
+save Images/koala-vertical.ppm koala-vertical

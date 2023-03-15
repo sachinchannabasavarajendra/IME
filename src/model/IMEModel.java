@@ -1,6 +1,7 @@
 package model;
 
 import java.util.List;
+import java.util.function.Function;
 
 public interface IMEModel {
 
@@ -10,17 +11,7 @@ public interface IMEModel {
 
   int getImageWidth();
 
-  IMEModel redGreyScaleImage();
-
-  IMEModel greenGreyScaleImage();
-
-  IMEModel blueGreyScaleImage();
-
-  IMEModel valueGreyScaleImage();
-
-  IMEModel lumaGreyScaleImage();
-
-  IMEModel intensityGreyScaleImage();
+  IMEModel greyScaleImage(Function<Pixel, Integer> func);
 
   IMEModel horizontalFlipImage();
 

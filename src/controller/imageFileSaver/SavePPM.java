@@ -10,12 +10,17 @@ import model.Pixel;
 public class SavePPM implements SaveImage {
 
   @Override
-  public void save(String imagePath, String imageName, IMEModel model) throws IOException {
+  public void save(String imagePath, IMEModel model) throws IOException {
     try {
       Pixel[][] imageData = model.getImageData();
       int height = model.getImageHeight();
       int width = model.getImageWidth();
       File output = new File(imagePath);
+      output.mkdirs();
+      if(output.exists()) {
+        output.delete();
+        output = new File(imagePath);
+      }
       Writer writer = new FileWriter(output);
       writer.write("P3\n");
 
@@ -32,9 +37,10 @@ public class SavePPM implements SaveImage {
           writer.write(imageData[i][j].getBlueComponent() + "\n");
         }
       }
+      writer.flush();
       writer.close();
-    } catch (IOException e) {
-      throw new IOException("Error saving ppm file");
+    } catch (Exception e) {
+      throw new IOException(String.format("Error saving ppm file: %s", imagePath));
     }
   }
 }

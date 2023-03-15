@@ -2,6 +2,7 @@ package controller.commands;
 
 import java.util.Map;
 import model.IMEModel;
+import model.Pixel;
 
 public class Greyscale extends AbstractIMECommand {
 
@@ -21,13 +22,25 @@ public class Greyscale extends AbstractIMECommand {
     IMEModel callingObject = getModelObject(objectMap, sourceImageName);
     IMEModel resultantImage;
     switch (component) {
-      case "red-component" -> resultantImage = callingObject.redGreyScaleImage();
-      case "green-component" -> resultantImage = callingObject.greenGreyScaleImage();
-      case "blue-component" -> resultantImage = callingObject.blueGreyScaleImage();
-      case "value" -> resultantImage = callingObject.valueGreyScaleImage();
-      case "intensity" -> resultantImage = callingObject.intensityGreyScaleImage();
-      case "luma" -> resultantImage = callingObject.lumaGreyScaleImage();
-      default ->
+      case "red-component":
+        resultantImage = callingObject.greyScaleImage(Pixel::getRedComponent);
+        break;
+      case "green-component":
+        resultantImage = callingObject.greyScaleImage(Pixel::getGreenComponent);
+        break;
+      case "blue-component":
+        resultantImage = callingObject.greyScaleImage(Pixel::getBlueComponent);
+        break;
+      case "value-component":
+        resultantImage = callingObject.greyScaleImage(Pixel::getValue);
+        break;
+      case "intensity-component":
+        resultantImage = callingObject.greyScaleImage(Pixel::getIntensity);
+        break;
+      case "luma-component":
+        resultantImage = callingObject.greyScaleImage(Pixel::getLuma);
+        break;
+      default:
           throw new IllegalArgumentException(String.format("Unknown component %s", component));
     }
     objectMap.put(destinationImageName, resultantImage);

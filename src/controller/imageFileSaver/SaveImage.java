@@ -5,5 +5,5 @@ import model.IMEModel;
 
 public interface SaveImage {
 
-  void save(String imagePath, String imageName, IMEModel model) throws IOException;
+  void save(String imagePath, IMEModel model) throws IOException;
 }

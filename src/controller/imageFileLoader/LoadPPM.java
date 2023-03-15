@@ -2,12 +2,19 @@ package controller.imageFileLoader;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Scanner;
 import model.IMEModel;
 import model.IMEModelImpl;
 import model.Pixel;
 
 public class LoadPPM implements LoadImage {
+
+  private InputStream in;
+
+  public LoadPPM(InputStream in) {
+    this.in = in;
+  }
 
   @Override
   public IMEModel load(String imagePath, String imageName) throws FileNotFoundException {
@@ -17,8 +24,8 @@ public class LoadPPM implements LoadImage {
     int width;
 
     try {
-      sc = new Scanner(new FileInputStream(imagePath));
-    } catch (FileNotFoundException e) {
+      sc = new Scanner(this.in);
+    } catch (Exception e) {
       throw new FileNotFoundException("File " + imagePath + " not found!");
     }
     StringBuilder builder = new StringBuilder();
