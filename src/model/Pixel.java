@@ -1,3 +1,5 @@
+package model;
+
 public class Pixel {
 
   private final int redComponent;

@@ -1,10 +1,5 @@
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
-import java.util.Scanner;
+package model;
+
 import java.util.function.Function;
 
 public class IMEModelImpl implements IMEModel {
@@ -13,14 +8,10 @@ public class IMEModelImpl implements IMEModel {
   private final int height;
   private final int width;
 
-  private IMEModelImpl(Pixel[][] imageData, int height, int width) {
+  public IMEModelImpl(Pixel[][] imageData, int height, int width) {
     this.imageData = imageData;
     this.height = height;
     this.width = width;
-  }
-
-  public static ImageBuilder getBuilder() {
-    return new ImageBuilder();
   }
 
   @Override
@@ -29,30 +20,13 @@ public class IMEModelImpl implements IMEModel {
   }
 
   @Override
-  public void saveImageFile(String imageName, String filePath, String fileType) {
-    try {
-      File output = new File(filePath + imageName + "." + fileType);
-      Writer writer = new FileWriter(output);
-      writer.write("P3\n");
+  public int getImageHeight() {
+    return this.height;
+  }
 
-      writer.write("# Image data of the resultant ppm\n");
-
-      writer.write(this.width + " \n");
-      writer.write(this.height + "\n");
-      writer.write(255 + " \n");
-
-      for (int i = 0; i < this.height; i++) {
-        for (int j = 0; j < this.width; j++) {
-          writer.write(this.imageData[i][j].getRedComponent() + "\n");
-          writer.write(this.imageData[i][j].getGreenComponent() + "\n");
-          writer.write(this.imageData[i][j].getBlueComponent() + "\n");
-        }
-      }
-      writer.close();
-    } catch (IOException e) {
-      System.out.println(e.getMessage());
-      throw new RuntimeException(e);
-    }
+  @Override
+  public int getImageWidth() {
+    return this.width;
   }
 
   private IMEModel greyScaleImage(Function<Pixel, Integer> func) {
@@ -132,15 +106,16 @@ public class IMEModelImpl implements IMEModel {
   }
 
   @Override
-  public IMEModel combineRGBImage(IMEModel redScaleImage, IMEModel blueScaleImage, IMEModel greenScaleImage) {
+  public IMEModel combineRGBImage(IMEModel redScaleImage, IMEModel blueScaleImage,
+      IMEModel greenScaleImage) {
 
     Pixel[][] newImageData = new Pixel[height][width];
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
         newImageData[i][j] = new Pixel(
-                redScaleImage.getImageData()[i][j].getRedComponent(),
-                greenScaleImage.getImageData()[i][j].getGreenComponent(),
-                blueScaleImage.getImageData()[i][j].getBlueComponent());
+            redScaleImage.getImageData()[i][j].getRedComponent(),
+            greenScaleImage.getImageData()[i][j].getGreenComponent(),
+            blueScaleImage.getImageData()[i][j].getBlueComponent());
       }
     }
     return new IMEModelImpl(newImageData, height, width);
@@ -157,62 +132,4 @@ public class IMEModelImpl implements IMEModel {
     }
     return newRow;
   }
-
-  public static class ImageBuilder {
-    Pixel[][] imageData;
-    int height;
-    int width;
-
-    public ImageBuilder loadFile(String filename) throws FileNotFoundException {
-
-      Scanner sc;
-
-      try {
-        sc = new Scanner(new FileInputStream(filename));
-      } catch (FileNotFoundException e) {
-        throw new FileNotFoundException("File " + filename + " not found!");
-      }
-      StringBuilder builder = new StringBuilder();
-      //read the file line by line, and populate a string. This will throw away any comment lines
-      while (sc.hasNextLine()) {
-        String s = sc.nextLine();
-        if (s.charAt(0) != '#') {
-          builder.append(s).append(System.lineSeparator());
-        }
-      }
-
-      //now set up the scanner to read from the string we just built
-      sc = new Scanner(builder.toString());
-
-      String token;
-
-      token = sc.next();
-      if (!token.equals("P3")) {
-        System.out.println("Invalid PPM file: plain RAW file should begin with P3");
-      }
-      width = sc.nextInt();
-      height = sc.nextInt();
-      int maxValue = sc.nextInt();
-
-      imageData = new Pixel[height][width];
-
-      for (int i = 0; i < height; i++) {
-        for (int j = 0; j < width; j++) {
-          int redComponent = sc.nextInt();
-          int greenComponent = sc.nextInt();
-          int blueComponent = sc.nextInt();
-
-          imageData[i][j] = new Pixel(redComponent, greenComponent, blueComponent);
-        }
-      }
-
-      return this;
-    }
-
-    public IMEModel build () {
-      return new IMEModelImpl(imageData, height, width);
-    }
-
-  }
-
 }
