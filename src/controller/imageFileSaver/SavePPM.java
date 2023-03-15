@@ -7,8 +7,19 @@ import java.io.Writer;
 import model.IMEModel;
 import model.Pixel;
 
+/**
+ * This is an implementation of the SaveImage interface which is used to save the manipulated image
+ * files of ppm format.
+ */
 public class SavePPM implements SaveImage {
 
+  /**
+   * This method is used to save the manipulated image file at the given path.
+   *
+   * @param imagePath the path where the file should be saved at
+   * @param model     image data of the image to be saved in the file
+   * @throws IOException if the given path is incorrect
+   */
   @Override
   public void save(String imagePath, IMEModel model) throws IOException {
     try {
@@ -17,7 +28,7 @@ public class SavePPM implements SaveImage {
       int width = model.getImageWidth();
       File output = new File(imagePath);
       output.mkdirs();
-      if(output.exists()) {
+      if (output.exists()) {
         output.delete();
         output = new File(imagePath);
       }
