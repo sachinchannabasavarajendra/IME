@@ -1,6 +1,5 @@
 package controller.imageFileLoader;
 
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Scanner;
@@ -8,14 +7,31 @@ import model.IMEModel;
 import model.IMEModelImpl;
 import model.Pixel;
 
+/**
+ * This is an implementation of the LoadImage interface which is used to load and process image
+ * files of ppm format.
+ */
 public class LoadPPM implements LoadImage {
 
   private InputStream in;
 
+  /**
+   * This is a constructor which is used to instantiate the above class.
+   *
+   * @param in input stream for the file to be processed
+   */
   public LoadPPM(InputStream in) {
     this.in = in;
   }
 
+  /**
+   * This method is used to load an image file located at the given path.
+   *
+   * @param imagePath the path of the image file
+   * @param imageName the name of the image file
+   * @return processed image data
+   * @throws FileNotFoundException if file is not located at the given file path
+   */
   @Override
   public IMEModel load(String imagePath, String imageName) throws FileNotFoundException {
     Scanner sc;
