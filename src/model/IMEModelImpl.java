@@ -1,5 +1,8 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Function;
 
 public class IMEModelImpl implements IMEModel {
@@ -103,6 +106,14 @@ public class IMEModelImpl implements IMEModel {
       }
     }
     return new IMEModelImpl(newImageData, height, width);
+  }
+
+  @Override
+  public List<IMEModel> rgbSplit() {
+    IMEModel redImage = this.redGreyScaleImage();
+    IMEModel greenImage = this.greenGreyScaleImage();
+    IMEModel blueImage = this.blueGreyScaleImage();
+    return new ArrayList<>(Arrays.asList(redImage, greenImage, blueImage));
   }
 
   @Override

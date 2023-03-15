@@ -1,5 +1,7 @@
 package model;
 
+import java.util.List;
+
 public interface IMEModel {
 
   Pixel[][] getImageData();
@@ -19,6 +21,8 @@ public interface IMEModel {
   IMEModel verticalFlipImage();
 
   IMEModel alterBrightness(int delta);
+
+  List<IMEModel> rgbSplit();
 
   IMEModel combineRGBImage(
       IMEModel redScaleImage,
