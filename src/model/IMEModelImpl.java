@@ -59,6 +59,21 @@ public class IMEModelImpl implements IMEModel {
   }
 
   @Override
+  public IMEModel valueGreyScaleImage() {
+    return greyScaleImage(Pixel::getValue);
+  }
+
+  @Override
+  public IMEModel lumaGreyScaleImage() {
+    return greyScaleImage(Pixel::getLuma);
+  }
+
+  @Override
+  public IMEModel intensityGreyScaleImage() {
+    return greyScaleImage(Pixel::getIntensity);
+  }
+
+  @Override
   public IMEModel horizontalFlipImage() {
     Pixel[][] newImageData = new Pixel[height][width];
     for (int i = 0; i < imageData.length; i++) {

@@ -7,7 +7,6 @@ import java.util.Map;
 import model.IMEModel;
 
 public class Save extends AbstractIMECommand {
-
   private final String imagePath;
   private final String imageName;
 

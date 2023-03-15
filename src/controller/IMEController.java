@@ -7,6 +7,7 @@ import controller.commands.HorizontalFlip;
 import controller.commands.IMEModelCommand;
 import controller.commands.Load;
 import controller.commands.RGBCombine;
+import controller.commands.RGBSplit;
 import controller.commands.Save;
 import controller.commands.VerticalFlip;
 import java.util.HashMap;
@@ -63,7 +64,7 @@ public class IMEController {
             break;
 
           case "rgb-split":
-            //TODO : Add this part of adding method to model
+            imeModelCommand = new RGBSplit(sc.next(), sc.next(), sc.next(), sc.next());
             break;
 
           case "rgb-combine":

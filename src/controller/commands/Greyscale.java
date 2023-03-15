@@ -24,6 +24,9 @@ public class Greyscale extends AbstractIMECommand {
       case "red-component" -> resultantImage = callingObject.redGreyScaleImage();
       case "green-component" -> resultantImage = callingObject.greenGreyScaleImage();
       case "blue-component" -> resultantImage = callingObject.blueGreyScaleImage();
+      case "value" -> resultantImage = callingObject.valueGreyScaleImage();
+      case "intensity" -> resultantImage = callingObject.intensityGreyScaleImage();
+      case "luma" -> resultantImage = callingObject.lumaGreyScaleImage();
       default ->
           throw new IllegalArgumentException(String.format("Unknown component %s", component));
     }

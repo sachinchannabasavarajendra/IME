@@ -16,12 +16,12 @@ public class Pixel {
     return Math.max(redComponent, Math.max(blueComponent, greenComponent));
   }
 
-  public double getIntensity() {
-    return ((double) redComponent + greenComponent + blueComponent) / 3;
+  public int getIntensity() {
+    return Math.round((double) redComponent + greenComponent + blueComponent) / 3);
   }
 
-  public double getLuma() {
-    return (0.2126 * redComponent) + (0.7152 * greenComponent) + (0.0722 * blueComponent);
+  public int getLuma() {
+    return Math.round(0.2126 * redComponent) + (0.7152 * greenComponent) + (0.0722 * blueComponent));
   }
 
   public int getRedComponent() {

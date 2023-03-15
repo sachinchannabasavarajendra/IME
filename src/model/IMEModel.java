@@ -16,6 +16,12 @@ public interface IMEModel {
 
   IMEModel blueGreyScaleImage();
 
+  IMEModel valueGreyScaleImage();
+
+  IMEModel lumaGreyScaleImage();
+
+  IMEModel intensityGreyScaleImage();
+
   IMEModel horizontalFlipImage();
 
   IMEModel verticalFlipImage();
