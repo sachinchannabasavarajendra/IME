@@ -1,4 +1,4 @@
-package controller.imageFileLoader;
+package service.imageFileLoader;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;

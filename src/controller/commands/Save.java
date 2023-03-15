@@ -1,7 +1,7 @@
 package controller.commands;
 
-import controller.imageFileSaver.SaveImage;
-import controller.imageFileSaver.SavePPM;
+import service.imageFileSaver.SaveImage;
+import service.imageFileSaver.SavePPM;
 
 import java.awt.geom.IllegalPathStateException;
 import java.io.IOException;
