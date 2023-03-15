@@ -48,6 +48,7 @@ public class IMEControllerImpl implements IMEController {
   public void go() {
     Scanner sc = new Scanner(this.in);
     IMEModelCommand imeModelCommand = null;
+    boolean isScriptRunning = false;
 
     Map<String, Function<String[], IMEModelCommand>> knownCommands = new HashMap<>();
     knownCommands.put("load", inputCommand -> {
@@ -104,7 +105,11 @@ public class IMEControllerImpl implements IMEController {
       return new RGBCombine(inputCommand[1], inputCommand[2], inputCommand[3], inputCommand[4]);
     });
 
-    while (sc.hasNextLine()) {
+    while (sc.hasNextLine() || isScriptRunning ) {
+      if(!sc.hasNextLine() && isScriptRunning) {
+        isScriptRunning = false;
+        sc = new Scanner(this.in);
+      }
       String in = sc.nextLine();
       while (in.startsWith("#") || in.trim().equals("")) {
         in = sc.nextLine();
@@ -118,6 +123,7 @@ public class IMEControllerImpl implements IMEController {
 
         if (inputCommand[0].equalsIgnoreCase("run")) {
           sc = new Scanner(new FileInputStream(inputCommand[1]));
+          isScriptRunning = true;
           continue;
         }
 
