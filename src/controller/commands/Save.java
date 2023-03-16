@@ -1,12 +1,12 @@
 package controller.commands;
 
-import service.imageFileSaver.SaveImage;
-import service.imageFileSaver.SavePPM;
-
 import java.awt.geom.IllegalPathStateException;
 import java.io.IOException;
 import java.util.Map;
+
 import model.IMEModel;
+import service.imageFileSaver.SaveImage;
+import service.imageFileSaver.SavePPM;
 
 /**
  * This class is used to perform the operation of saving the image with the given name to the

@@ -3,6 +3,7 @@ package service.imageFileLoader;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Scanner;
+
 import model.IMEModel;
 import model.IMEModelImpl;
 import model.Pixel;
@@ -13,7 +14,7 @@ import model.Pixel;
  */
 public class LoadPPM implements LoadImage {
 
-  private InputStream in;
+  private final InputStream in;
 
   /**
    * This is a constructor which is used to instantiate the above class.
@@ -73,6 +74,14 @@ public class LoadPPM implements LoadImage {
         int redComponent = sc.nextInt();
         int greenComponent = sc.nextInt();
         int blueComponent = sc.nextInt();
+
+        if (redComponent > maxValue || blueComponent > maxValue || greenComponent > maxValue) {
+          throw new IllegalArgumentException("Component Value cannot be more than max value " + maxValue);
+        }
+
+        if (redComponent < 0 || blueComponent < 0 || greenComponent < 0) {
+          throw new IllegalArgumentException("Component Value cannot be negative");
+        }
 
         imageData[i][j] = new Pixel(redComponent, greenComponent, blueComponent);
       }

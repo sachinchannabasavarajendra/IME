@@ -56,6 +56,7 @@ public class IMEModelImpl implements IMEModel {
   public int getMaxValue() {
     return this.maxValue;
   }
+
   /**
    * This is a method used to get the width of the image.
    *
@@ -176,15 +177,19 @@ public class IMEModelImpl implements IMEModel {
    */
   @Override
   public IMEModel combineRGBImage(IMEModel greenScaleImage,
-      IMEModel blueScaleImage) {
+                                  IMEModel blueScaleImage) {
 
+    if (!(this.height == greenScaleImage.getImageHeight() && this.height == blueScaleImage.getImageHeight()) ||
+            !(this.width == greenScaleImage.getImageWidth() && this.width == blueScaleImage.getImageWidth())) {
+      throw new IllegalStateException("The greyscale images are of different sizes!");
+    }
     Pixel[][] newImageData = new Pixel[height][width];
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
         newImageData[i][j] = new Pixel(
-            this.getImageData()[i][j].getRedComponent(),
-            greenScaleImage.getImageData()[i][j].getGreenComponent(),
-            blueScaleImage.getImageData()[i][j].getBlueComponent());
+                this.getImageData()[i][j].getRedComponent(),
+                greenScaleImage.getImageData()[i][j].getGreenComponent(),
+                blueScaleImage.getImageData()[i][j].getBlueComponent());
       }
     }
     return new IMEModelImpl(newImageData, height, width, maxValue);

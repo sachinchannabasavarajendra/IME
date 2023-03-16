@@ -48,7 +48,7 @@ public class Pixel implements IPixel {
    */
   public int getLuma() {
     return (int) Math.round(
-        (0.2126 * redComponent) + (0.7152 * greenComponent) + (0.0722 * blueComponent));
+            (0.2126 * redComponent) + (0.7152 * greenComponent) + (0.0722 * blueComponent));
   }
 
   /**

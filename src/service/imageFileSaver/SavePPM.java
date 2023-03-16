@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+
 import model.IMEModel;
 import model.Pixel;
 
@@ -34,8 +35,6 @@ public class SavePPM implements SaveImage {
       }
       Writer writer = new FileWriter(output);
       writer.write("P3\n");
-
-      writer.write("# Image data of the resultant ppm\n");
 
       writer.write(width + " ");
       writer.write(height + "\n");

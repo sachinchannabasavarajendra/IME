@@ -1,11 +1,12 @@
 package controller.commands;
 
-import service.imageFileLoader.LoadImage;
-import service.imageFileLoader.LoadPPM;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Map;
+
 import model.IMEModel;
+import service.imageFileLoader.LoadImage;
+import service.imageFileLoader.LoadPPM;
 
 /**
  * This class is used to perform the operation of loading an image from the specified path and refer

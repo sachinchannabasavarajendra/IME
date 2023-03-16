@@ -1,5 +1,14 @@
 package controller;
 
+import java.awt.geom.IllegalPathStateException;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.function.Function;
+
 import controller.commands.Brighten;
 import controller.commands.Greyscale;
 import controller.commands.HorizontalFlip;
@@ -9,15 +18,6 @@ import controller.commands.RGBCombine;
 import controller.commands.RGBSplit;
 import controller.commands.Save;
 import controller.commands.VerticalFlip;
-import java.awt.geom.IllegalPathStateException;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.io.PrintStream;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.function.Function;
 import model.IMEModel;
 
 /**
@@ -27,8 +27,8 @@ import model.IMEModel;
 public class IMEControllerImpl implements IMEController {
 
   private final Map<String, IMEModel> objectMap;
-  private final InputStream in;
-  private final PrintStream out;
+  private final Readable in;
+  private final Appendable out;
 
   /**
    * This is a constructor which is used to instantiate the above class.
@@ -36,7 +36,7 @@ public class IMEControllerImpl implements IMEController {
    * @param in  commands to be processed which are passed as input stream
    * @param out output stream used to display messages to the user
    */
-  public IMEControllerImpl(InputStream in, PrintStream out) {
+  public IMEControllerImpl(Readable in, Appendable out) {
     this.objectMap = new HashMap<>();
     this.in = in;
     this.out = out;
@@ -45,7 +45,7 @@ public class IMEControllerImpl implements IMEController {
   /**
    * This method processes and executes the given command.
    */
-  public void go() {
+  public void go() throws IOException {
     Scanner sc = new Scanner(this.in);
     IMEModelCommand imeModelCommand;
     boolean isScriptRunning = false;
@@ -72,7 +72,7 @@ public class IMEControllerImpl implements IMEController {
         throw new IllegalArgumentException("Brighten expects 3 parameters");
       }
       return new Brighten(Integer.parseInt(inputCommand[1]),
-          inputCommand[2], inputCommand[3]);
+              inputCommand[2], inputCommand[3]);
     });
     knownCommands.put("vertical-flip", inputCommand -> {
       if (inputCommand.length != 3) {
@@ -105,10 +105,12 @@ public class IMEControllerImpl implements IMEController {
       return new RGBCombine(inputCommand[1], inputCommand[2], inputCommand[3], inputCommand[4]);
     });
 
-    while (sc.hasNextLine() || isScriptRunning ) {
-      if(!sc.hasNextLine() && isScriptRunning) {
+    while (sc.hasNextLine() || isScriptRunning) {
+      if (!sc.hasNextLine() && isScriptRunning) {
         isScriptRunning = false;
         sc = new Scanner(this.in);
+        this.out.append("The script file has completed execution!");
+        continue;
       }
       String in = sc.nextLine();
       while (in.startsWith("#") || in.trim().equals("")) {
@@ -117,7 +119,7 @@ public class IMEControllerImpl implements IMEController {
       try {
         String[] inputCommand = in.trim().split(" ");
         if (inputCommand[0].equalsIgnoreCase("q") ||
-            inputCommand[0].equalsIgnoreCase("quit")) {
+                inputCommand[0].equalsIgnoreCase("quit")) {
           return;
         }
 
@@ -135,7 +137,7 @@ public class IMEControllerImpl implements IMEController {
           imeModelCommand.execute(this.objectMap);
         }
       } catch (Exception e) {
-        this.out.println("Error!: " + e.getMessage());
+        this.out.append("Error!: ").append(e.getMessage());
       }
     }
   }

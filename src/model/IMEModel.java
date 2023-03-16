@@ -85,7 +85,7 @@ public interface IMEModel {
    * @return combined greyscale image with all the three components
    */
   IMEModel combineRGBImage(
-      IMEModel greenScaleImage,
-      IMEModel blueScaleImage
+          IMEModel greenScaleImage,
+          IMEModel blueScaleImage
   );
 }

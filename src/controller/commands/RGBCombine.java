@@ -1,6 +1,7 @@
 package controller.commands;
 
 import java.util.Map;
+
 import model.IMEModel;
 
 /**
@@ -23,7 +24,7 @@ public class RGBCombine extends AbstractIMECommand {
    * @param blueImage            the image from which the blue component needs to be taken
    */
   public RGBCombine(String destinationImageName, String redImage, String greenImage,
-      String blueImage) {
+                    String blueImage) {
     this.destinationImageName = destinationImageName;
     this.redImage = redImage;
     this.greenImage = greenImage;
@@ -42,7 +43,7 @@ public class RGBCombine extends AbstractIMECommand {
     IMEModel greenImageComponent = getModelObject(objectMap, greenImage);
     IMEModel blueImageComponent = getModelObject(objectMap, blueImage);
     IMEModel combinedImage = redImageComponent.combineRGBImage(
-        greenImageComponent, blueImageComponent);
+            greenImageComponent, blueImageComponent);
     objectMap.put(destinationImageName, combinedImage);
   }
 }
