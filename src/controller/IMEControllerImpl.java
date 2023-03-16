@@ -45,7 +45,7 @@ public class IMEControllerImpl implements IMEController {
   /**
    * This method processes and executes the given command.
    */
-  public void go() throws IOException {
+  public void execute() throws IOException {
     Scanner sc = new Scanner(this.in);
     IMEModelCommand imeModelCommand;
     boolean isScriptRunning = false;

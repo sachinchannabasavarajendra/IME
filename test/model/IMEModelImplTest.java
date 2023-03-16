@@ -7,17 +7,23 @@ import java.awt.geom.IllegalPathStateException;
 import java.io.FileInputStream;
 import java.util.List;
 import org.junit.Test;
-import service.imageFileLoader.LoadImage;
-import service.imageFileLoader.LoadPPM;
+import service.imagefileloader.LoadImage;
+import service.imagefileloader.LoadPPM;
 
+/**
+ * Test class to test functionity of the model and its supporting functions.
+ */
 public class IMEModelImplTest {
 
   IMEModel image;
 
+  /**
+   * Contructor to initialize an image which is used in all the test cases.
+   */
   public IMEModelImplTest() {
     try {
-      LoadImage imageLoader = new LoadPPM(new FileInputStream("windows.ppm"));
-      image = imageLoader.load("windows.ppm", "windows");
+      LoadImage imageLoader = new LoadPPM(new FileInputStream("res/reindeer.ppm"));
+      image = imageLoader.load("res/reindder.ppm", "windows");
     } catch (Exception e) {
       throw new IllegalPathStateException(e.getMessage());
     }
@@ -25,23 +31,23 @@ public class IMEModelImplTest {
 
   @Test
   public void getImageData() {
-    assertEquals(141, image.getImageData().length);
-    assertEquals(150, image.getImageData()[0].length);
+    assertEquals(300, image.getImageData().length);
+    assertEquals(225, image.getImageData()[0].length);
   }
 
   @Test
   public void getImageHeight() {
-    assertEquals(141, image.getImageHeight());
+    assertEquals(300, image.getImageHeight());
   }
 
   @Test
   public void getImageWidth() {
-    assertEquals(150, image.getImageWidth());
+    assertEquals(225, image.getImageWidth());
   }
 
   @Test
   public void redGreyScaleImage() {
-    IMEModel redScaleImage = image.greyScaleImage(Pixel::getRedComponent);
+    IMEModel redScaleImage = image.greyScaleImage(IPixel::getRedComponent);
     for (int i = 0; i < redScaleImage.getImageHeight(); i++) {
       for (int j = 0; j < redScaleImage.getImageWidth(); j++) {
         int expected = image.getImageData()[i][j].getRedComponent();
@@ -54,7 +60,7 @@ public class IMEModelImplTest {
 
   @Test
   public void blueGreyScaleImage() {
-    IMEModel blueScaleImage = image.greyScaleImage(Pixel::getBlueComponent);
+    IMEModel blueScaleImage = image.greyScaleImage(IPixel::getBlueComponent);
     for (int i = 0; i < blueScaleImage.getImageHeight(); i++) {
       for (int j = 0; j < blueScaleImage.getImageWidth(); j++) {
         int expected = image.getImageData()[i][j].getBlueComponent();
@@ -67,7 +73,7 @@ public class IMEModelImplTest {
 
   @Test
   public void greenGreyScaleImage() {
-    IMEModel greenScaleImage = image.greyScaleImage(Pixel::getGreenComponent);
+    IMEModel greenScaleImage = image.greyScaleImage(IPixel::getGreenComponent);
     for (int i = 0; i < greenScaleImage.getImageHeight(); i++) {
       for (int j = 0; j < greenScaleImage.getImageWidth(); j++) {
         int expected = image.getImageData()[i][j].getGreenComponent();
@@ -80,7 +86,7 @@ public class IMEModelImplTest {
 
   @Test
   public void valueGreyScaleImage() {
-    IMEModel valueScaleImage = image.greyScaleImage(Pixel::getValue);
+    IMEModel valueScaleImage = image.greyScaleImage(IPixel::getValue);
     for (int i = 0; i < valueScaleImage.getImageHeight(); i++) {
       for (int j = 0; j < valueScaleImage.getImageWidth(); j++) {
         int expected = image.getImageData()[i][j].getValue();
@@ -93,7 +99,7 @@ public class IMEModelImplTest {
 
   @Test
   public void intensityGreyScaleImage() {
-    IMEModel intensityScaleImage = image.greyScaleImage(Pixel::getIntensity);
+    IMEModel intensityScaleImage = image.greyScaleImage(IPixel::getIntensity);
     for (int i = 0; i < intensityScaleImage.getImageHeight(); i++) {
       for (int j = 0; j < intensityScaleImage.getImageWidth(); j++) {
         int expected = image.getImageData()[i][j].getIntensity();
@@ -106,7 +112,7 @@ public class IMEModelImplTest {
 
   @Test
   public void lumaGreyScaleImage() {
-    IMEModel lumaScaleImage = image.greyScaleImage(Pixel::getLuma);
+    IMEModel lumaScaleImage = image.greyScaleImage(IPixel::getLuma);
     for (int i = 0; i < lumaScaleImage.getImageHeight(); i++) {
       for (int j = 0; j < lumaScaleImage.getImageWidth(); j++) {
         int expected = image.getImageData()[i][j].getLuma();
@@ -209,10 +215,10 @@ public class IMEModelImplTest {
     }
   }
 
-  private Pixel[] reverse(Pixel[] a) {
+  private IPixel[] reverse(IPixel[] a) {
     int n = a.length;
-    Pixel[] newRow = a.clone();
-    Pixel t;
+    IPixel[] newRow = a.clone();
+    IPixel t;
     for (int i = 0; i < n / 2; i++) {
       t = newRow[i];
       newRow[i] = newRow[n - i - 1];

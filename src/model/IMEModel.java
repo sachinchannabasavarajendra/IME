@@ -13,7 +13,7 @@ public interface IMEModel {
    *
    * @return the processed image data
    */
-  Pixel[][] getImageData();
+  IPixel[][] getImageData();
 
   /**
    * This is a method used to get the height of the image.
@@ -43,7 +43,7 @@ public interface IMEModel {
    * @param func function which takes in the color component
    * @return the greyscale image data
    */
-  IMEModel greyScaleImage(Function<Pixel, Integer> func);
+  IMEModel greyScaleImage(Function<IPixel, Integer> func);
 
   /**
    * This is a method used to flip the given image horizontally.

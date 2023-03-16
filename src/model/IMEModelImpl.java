@@ -11,7 +11,14 @@ import java.util.function.Function;
  */
 public class IMEModelImpl implements IMEModel {
 
-  private final Pixel[][] imageData;
+  /*
+  Each Model object represents an Image loaded.
+  An image is represented as a 2D array of IPixels where in each IPixel represent a particular
+  type of Pixel implementation (RGB, PNG, etc..).
+  Irrespective of the type of file imported the image will always be represented as an 2D array of
+  IPixel objects.
+   */
+  private final IPixel[][] imageData;
   private final int height;
   private final int width;
   private final int maxValue;
@@ -25,7 +32,7 @@ public class IMEModelImpl implements IMEModel {
    * @param width     the width of the image
    * @param maxValue  the max value of each component of a pixel
    */
-  public IMEModelImpl(Pixel[][] imageData, int height, int width, int maxValue) {
+  public IMEModelImpl(IPixel[][] imageData, int height, int width, int maxValue) {
     this.imageData = imageData;
     this.height = height;
     this.width = width;
@@ -38,7 +45,7 @@ public class IMEModelImpl implements IMEModel {
    * @return the processed image data
    */
   @Override
-  public Pixel[][] getImageData() {
+  public IPixel[][] getImageData() {
     return imageData;
   }
 
@@ -75,8 +82,8 @@ public class IMEModelImpl implements IMEModel {
    * @return the greyscale image data
    */
   @Override
-  public IMEModel greyScaleImage(Function<Pixel, Integer> func) {
-    Pixel[][] newImageData = new Pixel[height][width];
+  public IMEModel greyScaleImage(Function<IPixel, Integer> func) {
+    IPixel[][] newImageData = new Pixel[height][width];
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
         int value = func.apply(imageData[i][j]);
@@ -93,7 +100,7 @@ public class IMEModelImpl implements IMEModel {
    */
   @Override
   public IMEModel horizontalFlipImage() {
-    Pixel[][] newImageData = new Pixel[height][width];
+    IPixel[][] newImageData = new Pixel[height][width];
     for (int i = 0; i < imageData.length; i++) {
       newImageData[i] = reverse(imageData[i]);
     }
@@ -108,7 +115,7 @@ public class IMEModelImpl implements IMEModel {
    */
   @Override
   public IMEModel verticalFlipImage() {
-    Pixel[][] newImageData = new Pixel[height][width];
+    IPixel[][] newImageData = new Pixel[height][width];
     int n = imageData.length - 1;
     for (int i = n; i >= 0; i--) {
       newImageData[n - i] = imageData[i];
@@ -127,7 +134,7 @@ public class IMEModelImpl implements IMEModel {
   @Override
   public IMEModel alterBrightness(int delta) {
 
-    Pixel[][] newImageData = new Pixel[height][width];
+    IPixel[][] newImageData = new Pixel[height][width];
 
     if (delta < 0) {
       for (int i = 0; i < height; i++) {
@@ -142,9 +149,12 @@ public class IMEModelImpl implements IMEModel {
     } else {
       for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
-          int redComponent = Math.min(this.imageData[i][j].getRedComponent() + delta, this.maxValue);
-          int greenComponent = Math.min(this.imageData[i][j].getGreenComponent() + delta, this.maxValue);
-          int blueComponent = Math.min(this.imageData[i][j].getBlueComponent() + delta, this.maxValue);
+          int redComponent =
+                  Math.min(this.imageData[i][j].getRedComponent() + delta, this.maxValue);
+          int greenComponent =
+                  Math.min(this.imageData[i][j].getGreenComponent() + delta, this.maxValue);
+          int blueComponent =
+                  Math.min(this.imageData[i][j].getBlueComponent() + delta, this.maxValue);
 
           newImageData[i][j] = new Pixel(redComponent, greenComponent, blueComponent);
         }
@@ -161,9 +171,9 @@ public class IMEModelImpl implements IMEModel {
    */
   @Override
   public List<IMEModel> rgbSplit() {
-    IMEModel redImage = this.greyScaleImage(Pixel::getRedComponent);
-    IMEModel greenImage = this.greyScaleImage(Pixel::getGreenComponent);
-    IMEModel blueImage = this.greyScaleImage(Pixel::getBlueComponent);
+    IMEModel redImage = this.greyScaleImage(IPixel::getRedComponent);
+    IMEModel greenImage = this.greyScaleImage(IPixel::getGreenComponent);
+    IMEModel blueImage = this.greyScaleImage(IPixel::getBlueComponent);
     return new ArrayList<>(Arrays.asList(redImage, greenImage, blueImage));
   }
 
@@ -179,11 +189,13 @@ public class IMEModelImpl implements IMEModel {
   public IMEModel combineRGBImage(IMEModel greenScaleImage,
                                   IMEModel blueScaleImage) {
 
-    if (!(this.height == greenScaleImage.getImageHeight() && this.height == blueScaleImage.getImageHeight()) ||
-            !(this.width == greenScaleImage.getImageWidth() && this.width == blueScaleImage.getImageWidth())) {
+    if (!(this.height == greenScaleImage.getImageHeight()
+            && this.height == blueScaleImage.getImageHeight())
+            || !(this.width == greenScaleImage.getImageWidth()
+            && this.width == blueScaleImage.getImageWidth())) {
       throw new IllegalStateException("The greyscale images are of different sizes!");
     }
-    Pixel[][] newImageData = new Pixel[height][width];
+    IPixel[][] newImageData = new Pixel[height][width];
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
         newImageData[i][j] = new Pixel(
@@ -201,10 +213,10 @@ public class IMEModelImpl implements IMEModel {
    * @param a the input array
    * @return the reversed array
    */
-  private Pixel[] reverse(Pixel[] a) {
+  private IPixel[] reverse(IPixel[] a) {
     int n = a.length;
-    Pixel[] newRow = a.clone();
-    Pixel t;
+    IPixel[] newRow = a.clone();
+    IPixel t;
     for (int i = 0; i < n / 2; i++) {
       t = newRow[i];
       newRow[i] = newRow[n - i - 1];

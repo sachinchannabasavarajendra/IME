@@ -10,5 +10,5 @@ public interface IMEController {
   /**
    * Start the program, i.e. give control to the controller.
    */
-  void go() throws IOException;
+  void execute() throws IOException;
 }

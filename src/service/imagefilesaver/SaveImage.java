@@ -1,4 +1,4 @@
-package service.imageFileSaver;
+package service.imagefilesaver;
 
 import java.io.IOException;
 

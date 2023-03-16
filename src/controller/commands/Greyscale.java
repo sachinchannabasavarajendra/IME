@@ -3,7 +3,7 @@ package controller.commands;
 import java.util.Map;
 
 import model.IMEModel;
-import model.Pixel;
+import model.IPixel;
 
 /**
  * This class is used to perform the operation of convert the given image into a greyscale image of
@@ -42,22 +42,22 @@ public class Greyscale extends AbstractIMECommand {
     IMEModel resultantImage;
     switch (component) {
       case "red-component":
-        resultantImage = callingObject.greyScaleImage(Pixel::getRedComponent);
+        resultantImage = callingObject.greyScaleImage(IPixel::getRedComponent);
         break;
       case "green-component":
-        resultantImage = callingObject.greyScaleImage(Pixel::getGreenComponent);
+        resultantImage = callingObject.greyScaleImage(IPixel::getGreenComponent);
         break;
       case "blue-component":
-        resultantImage = callingObject.greyScaleImage(Pixel::getBlueComponent);
+        resultantImage = callingObject.greyScaleImage(IPixel::getBlueComponent);
         break;
       case "value-component":
-        resultantImage = callingObject.greyScaleImage(Pixel::getValue);
+        resultantImage = callingObject.greyScaleImage(IPixel::getValue);
         break;
       case "intensity-component":
-        resultantImage = callingObject.greyScaleImage(Pixel::getIntensity);
+        resultantImage = callingObject.greyScaleImage(IPixel::getIntensity);
         break;
       case "luma-component":
-        resultantImage = callingObject.greyScaleImage(Pixel::getLuma);
+        resultantImage = callingObject.greyScaleImage(IPixel::getLuma);
         break;
       default:
         throw new IllegalArgumentException(String.format("Unknown component %s", component));

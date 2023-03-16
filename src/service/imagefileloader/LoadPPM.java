@@ -1,4 +1,4 @@
-package service.imageFileLoader;
+package service.imagefileloader;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -34,7 +34,8 @@ public class LoadPPM implements LoadImage {
    * @throws FileNotFoundException if file is not located at the given file path
    */
   @Override
-  public IMEModel load(String imagePath, String imageName) throws FileNotFoundException, IllegalStateException {
+  public IMEModel load(String imagePath, String imageName)
+          throws FileNotFoundException, IllegalStateException {
     Scanner sc;
     Pixel[][] imageData;
     int height;
@@ -76,7 +77,8 @@ public class LoadPPM implements LoadImage {
         int blueComponent = sc.nextInt();
 
         if (redComponent > maxValue || blueComponent > maxValue || greenComponent > maxValue) {
-          throw new IllegalArgumentException("Component Value cannot be more than max value " + maxValue);
+          throw new IllegalArgumentException("Component Value cannot be more than max value "
+                  + maxValue);
         }
 
         if (redComponent < 0 || blueComponent < 0 || greenComponent < 0) {

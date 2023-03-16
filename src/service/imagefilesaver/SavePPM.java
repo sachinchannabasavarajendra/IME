@@ -1,4 +1,4 @@
-package service.imageFileSaver;
+package service.imagefilesaver;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 import model.IMEModel;
-import model.Pixel;
+import model.IPixel;
 
 /**
  * This is an implementation of the SaveImage interface which is used to save the manipulated image
@@ -24,7 +24,7 @@ public class SavePPM implements SaveImage {
   @Override
   public void save(String imagePath, IMEModel model) throws IOException {
     try {
-      Pixel[][] imageData = model.getImageData();
+      IPixel[][] imageData = model.getImageData();
       int height = model.getImageHeight();
       int width = model.getImageWidth();
       File output = new File(imagePath);

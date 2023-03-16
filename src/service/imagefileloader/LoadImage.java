@@ -1,4 +1,4 @@
-package service.imageFileLoader;
+package service.imagefileloader;
 
 import java.io.FileNotFoundException;
 

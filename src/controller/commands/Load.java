@@ -5,8 +5,8 @@ import java.io.InputStream;
 import java.util.Map;
 
 import model.IMEModel;
-import service.imageFileLoader.LoadImage;
-import service.imageFileLoader.LoadPPM;
+import service.imagefileloader.LoadImage;
+import service.imagefileloader.LoadPPM;
 
 /**
  * This class is used to perform the operation of loading an image from the specified path and refer
@@ -41,18 +41,15 @@ public class Load extends AbstractIMECommand {
   public void execute(Map<String, IMEModel> objectMap) {
     IMEModel loadedImageObject = null;
     String fileType = imagePath.substring(imagePath.lastIndexOf(".") + 1);
-    switch (fileType) {
-      case "ppm":
-        LoadImage loadPPM = new LoadPPM(this.in);
-        try {
-          loadedImageObject = loadPPM.load(imagePath, imageName);
-        } catch (FileNotFoundException e) {
-          throw new IllegalArgumentException("PPM image file not found");
-        }
-        break;
-
-      default:
-        throw new IllegalStateException("Given file type is not valid");
+    if (fileType.equals("ppm")) {
+      LoadImage loadPPM = new LoadPPM(this.in);
+      try {
+        loadedImageObject = loadPPM.load(imagePath, imageName);
+      } catch (FileNotFoundException e) {
+        throw new IllegalArgumentException("PPM image file not found");
+      }
+    } else {
+      throw new IllegalStateException("Given file type is not valid");
     }
 
     if (loadedImageObject != null) {

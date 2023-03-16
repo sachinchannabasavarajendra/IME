@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.util.Map;
 
 import model.IMEModel;
-import service.imageFileSaver.SaveImage;
-import service.imageFileSaver.SavePPM;
+import service.imagefilesaver.SaveImage;
+import service.imagefilesaver.SavePPM;
 
 /**
  * This class is used to perform the operation of saving the image with the given name to the
@@ -37,19 +37,16 @@ public class Save extends AbstractIMECommand {
   public void execute(Map<String, IMEModel> objectMap) {
     String fileType = imagePath.substring(imagePath.lastIndexOf(".") + 1);
     IMEModel imageObjectToBeSaved = null;
-    switch (fileType) {
-      case "ppm":
-        SaveImage savePPM = new SavePPM();
-        imageObjectToBeSaved = getModelObject(objectMap, imageName);
-        try {
-          savePPM.save(imagePath, imageObjectToBeSaved);
-        } catch (IOException e) {
-          throw new IllegalPathStateException(e.getMessage());
-        }
-        break;
-
-      default:
-        throw new IllegalArgumentException("Given file type is not valid");
+    if (fileType.equals("ppm")) {
+      SaveImage savePPM = new SavePPM();
+      imageObjectToBeSaved = getModelObject(objectMap, imageName);
+      try {
+        savePPM.save(imagePath, imageObjectToBeSaved);
+      } catch (IOException e) {
+        throw new IllegalPathStateException(e.getMessage());
+      }
+    } else {
+      throw new IllegalArgumentException("Given file type is not valid");
     }
   }
 }

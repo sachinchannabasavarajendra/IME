@@ -11,6 +11,9 @@ import java.nio.file.Path;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
+/**
+ * Test class to test functionity of the controller, command through inputs given as text commands.
+ */
 public class IMEControllerImplTest {
 
   IMEController controller;
@@ -25,7 +28,7 @@ public class IMEControllerImplTest {
     StringBuffer out = new StringBuffer();
     Reader in = new StringReader("load koala1.ppm koala");
     controller = new IMEControllerImpl(in, out);
-    controller.go();
+    controller.execute();
     assertEquals("Error!: koala1.ppm (No such file or directory)", out.toString());
   }
 
@@ -36,7 +39,7 @@ public class IMEControllerImplTest {
             "brighten 100 koala koala1\n" +
             "save output/koala-brighten.ppm koala1");
     controller = new IMEControllerImpl(in, out);
-    controller.go();
+    controller.execute();
     assertArrayEquals(Files.readAllBytes(Path.of("input/koala-brighten.ppm")),
             Files.readAllBytes(Path.of("output/koala-brighten.ppm")));
   }
@@ -46,7 +49,7 @@ public class IMEControllerImplTest {
     StringBuffer out = new StringBuffer();
     Reader in = new StringReader("load input/koala.png koala");
     controller = new IMEControllerImpl(in, out);
-    controller.go();
+    controller.execute();
     assertEquals("Error!: Given file type is not valid",
             out.toString());
   }
@@ -57,7 +60,7 @@ public class IMEControllerImplTest {
     Reader in = new StringReader("load input/koala.ppm koala\n" +
             "save output/koala.ppm koala");
     controller = new IMEControllerImpl(in, out);
-    controller.go();
+    controller.execute();
     assertArrayEquals(Files.readAllBytes(Path.of("input/koala.ppm")),
             Files.readAllBytes(Path.of("output/koala.ppm")));
   }
@@ -67,7 +70,7 @@ public class IMEControllerImplTest {
     StringBuffer out = new StringBuffer();
     Reader in = new StringReader("load input/max_great.ppm koala");
     controller = new IMEControllerImpl(in, out);
-    controller.go();
+    controller.execute();
     assertEquals("Error!: Component Value cannot be more than max value 255", out.toString());
   }
 
@@ -76,7 +79,7 @@ public class IMEControllerImplTest {
     StringBuffer out = new StringBuffer();
     Reader in = new StringReader("load input/min_less.ppm koala");
     controller = new IMEControllerImpl(in, out);
-    controller.go();
+    controller.execute();
     assertEquals("Error!: Component Value cannot be negative", out.toString());
   }
 
@@ -85,7 +88,7 @@ public class IMEControllerImplTest {
     StringBuffer out = new StringBuffer();
     Reader in = new StringReader("run input/loadTest.txt");
     controller = new IMEControllerImpl(in, out);
-    controller.go();
+    controller.execute();
     assertArrayEquals(Files.readAllBytes(Path.of("input/koala.ppm")),
             Files.readAllBytes(Path.of("output/koala.ppm")));
   }
@@ -95,7 +98,7 @@ public class IMEControllerImplTest {
     StringBuffer out = new StringBuffer();
     Reader in = new StringReader("loadImage input/min_less.ppm koala");
     controller = new IMEControllerImpl(in, out);
-    controller.go();
+    controller.execute();
     assertEquals("Error!: Bad input command :- loadImage", out.toString());
   }
 
@@ -105,7 +108,7 @@ public class IMEControllerImplTest {
     Reader in = new StringReader("load koala.ppm koala\n" +
             "save output/koala.ppm koala");
     controller = new IMEControllerImpl(in, out);
-    controller.go();
+    controller.execute();
     assertArrayEquals(Files.readAllBytes(Path.of("koala.ppm")),
             Files.readAllBytes(Path.of("output/koala.ppm")));
   }
@@ -115,7 +118,7 @@ public class IMEControllerImplTest {
     StringBuffer out = new StringBuffer();
     Reader in = new StringReader("load koala.ppm koala test");
     controller = new IMEControllerImpl(in, out);
-    controller.go();
+    controller.execute();
     assertEquals("Error!: Load expects 2 parameters", out.toString());
   }
 
@@ -126,7 +129,7 @@ public class IMEControllerImplTest {
             "greyscale red-component koala koala-red\n" +
             "save output/koala-red.ppm koala-red");
     controller = new IMEControllerImpl(in, out);
-    controller.go();
+    controller.execute();
     assertArrayEquals(Files.readAllBytes(Path.of("input/koala-red.ppm")),
             Files.readAllBytes(Path.of("output/koala-red.ppm")));
   }
@@ -138,7 +141,7 @@ public class IMEControllerImplTest {
             "greyscale blue-component koala koala-blue\n" +
             "save output/koala-blue.ppm koala-blue");
     controller = new IMEControllerImpl(in, out);
-    controller.go();
+    controller.execute();
     assertArrayEquals(Files.readAllBytes(Path.of("input/koala-blue.ppm")),
             Files.readAllBytes(Path.of("output/koala-blue.ppm")));
   }
@@ -150,7 +153,7 @@ public class IMEControllerImplTest {
             "greyscale green-component koala koala-green\n" +
             "save output/koala-green.ppm koala-green");
     controller = new IMEControllerImpl(in, out);
-    controller.go();
+    controller.execute();
     assertArrayEquals(Files.readAllBytes(Path.of("input/koala-green.ppm")),
             Files.readAllBytes(Path.of("output/koala-green.ppm")));
   }
@@ -162,7 +165,7 @@ public class IMEControllerImplTest {
             "greyscale value-component koala koala-value\n" +
             "save output/koala-value.ppm koala-value");
     controller = new IMEControllerImpl(in, out);
-    controller.go();
+    controller.execute();
     assertArrayEquals(Files.readAllBytes(Path.of("input/koala-value.ppm")),
             Files.readAllBytes(Path.of("output/koala-value.ppm")));
   }
@@ -174,7 +177,7 @@ public class IMEControllerImplTest {
             "greyscale intensity-component koala koala-intensity\n" +
             "save output/koala-intensity.ppm koala-intensity");
     controller = new IMEControllerImpl(in, out);
-    controller.go();
+    controller.execute();
     assertArrayEquals(Files.readAllBytes(Path.of("input/koala-intensity.ppm")),
             Files.readAllBytes(Path.of("output/koala-intensity.ppm")));
   }
@@ -186,7 +189,7 @@ public class IMEControllerImplTest {
             "greyscale luma-component koala koala-luma\n" +
             "save output/koala-luma.ppm koala-luma");
     controller = new IMEControllerImpl(in, out);
-    controller.go();
+    controller.execute();
     assertArrayEquals(Files.readAllBytes(Path.of("input/koala-luma.ppm")),
             Files.readAllBytes(Path.of("output/koala-luma.ppm")));
   }
@@ -198,7 +201,7 @@ public class IMEControllerImplTest {
             "horizontal-flip koala koala-horizontal\n" +
             "save output/koala-horizontal.ppm koala-horizontal");
     controller = new IMEControllerImpl(in, out);
-    controller.go();
+    controller.execute();
     assertArrayEquals(Files.readAllBytes(Path.of("input/koala-horizontal.ppm")),
             Files.readAllBytes(Path.of("output/koala-horizontal.ppm")));
   }
@@ -210,7 +213,7 @@ public class IMEControllerImplTest {
             "vertical-flip koala koala-vertical\n" +
             "save output/koala-vertical.ppm koala-vertical");
     controller = new IMEControllerImpl(in, out);
-    controller.go();
+    controller.execute();
     assertArrayEquals(Files.readAllBytes(Path.of("input/koala-vertical.ppm")),
             Files.readAllBytes(Path.of("output/koala-vertical.ppm")));
   }
@@ -226,7 +229,7 @@ public class IMEControllerImplTest {
             "save output/koala-hor-ver.ppm koala-hor-ver\n" +
             "save output/koala-ver-hor.ppm koala-ver-hor");
     controller = new IMEControllerImpl(in, out);
-    controller.go();
+    controller.execute();
     assertArrayEquals(Files.readAllBytes(Path.of("output/koala-ver-hor.ppm")),
             Files.readAllBytes(Path.of("output/koala-hor-ver.ppm")));
   }
@@ -242,7 +245,7 @@ public class IMEControllerImplTest {
             "save output/koala-hor-hor.ppm koala-hor-hor\n" +
             "save output/koala-ver-ver.ppm koala-ver-ver");
     controller = new IMEControllerImpl(in, out);
-    controller.go();
+    controller.execute();
     assertArrayEquals(Files.readAllBytes(Path.of("output/koala-hor-hor.ppm")),
             Files.readAllBytes(Path.of("koala.ppm")));
     assertArrayEquals(Files.readAllBytes(Path.of("output/koala-ver-ver.ppm")),
@@ -256,7 +259,7 @@ public class IMEControllerImplTest {
             "brighten -50 koala koala-darken\n" +
             "save output/koala-darken.ppm koala-darken");
     controller = new IMEControllerImpl(in, out);
-    controller.go();
+    controller.execute();
     assertArrayEquals(Files.readAllBytes(Path.of("input/koala-darken.ppm")),
             Files.readAllBytes(Path.of("output/koala-darken.ppm")));
   }
@@ -268,7 +271,7 @@ public class IMEControllerImplTest {
             "brighten 0 koala koala-brighten-1\n" +
             "save output/koala-brighten-1.ppm koala-brighten-1");
     controller = new IMEControllerImpl(in, out);
-    controller.go();
+    controller.execute();
     assertArrayEquals(Files.readAllBytes(Path.of("koala.ppm")),
             Files.readAllBytes(Path.of("output/koala-brighten-1.ppm")));
   }
@@ -280,7 +283,7 @@ public class IMEControllerImplTest {
             "brighten 256 koala koala-brightest\n" +
             "save output/koala-brightest.ppm koala-brightest");
     controller = new IMEControllerImpl(in, out);
-    controller.go();
+    controller.execute();
     assertArrayEquals(Files.readAllBytes(Path.of("input/koala-brightest.ppm")),
             Files.readAllBytes(Path.of("output/koala-brightest.ppm")));
   }
@@ -292,7 +295,7 @@ public class IMEControllerImplTest {
             "brighten -256 koala koala-black\n" +
             "save output/koala-black.ppm koala-black");
     controller = new IMEControllerImpl(in, out);
-    controller.go();
+    controller.execute();
     assertArrayEquals(Files.readAllBytes(Path.of("input/koala-black.ppm")),
             Files.readAllBytes(Path.of("output/koala-black.ppm")));
   }
@@ -306,7 +309,7 @@ public class IMEControllerImplTest {
             "save output/koala-green-1.ppm koala-green\n" +
             "save output/koala-blue-1.ppm koala-blue");
     controller = new IMEControllerImpl(in, out);
-    controller.go();
+    controller.execute();
     assertArrayEquals(Files.readAllBytes(Path.of("input/koala-red.ppm")),
             Files.readAllBytes(Path.of("output/koala-red-1.ppm")));
     assertArrayEquals(Files.readAllBytes(Path.of("input/koala-green.ppm")),
@@ -324,7 +327,7 @@ public class IMEControllerImplTest {
             "save output/koala-green-2.ppm koala-green\n" +
             "save output/koala-blue-2.ppm koala-blue");
     controller = new IMEControllerImpl(in, out);
-    controller.go();
+    controller.execute();
     assertArrayEquals(Files.readAllBytes(Path.of("input/koala-red.ppm")),
             Files.readAllBytes(Path.of("output/koala-red-2.ppm")));
     assertArrayEquals(Files.readAllBytes(Path.of("input/koala-red.ppm")),
@@ -342,7 +345,7 @@ public class IMEControllerImplTest {
             "save output/koala-green-3.ppm koala-green\n" +
             "save output/koala-blue-3.ppm koala-blue");
     controller = new IMEControllerImpl(in, out);
-    controller.go();
+    controller.execute();
     assertArrayEquals(Files.readAllBytes(Path.of("input/koala-green.ppm")),
             Files.readAllBytes(Path.of("output/koala-red-3.ppm")));
     assertArrayEquals(Files.readAllBytes(Path.of("input/koala-green.ppm")),
@@ -360,7 +363,7 @@ public class IMEControllerImplTest {
             "save output/koala-green-4.ppm koala-green\n" +
             "save output/koala-blue-4.ppm koala-blue");
     controller = new IMEControllerImpl(in, out);
-    controller.go();
+    controller.execute();
     assertArrayEquals(Files.readAllBytes(Path.of("input/koala-blue.ppm")),
             Files.readAllBytes(Path.of("output/koala-red-4.ppm")));
     assertArrayEquals(Files.readAllBytes(Path.of("input/koala-blue.ppm")),
@@ -377,7 +380,7 @@ public class IMEControllerImplTest {
             "rgb-combine koala-combine koala-red koala-green koala-blue\n" +
             "save output/koala-combine.ppm koala-combine");
     controller = new IMEControllerImpl(in, out);
-    controller.go();
+    controller.execute();
     assertArrayEquals(Files.readAllBytes(Path.of("koala.ppm")),
             Files.readAllBytes(Path.of("output/koala-combine.ppm")));
   }
@@ -390,7 +393,7 @@ public class IMEControllerImplTest {
             "load input/koala-green.ppm koala-green\n" +
             "rgb-combine koala-combine koala-red koala-green koala-blue");
     controller = new IMEControllerImpl(in, out);
-    controller.go();
+    controller.execute();
     assertEquals("Error!: The greyscale images are of different sizes!", out.toString());
   }
 }
