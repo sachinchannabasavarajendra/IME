@@ -16,8 +16,8 @@ public class IMEModelImplTest {
 
   public IMEModelImplTest() {
     try {
-      LoadImage imageLoader = new LoadPPM(new FileInputStream("test.ppm"));
-      image = imageLoader.load("test.ppm", "test");
+      LoadImage imageLoader = new LoadPPM(new FileInputStream("windows.ppm"));
+      image = imageLoader.load("windows.ppm", "windows");
     } catch (Exception e) {
       throw new IllegalPathStateException(e.getMessage());
     }
@@ -25,18 +25,18 @@ public class IMEModelImplTest {
 
   @Test
   public void getImageData() {
-    assertEquals(768, image.getImageData().length);
-    assertEquals(1024, image.getImageData()[0].length);
+    assertEquals(141, image.getImageData().length);
+    assertEquals(150, image.getImageData()[0].length);
   }
 
   @Test
   public void getImageHeight() {
-    assertEquals(768, image.getImageHeight());
+    assertEquals(141, image.getImageHeight());
   }
 
   @Test
   public void getImageWidth() {
-    assertEquals(1024, image.getImageWidth());
+    assertEquals(150, image.getImageWidth());
   }
 
   @Test

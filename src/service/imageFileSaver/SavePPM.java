@@ -39,7 +39,7 @@ public class SavePPM implements SaveImage {
 
       writer.write(width + " ");
       writer.write(height + "\n");
-      writer.write(255 + "\n");
+      writer.write(model.getMaxValue() + "\n");
 
       for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {

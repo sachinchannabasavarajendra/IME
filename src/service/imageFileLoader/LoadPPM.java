@@ -33,7 +33,7 @@ public class LoadPPM implements LoadImage {
    * @throws FileNotFoundException if file is not located at the given file path
    */
   @Override
-  public IMEModel load(String imagePath, String imageName) throws FileNotFoundException {
+  public IMEModel load(String imagePath, String imageName) throws FileNotFoundException, IllegalStateException {
     Scanner sc;
     Pixel[][] imageData;
     int height;
@@ -60,7 +60,7 @@ public class LoadPPM implements LoadImage {
 
     token = sc.next();
     if (!token.equals("P3")) {
-      System.out.println("Invalid PPM file: plain RAW file should begin with P3");
+      throw new IllegalStateException("Invalid PPM file: plain RAW file should begin with P3");
     }
     width = sc.nextInt();
     height = sc.nextInt();
@@ -78,6 +78,6 @@ public class LoadPPM implements LoadImage {
       }
     }
 
-    return new IMEModelImpl(imageData, height, width);
+    return new IMEModelImpl(imageData, height, width, maxValue);
   }
 }

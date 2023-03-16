@@ -51,8 +51,7 @@ public class Load extends AbstractIMECommand {
         break;
 
       default:
-        System.out.println("Given file type is not valid");
-        break;
+        throw new IllegalStateException("Given file type is not valid");
     }
 
     if (loadedImageObject != null) {

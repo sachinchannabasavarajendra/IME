@@ -14,6 +14,7 @@ public class IMEModelImpl implements IMEModel {
   private final Pixel[][] imageData;
   private final int height;
   private final int width;
+  private final int maxValue;
 
   /**
    * This is a constructor used to instantiate the above class by taking in the image data, height
@@ -22,11 +23,13 @@ public class IMEModelImpl implements IMEModel {
    * @param imageData the image data in the form of an array
    * @param height    the height of the image
    * @param width     the width of the image
+   * @param maxValue  the max value of each component of a pixel
    */
-  public IMEModelImpl(Pixel[][] imageData, int height, int width) {
+  public IMEModelImpl(Pixel[][] imageData, int height, int width, int maxValue) {
     this.imageData = imageData;
     this.height = height;
     this.width = width;
+    this.maxValue = maxValue;
   }
 
   /**
@@ -49,6 +52,10 @@ public class IMEModelImpl implements IMEModel {
     return this.height;
   }
 
+  @Override
+  public int getMaxValue() {
+    return this.maxValue;
+  }
   /**
    * This is a method used to get the width of the image.
    *
@@ -75,7 +82,7 @@ public class IMEModelImpl implements IMEModel {
         newImageData[i][j] = new Pixel(value, value, value);
       }
     }
-    return new IMEModelImpl(newImageData, height, width);
+    return new IMEModelImpl(newImageData, height, width, this.maxValue);
   }
 
   /**
@@ -90,7 +97,7 @@ public class IMEModelImpl implements IMEModel {
       newImageData[i] = reverse(imageData[i]);
     }
 
-    return new IMEModelImpl(newImageData, height, width);
+    return new IMEModelImpl(newImageData, height, width, maxValue);
   }
 
   /**
@@ -106,7 +113,7 @@ public class IMEModelImpl implements IMEModel {
       newImageData[n - i] = imageData[i];
     }
 
-    return new IMEModelImpl(newImageData, height, width);
+    return new IMEModelImpl(newImageData, height, width, maxValue);
   }
 
   /**
@@ -134,15 +141,15 @@ public class IMEModelImpl implements IMEModel {
     } else {
       for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
-          int redComponent = Math.min(this.imageData[i][j].getRedComponent() + delta, 255);
-          int greenComponent = Math.min(this.imageData[i][j].getGreenComponent() + delta, 255);
-          int blueComponent = Math.min(this.imageData[i][j].getBlueComponent() + delta, 255);
+          int redComponent = Math.min(this.imageData[i][j].getRedComponent() + delta, this.maxValue);
+          int greenComponent = Math.min(this.imageData[i][j].getGreenComponent() + delta, this.maxValue);
+          int blueComponent = Math.min(this.imageData[i][j].getBlueComponent() + delta, this.maxValue);
 
           newImageData[i][j] = new Pixel(redComponent, greenComponent, blueComponent);
         }
       }
     }
-    return new IMEModelImpl(newImageData, height, width);
+    return new IMEModelImpl(newImageData, height, width, maxValue);
   }
 
   /**
@@ -180,7 +187,7 @@ public class IMEModelImpl implements IMEModel {
             blueScaleImage.getImageData()[i][j].getBlueComponent());
       }
     }
-    return new IMEModelImpl(newImageData, height, width);
+    return new IMEModelImpl(newImageData, height, width, maxValue);
   }
 
   /**

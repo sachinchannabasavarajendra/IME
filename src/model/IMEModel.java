@@ -30,6 +30,13 @@ public interface IMEModel {
   int getImageWidth();
 
   /**
+   * This is a method used to get the max value of each component of the image.
+   *
+   * @return the max value of the each component.
+   */
+  int getMaxValue();
+
+  /**
    * This is a method used to convert the given image into a greyscale image of the given
    * component.
    *

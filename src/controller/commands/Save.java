@@ -49,8 +49,7 @@ public class Save extends AbstractIMECommand {
         break;
 
       default:
-        System.out.println("Given file type is not valid");
-        break;
+        throw new IllegalArgumentException("Given file type is not valid");
     }
   }
 }

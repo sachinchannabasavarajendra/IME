@@ -13,7 +13,7 @@ import java.awt.geom.IllegalPathStateException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -28,7 +28,7 @@ public class IMEControllerImpl implements IMEController {
 
   private final Map<String, IMEModel> objectMap;
   private final InputStream in;
-  private OutputStream out;
+  private final PrintStream out;
 
   /**
    * This is a constructor which is used to instantiate the above class.
@@ -36,7 +36,7 @@ public class IMEControllerImpl implements IMEController {
    * @param in  commands to be processed which are passed as input stream
    * @param out output stream used to display messages to the user
    */
-  public IMEControllerImpl(InputStream in, OutputStream out) {
+  public IMEControllerImpl(InputStream in, PrintStream out) {
     this.objectMap = new HashMap<>();
     this.in = in;
     this.out = out;
@@ -47,7 +47,7 @@ public class IMEControllerImpl implements IMEController {
    */
   public void go() {
     Scanner sc = new Scanner(this.in);
-    IMEModelCommand imeModelCommand = null;
+    IMEModelCommand imeModelCommand;
     boolean isScriptRunning = false;
 
     Map<String, Function<String[], IMEModelCommand>> knownCommands = new HashMap<>();
@@ -135,7 +135,7 @@ public class IMEControllerImpl implements IMEController {
           imeModelCommand.execute(this.objectMap);
         }
       } catch (Exception e) {
-        System.out.println("Error!: " + e.getMessage());
+        this.out.println("Error!: " + e.getMessage());
       }
     }
   }
