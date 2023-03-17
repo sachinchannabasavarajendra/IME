@@ -11,4 +11,27 @@ Instructions to run the script file :-
 
 Along with the console input commands, this user-interactive application also takes the text based script file and executes the supported commands in it. This application has a commands file called 'script.txt' which can be executed when the program runs using the console command - "run script.txt".
 
+Other supported commands:
+- load <imagePath> reindeer
+- brighten 50 reindeer reindeer-brighter
+- save <imagePath> reindeer-brighter
+- brighten -50 reindeer reindeer-darken (darken)
+- horizontal-flip reindeer reindeer-horizontal
+- vertical-flip reindeer-horizontal reindeer-horizontal-vertical
+- greyscale red-component reindeer reindeer-red-greyscale
+- greyscale green-component reindeer reindeer-green-greyscale
+- greyscale blue-component reindeer reindeer-blue-greyscale
+- greyscale value-component reindeer reindeer-value-greyscale
+- greyscale intensity-component reindeer reindeer-intensity-greyscale
+- greyscale luma-component reindeer reindeer-luma-greyscale
+- run <filePath>
+
 Use 'q' or 'quit' to stop running the application.
+
+## Citation of the image used Filename: reindeer.ppm
+
+Creator: Sachin Channabasavarajendra
+Location: Woodstock New Hampshire
+From the creator's personal collection, permitted to use the image.
+
+

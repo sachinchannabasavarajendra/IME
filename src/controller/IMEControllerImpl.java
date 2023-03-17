@@ -118,8 +118,8 @@ public class IMEControllerImpl implements IMEController {
       }
       try {
         String[] inputCommand = in.trim().split(" ");
-        if (inputCommand[0].equalsIgnoreCase("q") ||
-                inputCommand[0].equalsIgnoreCase("quit")) {
+        if (inputCommand[0].equalsIgnoreCase("q")
+                || inputCommand[0].equalsIgnoreCase("quit")) {
           return;
         }
 
@@ -129,7 +129,8 @@ public class IMEControllerImpl implements IMEController {
           continue;
         }
 
-        Function<String[], IMEModelCommand> cmd = knownCommands.getOrDefault(inputCommand[0], null);
+        Function<String[], IMEModelCommand> cmd =
+                knownCommands.getOrDefault(inputCommand[0], null);
         if (cmd == null) {
           throw new IllegalArgumentException("Bad input command :- " + inputCommand[0]);
         } else {
