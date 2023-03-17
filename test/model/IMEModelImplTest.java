@@ -215,6 +215,13 @@ public class IMEModelImplTest {
     }
   }
 
+  @Test
+  public void multipleFlips() {
+    IMEModel horizontalVertical = image.horizontalFlipImage().verticalFlipImage();
+    IMEModel verticalHorizontal = image.verticalFlipImage().horizontalFlipImage();
+    assertArrayEquals(horizontalVertical.getImageData(), verticalHorizontal.getImageData());
+  }
+
   private IPixel[] reverse(IPixel[] a) {
     int n = a.length;
     IPixel[] newRow = a.clone();
