@@ -2,3 +2,7 @@
 *.class
 *.xml
 .DS_Store
+.DS_Store
+input/*
+output/*
+res_copy/*	

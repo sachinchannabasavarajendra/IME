@@ -1,0 +1,2 @@
+load input/koala.ppm koala
+save output/koala.ppm koala
