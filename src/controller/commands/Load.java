@@ -3,9 +3,11 @@ package controller.commands;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Map;
-
 import model.IMEModel;
+import service.imagefileloader.LoadBMP;
 import service.imagefileloader.LoadImage;
+import service.imagefileloader.LoadJPG;
+import service.imagefileloader.LoadPNG;
 import service.imagefileloader.LoadPPM;
 
 /**
@@ -41,15 +43,46 @@ public class Load extends AbstractIMECommand {
   public void execute(Map<String, IMEModel> objectMap) {
     IMEModel loadedImageObject = null;
     String fileType = imagePath.substring(imagePath.lastIndexOf(".") + 1);
-    if (fileType.equals("ppm")) {
-      LoadImage loadPPM = new LoadPPM(this.in);
-      try {
-        loadedImageObject = loadPPM.load(imagePath, imageName);
-      } catch (FileNotFoundException e) {
-        throw new IllegalArgumentException("PPM image file not found");
-      }
-    } else {
-      throw new IllegalStateException("Given file type is not valid");
+    switch (fileType) {
+      case "ppm":
+        LoadImage loadPPM = new LoadPPM(this.in);
+        try {
+          loadedImageObject = loadPPM.load(imagePath, imageName);
+        } catch (FileNotFoundException e) {
+          throw new IllegalArgumentException("PPM image file not found");
+        }
+        break;
+
+      case "png":
+        LoadImage loadPNG = new LoadPNG();
+        try {
+          loadedImageObject = loadPNG.load(imagePath, imageName);
+        } catch (FileNotFoundException e) {
+          throw new IllegalArgumentException("PNG image file not found");
+        }
+        break;
+
+      case "jpg":
+      case "jpeg":
+        LoadImage loadJPG = new LoadJPG();
+        try {
+          loadedImageObject = loadJPG.load(imagePath, imageName);
+        } catch (FileNotFoundException e) {
+          throw new IllegalArgumentException("JPG image file not found");
+        }
+        break;
+
+      case "bmp":
+        LoadImage loadBMP = new LoadBMP();
+        try {
+          loadedImageObject = loadBMP.load(imagePath, imageName);
+        } catch (FileNotFoundException e) {
+          throw new IllegalArgumentException("BMP image file not found");
+        }
+        break;
+
+      default:
+        throw new IllegalStateException("Given file type is not valid");
     }
 
     if (loadedImageObject != null) {
