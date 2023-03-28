@@ -50,8 +50,9 @@ public class Pixel implements IPixel {
    */
   @Override
   public int getLuma() {
-    return (int) Math.round(
+    int value = (int) Math.round(
             (0.2126 * redComponent) + (0.7152 * greenComponent) + (0.0722 * blueComponent));
+    return Math.min(value, 255);
   }
 
   /**

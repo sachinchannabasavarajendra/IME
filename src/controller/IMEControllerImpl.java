@@ -2,6 +2,7 @@ package controller;
 
 import controller.commands.Blur;
 import controller.commands.Brighten;
+import controller.commands.Dither;
 import controller.commands.Greyscale;
 import controller.commands.HorizontalFlip;
 import controller.commands.IMEModelCommand;
@@ -89,6 +90,9 @@ public class IMEControllerImpl implements IMEController {
       return new HorizontalFlip(inputCommand[1], inputCommand[2]);
     });
     knownCommands.put("greyscale", inputCommand -> {
+      if(inputCommand.length == 3) {
+        return new Greyscale("luma-component", inputCommand[2], inputCommand[3]);
+      }
       if (inputCommand.length != 4) {
         throw new IllegalArgumentException("Greyscale expects 3 parameters");
       }
@@ -123,6 +127,12 @@ public class IMEControllerImpl implements IMEController {
         throw new IllegalArgumentException("Sepia color transformation expects 2 parameters");
       }
       return new SepiaColorTransform(inputCommand[1], inputCommand[2]);
+    });
+    knownCommands.put("dither", inputCommand -> {
+      if (inputCommand.length != 3) {
+        throw new IllegalArgumentException("Dither transformation expects 2 parameters");
+      }
+      return new Dither(inputCommand[1], inputCommand[2]);
     });
 
     while (sc.hasNextLine() || isScriptRunning) {

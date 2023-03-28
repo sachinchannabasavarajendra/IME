@@ -106,4 +106,6 @@ public interface IMEModel {
    * @return the resultant color transformed image data
    */
   IMEModel colorTransform(double[][] kernel);
+
+  IMEModel dither();
 }
