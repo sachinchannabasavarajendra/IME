@@ -1,6 +1,6 @@
-import java.io.InputStreamReader;
 import controller.IMEController;
 import controller.IMEControllerImpl;
+import java.io.InputStreamReader;
 
 /**
  * This class represents the entry point to the Image manipulator by calling the main method.

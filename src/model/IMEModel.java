@@ -85,7 +85,25 @@ public interface IMEModel {
    * @return combined greyscale image with all the three components
    */
   IMEModel combineRGBImage(
-          IMEModel greenScaleImage,
-          IMEModel blueScaleImage
+      IMEModel greenScaleImage,
+      IMEModel blueScaleImage
   );
+
+  /**
+   * This is a method used to blur or sharpen the image based on the kernel filter value passed to
+   * this method.
+   *
+   * @param kernel the filter value to blur or sharpen the image
+   * @return the resultant blurred or sharpened image data
+   */
+  IMEModel filterImage(double[][] kernel);
+
+  /**
+   * This is a method used to transform the color of the image based on the kernel filter value
+   * passed to this method.
+   *
+   * @param kernel the filter value to transform the color of the image
+   * @return the resultant color transformed image data
+   */
+  IMEModel colorTransform(double[][] kernel);
 }
