@@ -90,22 +90,31 @@ public interface IMEModel {
   );
 
   /**
-   * This is a method used to blur or sharpen the image based on the kernel filter value passed to
-   * this method.
+   * This is a method used to blur the image based on the kernel filter value.
    *
-   * @param kernel the filter value to blur or sharpen the image
-   * @return the resultant blurred or sharpened image data
+   * @return the resultant blurred image data
    */
-  IMEModel filterImage(double[][] kernel);
+  IMEModel blur();
 
   /**
-   * This is a method used to transform the color of the image based on the kernel filter value
-   * passed to this method.
+   * This is a method used to sharpen the image based on the kernel filter value.
    *
-   * @param kernel the filter value to transform the color of the image
-   * @return the resultant color transformed image data
+   * @return the resultant sharpened image data
    */
-  IMEModel colorTransform(double[][] kernel);
+  IMEModel sharpen();
 
+  /**
+   * This is a method used to transform the color of the image and give it a sepia tone based on the
+   * kernel filter value.
+   *
+   * @return the resultant sepia color transformed image data
+   */
+  IMEModel sepiaColorTransform();
+
+  /**
+   * This is a method used to dither an image.
+   *
+   * @return the resultant dithered image data.
+   */
   IMEModel dither();
 }

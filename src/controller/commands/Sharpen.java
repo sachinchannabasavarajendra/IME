@@ -9,7 +9,6 @@ import model.IMEModel;
  */
 public class Sharpen extends AbstractIMECommand {
 
-  private final double[][] kernel;
   private final String sourceImageName;
   private final String destinationImageName;
 
@@ -21,10 +20,6 @@ public class Sharpen extends AbstractIMECommand {
    * @param destinationImageName the name of the resultant image obtained after manipulation
    */
   public Sharpen(String sourceImageName, String destinationImageName) {
-    this.kernel = new double[][]{{-0.125, -0.125, -0.125, -0.125, -0.125},
-        {-0.125, 0.25, 0.25, 0.25, -0.125},
-        {-0.125, 0.25, 1, 0.25, -0.125}, {-0.125, 0.25, 0.25, 0.25, -0.125},
-        {-0.125, -0.125, -0.125, -0.125, -0.125}};
     this.sourceImageName = sourceImageName;
     this.destinationImageName = destinationImageName;
   }
@@ -38,7 +33,7 @@ public class Sharpen extends AbstractIMECommand {
   @Override
   public void execute(Map<String, IMEModel> objectMap) {
     IMEModel callingObject = getModelObject(objectMap, sourceImageName);
-    IMEModel ditheredImage = callingObject.filterImage(this.kernel);
-    objectMap.put(destinationImageName, ditheredImage);
+    IMEModel sharpenedImage = callingObject.sharpen();
+    objectMap.put(destinationImageName, sharpenedImage);
   }
 }

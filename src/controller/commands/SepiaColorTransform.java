@@ -9,7 +9,6 @@ import model.IMEModel;
  */
 public class SepiaColorTransform extends AbstractIMECommand {
 
-  private final double[][] kernel;
   private final String sourceImageName;
   private final String destinationImageName;
 
@@ -21,8 +20,6 @@ public class SepiaColorTransform extends AbstractIMECommand {
    * @param destinationImageName the name of the resultant image obtained after manipulation
    */
   public SepiaColorTransform(String sourceImageName, String destinationImageName) {
-    this.kernel = new double[][]{{0.393, 0.769, 0.189}, {0.349, 0.686, 0.168},
-        {0.272, 0.534, 0.131}};
     this.sourceImageName = sourceImageName;
     this.destinationImageName = destinationImageName;
   }
@@ -36,7 +33,7 @@ public class SepiaColorTransform extends AbstractIMECommand {
   @Override
   public void execute(Map<String, IMEModel> objectMap) {
     IMEModel callingObject = getModelObject(objectMap, sourceImageName);
-    IMEModel greyscaleColorTransformedImage = callingObject.colorTransform(this.kernel);
+    IMEModel greyscaleColorTransformedImage = callingObject.sepiaColorTransform();
     objectMap.put(destinationImageName, greyscaleColorTransformedImage);
   }
 }

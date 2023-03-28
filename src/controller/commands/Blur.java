@@ -9,7 +9,6 @@ import model.IMEModel;
  */
 public class Blur extends AbstractIMECommand {
 
-  private final double[][] kernel;
   private final String sourceImageName;
   private final String destinationImageName;
 
@@ -21,8 +20,6 @@ public class Blur extends AbstractIMECommand {
    * @param destinationImageName the name of the resultant image obtained after manipulation
    */
   public Blur(String sourceImageName, String destinationImageName) {
-    this.kernel = new double[][]{{0.0625, 0.125, 0.0625}, {0.125, 0.25, 0.125},
-        {0.0625, 0.125, 0.0625}};
     this.sourceImageName = sourceImageName;
     this.destinationImageName = destinationImageName;
   }
@@ -36,7 +33,7 @@ public class Blur extends AbstractIMECommand {
   @Override
   public void execute(Map<String, IMEModel> objectMap) {
     IMEModel callingObject = getModelObject(objectMap, sourceImageName);
-    IMEModel ditheredImage = callingObject.filterImage(this.kernel);
-    objectMap.put(destinationImageName, ditheredImage);
+    IMEModel blurredImage = callingObject.blur();
+    objectMap.put(destinationImageName, blurredImage);
   }
 }

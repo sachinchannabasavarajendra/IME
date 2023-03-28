@@ -208,14 +208,115 @@ public class IMEModelImpl implements IMEModel {
   }
 
   /**
-   * This is a method used to blur or sharpen the image based on the kernel filter value passed to
-   * this method.
+   * This is a method used to blur the image based on the kernel filter value.
    *
-   * @param kernel the filter value to blur or sharpen the image
-   * @return the resultant blurred or sharpened image data
+   * @return the resultant blurred image data
    */
   @Override
-  public IMEModel filterImage(double[][] kernel) {
+  public IMEModel blur() {
+    double[][] kernel = new double[][]{{0.0625, 0.125, 0.0625}, {0.125, 0.25, 0.125},
+        {0.0625, 0.125, 0.0625}};
+    return filterImage(kernel);
+  }
+
+  /**
+   * This is a method used to sharpen the image based on the kernel filter value.
+   *
+   * @return the resultant sharpened image data
+   */
+  @Override
+  public IMEModel sharpen() {
+    double[][] kernel = new double[][]{{-0.125, -0.125, -0.125, -0.125, -0.125},
+        {-0.125, 0.25, 0.25, 0.25, -0.125},
+        {-0.125, 0.25, 1, 0.25, -0.125}, {-0.125, 0.25, 0.25, 0.25, -0.125},
+        {-0.125, -0.125, -0.125, -0.125, -0.125}};
+    return filterImage(kernel);
+  }
+
+  /**
+   * This is a method used to transform the color of the image and give it a sepia tone based on the
+   * kernel filter value.
+   *
+   * @return the resultant sepia color transformed image data
+   */
+  @Override
+  public IMEModel sepiaColorTransform() {
+    double[][] kernel = new double[][]{{0.393, 0.769, 0.189}, {0.349, 0.686, 0.168},
+        {0.272, 0.534, 0.131}};
+    return colorTransform(kernel);
+  }
+
+  /**
+   * This is a method used to dither an image.
+   *
+   * @return the resultant dithered image data.
+   */
+  @Override
+  public IMEModel dither() {
+    IMEModel greyScaleImage = this.greyScaleImage(IPixel::getLuma);
+    IPixel[][] newImageData = new Pixel[height][width];
+    IPixel[][] oldImageData = greyScaleImage.getImageData();
+    for (int i = 0; i < greyScaleImage.getImageHeight(); i++) {
+      for (int j = 0; j < greyScaleImage.getImageWidth(); j++) {
+        int oldColor = oldImageData[i][j].getRedComponent();
+        int newColor = this.maxValue - oldColor <= 127 ? this.maxValue : 0;
+        int error = oldColor - newColor;
+        newImageData[i][j] = new Pixel(newColor, newColor, newColor);
+
+        if (j + 1 < greyScaleImage.getImageWidth()) {
+          int rightError = (int) Math.round(
+              oldImageData[i][j + 1].getRedComponent() + ((7.0 * error) / 16.0));
+          oldImageData[i][j + 1] = new Pixel(rightError, rightError, rightError);
+        }
+
+        if (j > 1 && i + 1 < greyScaleImage.getImageHeight()) {
+          int leftBottomError = (int) Math.round(
+              oldImageData[i + 1][j - 1].getRedComponent() + ((3.0 * error) / 16.0));
+          oldImageData[i + 1][j - 1] = new Pixel(leftBottomError, leftBottomError, leftBottomError);
+        }
+
+        if (i + 1 < greyScaleImage.getImageHeight()) {
+          int bottom = (int) Math.round(
+              oldImageData[i + 1][j].getRedComponent() + ((5.0 * error) / 16.0));
+          oldImageData[i + 1][j] = new Pixel(bottom, bottom, bottom);
+        }
+
+        if (i + 1 < greyScaleImage.getImageHeight() && j + 1 < greyScaleImage.getImageWidth()) {
+          int bottomRight = (int) Math.round(
+              oldImageData[i + 1][j + 1].getRedComponent() + (error / 16.0));
+          oldImageData[i + 1][j + 1] = new Pixel(bottomRight, bottomRight, bottomRight);
+        }
+      }
+    }
+
+    return new IMEModelImpl(newImageData, height, width, maxValue);
+  }
+
+  /**
+   * This is a helper method used to reverse the contents of an array.
+   *
+   * @param a the input array
+   * @return the reversed array
+   */
+  private IPixel[] reverse(IPixel[] a) {
+    int n = a.length;
+    IPixel[] newRow = a.clone();
+    IPixel t;
+    for (int i = 0; i < n / 2; i++) {
+      t = newRow[i];
+      newRow[i] = newRow[n - i - 1];
+      newRow[n - i - 1] = t;
+    }
+    return newRow;
+  }
+
+  /**
+   * This is a helper method used to filter the image based on the input kernel filter value.
+   *
+   * @param kernel the filter value which is used to filter the components of the image
+   * @return the resultant filtered image
+   */
+  private IMEModel filterImage(double[][] kernel) {
     int kernelSize = kernel.length;
     int offset = kernelSize / 2;
 
@@ -247,14 +348,13 @@ public class IMEModelImpl implements IMEModel {
   }
 
   /**
-   * This is a method used to transform the color of the image based on the kernel filter value
-   * passed to this method.
+   * This is a helper method used to apply a color transformation to the image based on the input
+   * kernel filter value.
    *
-   * @param kernel the filter value to transform the color of the image
+   * @param kernel the filter value which is used to transform the components of the image
    * @return the resultant color transformed image data
    */
-  @Override
-  public IMEModel colorTransform(double[][] kernel) {
+  private IMEModel colorTransform(double[][] kernel) {
     IPixel[][] newImageData = new Pixel[height][width];
     double red;
     double green;
@@ -279,60 +379,6 @@ public class IMEModelImpl implements IMEModel {
       }
     }
     return new IMEModelImpl(newImageData, height, width, maxValue);
-  }
-
-  public IMEModel dither() {
-    IMEModel greyScaleImage = this.greyScaleImage(IPixel::getLuma);
-    IPixel[][] newImageData = new Pixel[height][width];
-    IPixel[][] oldImageData = greyScaleImage.getImageData();
-    for(int i=0; i < greyScaleImage.getImageHeight(); i++) {
-      for(int j=0; j < greyScaleImage.getImageWidth(); j++) {
-        int oldColor = oldImageData[i][j].getRedComponent();
-        int newColor = this.maxValue - oldColor <= 127 ? this.maxValue : 0;
-        int error = oldColor - newColor;
-        newImageData[i][j] = new Pixel(newColor, newColor, newColor);
-
-        if(j+1 < greyScaleImage.getImageWidth()) {
-          int rightError = (int) Math.round(oldImageData[i][j+1].getRedComponent() + ((7 * (double)error) / 16));
-          oldImageData[i][j+1] = new Pixel(rightError, rightError, rightError);
-        }
-
-        if(j>1 && i+1 < greyScaleImage.getImageHeight()) {
-          int leftBottomError = (int) Math.round(oldImageData[i+1][j-1].getRedComponent() + ((3 * (double)error) / 16));
-          oldImageData[i+1][j-1] = new Pixel(leftBottomError, leftBottomError, leftBottomError);
-        }
-
-        if(i+1 < greyScaleImage.getImageHeight()) {
-          int bottom = (int) Math.round(oldImageData[i+1][j].getRedComponent() + ((5 * (double)error) / 16));
-          oldImageData[i+1][j] = new Pixel(bottom, bottom, bottom);
-        }
-
-        if(i+1 < greyScaleImage.getImageHeight() && j+1 < greyScaleImage.getImageWidth()) {
-          int bottomright = (int) Math.round(oldImageData[i+1][j+1].getRedComponent() + ((1 * (double)error) / 16));
-          oldImageData[i+1][j+1] = new Pixel(bottomright, bottomright, bottomright);
-        }
-      }
-    }
-
-    return new IMEModelImpl(newImageData, height, width, maxValue);
-  }
-
-  /**
-   * This is a helper method used to reverse the contents of an array.
-   *
-   * @param a the input array
-   * @return the reversed array
-   */
-  private IPixel[] reverse(IPixel[] a) {
-    int n = a.length;
-    IPixel[] newRow = a.clone();
-    IPixel t;
-    for (int i = 0; i < n / 2; i++) {
-      t = newRow[i];
-      newRow[i] = newRow[n - i - 1];
-      newRow[n - i - 1] = t;
-    }
-    return newRow;
   }
 
   /**
