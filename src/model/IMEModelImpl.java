@@ -150,11 +150,11 @@ public class IMEModelImpl implements IMEModel {
       for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
           int redComponent =
-                  Math.min(this.imageData[i][j].getRedComponent() + delta, this.maxValue);
+              Math.min(this.imageData[i][j].getRedComponent() + delta, this.maxValue);
           int greenComponent =
-                  Math.min(this.imageData[i][j].getGreenComponent() + delta, this.maxValue);
+              Math.min(this.imageData[i][j].getGreenComponent() + delta, this.maxValue);
           int blueComponent =
-                  Math.min(this.imageData[i][j].getBlueComponent() + delta, this.maxValue);
+              Math.min(this.imageData[i][j].getBlueComponent() + delta, this.maxValue);
 
           newImageData[i][j] = new Pixel(redComponent, greenComponent, blueComponent);
         }
@@ -187,23 +187,108 @@ public class IMEModelImpl implements IMEModel {
    */
   @Override
   public IMEModel combineRGBImage(IMEModel greenScaleImage,
-                                  IMEModel blueScaleImage) {
+      IMEModel blueScaleImage) {
 
     if (!(this.height == greenScaleImage.getImageHeight()
-            && this.height == blueScaleImage.getImageHeight())
-            || !(this.width == greenScaleImage.getImageWidth()
-            && this.width == blueScaleImage.getImageWidth())) {
+        && this.height == blueScaleImage.getImageHeight())
+        || !(this.width == greenScaleImage.getImageWidth()
+        && this.width == blueScaleImage.getImageWidth())) {
       throw new IllegalStateException("The greyscale images are of different sizes!");
     }
     IPixel[][] newImageData = new Pixel[height][width];
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
         newImageData[i][j] = new Pixel(
-                this.getImageData()[i][j].getRedComponent(),
-                greenScaleImage.getImageData()[i][j].getGreenComponent(),
-                blueScaleImage.getImageData()[i][j].getBlueComponent());
+            this.getImageData()[i][j].getRedComponent(),
+            greenScaleImage.getImageData()[i][j].getGreenComponent(),
+            blueScaleImage.getImageData()[i][j].getBlueComponent());
       }
     }
+    return new IMEModelImpl(newImageData, height, width, maxValue);
+  }
+
+  /**
+   * This is a method used to blur the image based on the kernel filter value.
+   *
+   * @return the resultant blurred image data
+   */
+  @Override
+  public IMEModel blur() {
+    double[][] kernel = new double[][]{{0.0625, 0.125, 0.0625}, {0.125, 0.25, 0.125},
+        {0.0625, 0.125, 0.0625}};
+    return filterImage(kernel);
+  }
+
+  /**
+   * This is a method used to sharpen the image based on the kernel filter value.
+   *
+   * @return the resultant sharpened image data
+   */
+  @Override
+  public IMEModel sharpen() {
+    double[][] kernel = new double[][]{{-0.125, -0.125, -0.125, -0.125, -0.125},
+        {-0.125, 0.25, 0.25, 0.25, -0.125},
+        {-0.125, 0.25, 1, 0.25, -0.125}, {-0.125, 0.25, 0.25, 0.25, -0.125},
+        {-0.125, -0.125, -0.125, -0.125, -0.125}};
+    return filterImage(kernel);
+  }
+
+  /**
+   * This is a method used to transform the color of the image and give it a sepia tone based on the
+   * kernel filter value.
+   *
+   * @return the resultant sepia color transformed image data
+   */
+  @Override
+  public IMEModel sepiaColorTransform() {
+    double[][] kernel = new double[][]{{0.393, 0.769, 0.189}, {0.349, 0.686, 0.168},
+        {0.272, 0.534, 0.131}};
+    return colorTransform(kernel);
+  }
+
+  /**
+   * This is a method used to dither an image.
+   *
+   * @return the resultant dithered image data.
+   */
+  @Override
+  public IMEModel dither() {
+    IMEModel greyScaleImage = this.greyScaleImage(IPixel::getLuma);
+    IPixel[][] newImageData = new Pixel[height][width];
+    IPixel[][] oldImageData = greyScaleImage.getImageData();
+    for (int i = 0; i < greyScaleImage.getImageHeight(); i++) {
+      for (int j = 0; j < greyScaleImage.getImageWidth(); j++) {
+        int oldColor = oldImageData[i][j].getRedComponent();
+        int newColor = this.maxValue - oldColor <= 127 ? this.maxValue : 0;
+        int error = oldColor - newColor;
+        newImageData[i][j] = new Pixel(newColor, newColor, newColor);
+
+        if (j + 1 < greyScaleImage.getImageWidth()) {
+          int rightError = (int) Math.round(
+              oldImageData[i][j + 1].getRedComponent() + ((7.0 * error) / 16.0));
+          oldImageData[i][j + 1] = new Pixel(rightError, rightError, rightError);
+        }
+
+        if (j > 1 && i + 1 < greyScaleImage.getImageHeight()) {
+          int leftBottomError = (int) Math.round(
+              oldImageData[i + 1][j - 1].getRedComponent() + ((3.0 * error) / 16.0));
+          oldImageData[i + 1][j - 1] = new Pixel(leftBottomError, leftBottomError, leftBottomError);
+        }
+
+        if (i + 1 < greyScaleImage.getImageHeight()) {
+          int bottom = (int) Math.round(
+              oldImageData[i + 1][j].getRedComponent() + ((5.0 * error) / 16.0));
+          oldImageData[i + 1][j] = new Pixel(bottom, bottom, bottom);
+        }
+
+        if (i + 1 < greyScaleImage.getImageHeight() && j + 1 < greyScaleImage.getImageWidth()) {
+          int bottomRight = (int) Math.round(
+              oldImageData[i + 1][j + 1].getRedComponent() + (error / 16.0));
+          oldImageData[i + 1][j + 1] = new Pixel(bottomRight, bottomRight, bottomRight);
+        }
+      }
+    }
+
     return new IMEModelImpl(newImageData, height, width, maxValue);
   }
 
@@ -223,5 +308,86 @@ public class IMEModelImpl implements IMEModel {
       newRow[n - i - 1] = t;
     }
     return newRow;
+  }
+
+  /**
+   * This is a helper method used to filter the image based on the input kernel filter value.
+   *
+   * @param kernel the filter value which is used to filter the components of the image
+   * @return the resultant filtered image
+   */
+  private IMEModel filterImage(double[][] kernel) {
+    int kernelSize = kernel.length;
+    int offset = kernelSize / 2;
+
+    IPixel[][] newImageData = new Pixel[height][width];
+
+    for (int i = 0; i < height; i++) {
+      for (int j = 0; j < width; j++) {
+        double red = 0;
+        double green = 0;
+        double blue = 0;
+        for (int k = -offset; k <= offset; k++) {
+          for (int l = -offset; l <= offset; l++) {
+            int x = i + k;
+            int y = j + l;
+            if (x >= 0 && x < height && y >= 0 && y < width) {
+              red += this.imageData[x][y].getRedComponent() * kernel[k + offset][l + offset];
+              green += this.imageData[x][y].getGreenComponent() * kernel[k + offset][l + offset];
+              blue += this.imageData[x][y].getBlueComponent() * kernel[k + offset][l + offset];
+            }
+          }
+        }
+        red = clamp(red);
+        green = clamp(green);
+        blue = clamp(blue);
+        newImageData[i][j] = new Pixel((int) red, (int) green, (int) blue);
+      }
+    }
+    return new IMEModelImpl(newImageData, height, width, maxValue);
+  }
+
+  /**
+   * This is a helper method used to apply a color transformation to the image based on the input
+   * kernel filter value.
+   *
+   * @param kernel the filter value which is used to transform the components of the image
+   * @return the resultant color transformed image data
+   */
+  private IMEModel colorTransform(double[][] kernel) {
+    IPixel[][] newImageData = new Pixel[height][width];
+    double red;
+    double green;
+    double blue;
+    for (int i = 0; i < height; i++) {
+      for (int j = 0; j < width; j++) {
+        red = kernel[0][0] * this.imageData[i][j].getRedComponent()
+            + kernel[0][1] * this.imageData[i][j].getGreenComponent()
+            + kernel[0][2] * this.imageData[i][j].getBlueComponent();
+        green = kernel[1][0] * this.imageData[i][j].getRedComponent()
+            + kernel[1][1] * this.imageData[i][j].getGreenComponent()
+            + kernel[1][2] * this.imageData[i][j].getBlueComponent();
+        blue = kernel[2][0] * this.imageData[i][j].getRedComponent()
+            + kernel[2][1] * this.imageData[i][j].getGreenComponent()
+            + kernel[2][2] * this.imageData[i][j].getBlueComponent();
+
+        red = clamp(red);
+        green = clamp(green);
+        blue = clamp(blue);
+
+        newImageData[i][j] = new Pixel((int) red, (int) green, (int) blue);
+      }
+    }
+    return new IMEModelImpl(newImageData, height, width, maxValue);
+  }
+
+  /**
+   * This is a helper method used to clamp a value between 0 and 255
+   *
+   * @param value the value to be clamped between 0 and 255
+   * @return the clamped value
+   */
+  private double clamp(double value) {
+    return Math.min(Math.max(value, 0), 255);
   }
 }

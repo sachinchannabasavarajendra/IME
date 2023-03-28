@@ -13,7 +13,7 @@ import model.Pixel;
  * This is an implementation of the LoadImage interface which is used to load and process image
  * files of ppm format.
  */
-public class LoadPPM extends AbstractLoadImage {
+public class LoadPPM implements LoadImage {
 
   private final InputStream in;
 

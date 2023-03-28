@@ -85,7 +85,36 @@ public interface IMEModel {
    * @return combined greyscale image with all the three components
    */
   IMEModel combineRGBImage(
-          IMEModel greenScaleImage,
-          IMEModel blueScaleImage
+      IMEModel greenScaleImage,
+      IMEModel blueScaleImage
   );
+
+  /**
+   * This is a method used to blur the image based on the kernel filter value.
+   *
+   * @return the resultant blurred image data
+   */
+  IMEModel blur();
+
+  /**
+   * This is a method used to sharpen the image based on the kernel filter value.
+   *
+   * @return the resultant sharpened image data
+   */
+  IMEModel sharpen();
+
+  /**
+   * This is a method used to transform the color of the image and give it a sepia tone based on the
+   * kernel filter value.
+   *
+   * @return the resultant sepia color transformed image data
+   */
+  IMEModel sepiaColorTransform();
+
+  /**
+   * This is a method used to dither an image.
+   *
+   * @return the resultant dithered image data.
+   */
+  IMEModel dither();
 }

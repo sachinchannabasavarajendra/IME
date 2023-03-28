@@ -1,5 +1,18 @@
 package controller;
 
+import controller.commands.Blur;
+import controller.commands.Brighten;
+import controller.commands.Dither;
+import controller.commands.Greyscale;
+import controller.commands.HorizontalFlip;
+import controller.commands.IMEModelCommand;
+import controller.commands.Load;
+import controller.commands.RGBCombine;
+import controller.commands.RGBSplit;
+import controller.commands.Save;
+import controller.commands.SepiaColorTransform;
+import controller.commands.Sharpen;
+import controller.commands.VerticalFlip;
 import java.awt.geom.IllegalPathStateException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -8,16 +21,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.function.Function;
-
-import controller.commands.Brighten;
-import controller.commands.Greyscale;
-import controller.commands.HorizontalFlip;
-import controller.commands.IMEModelCommand;
-import controller.commands.Load;
-import controller.commands.RGBCombine;
-import controller.commands.RGBSplit;
-import controller.commands.Save;
-import controller.commands.VerticalFlip;
 import model.IMEModel;
 
 /**
@@ -72,7 +75,7 @@ public class IMEControllerImpl implements IMEController {
         throw new IllegalArgumentException("Brighten expects 3 parameters");
       }
       return new Brighten(Integer.parseInt(inputCommand[1]),
-              inputCommand[2], inputCommand[3]);
+          inputCommand[2], inputCommand[3]);
     });
     knownCommands.put("vertical-flip", inputCommand -> {
       if (inputCommand.length != 3) {
@@ -87,6 +90,9 @@ public class IMEControllerImpl implements IMEController {
       return new HorizontalFlip(inputCommand[1], inputCommand[2]);
     });
     knownCommands.put("greyscale", inputCommand -> {
+      if(inputCommand.length == 3) {
+        return new Greyscale("luma-component", inputCommand[2], inputCommand[3]);
+      }
       if (inputCommand.length != 4) {
         throw new IllegalArgumentException("Greyscale expects 3 parameters");
       }
@@ -104,6 +110,30 @@ public class IMEControllerImpl implements IMEController {
       }
       return new RGBCombine(inputCommand[1], inputCommand[2], inputCommand[3], inputCommand[4]);
     });
+    knownCommands.put("blur", inputCommand -> {
+      if (inputCommand.length != 3) {
+        throw new IllegalArgumentException("Blur expects 2 parameters");
+      }
+      return new Blur(inputCommand[1], inputCommand[2]);
+    });
+    knownCommands.put("sharpen", inputCommand -> {
+      if (inputCommand.length != 3) {
+        throw new IllegalArgumentException("Sharpen expects 2 parameters");
+      }
+      return new Sharpen(inputCommand[1], inputCommand[2]);
+    });
+    knownCommands.put("sepia", inputCommand -> {
+      if (inputCommand.length != 3) {
+        throw new IllegalArgumentException("Sepia color transformation expects 2 parameters");
+      }
+      return new SepiaColorTransform(inputCommand[1], inputCommand[2]);
+    });
+    knownCommands.put("dither", inputCommand -> {
+      if (inputCommand.length != 3) {
+        throw new IllegalArgumentException("Dither transformation expects 2 parameters");
+      }
+      return new Dither(inputCommand[1], inputCommand[2]);
+    });
 
     while (sc.hasNextLine() || isScriptRunning) {
       if (!sc.hasNextLine() && isScriptRunning) {
@@ -119,7 +149,7 @@ public class IMEControllerImpl implements IMEController {
       try {
         String[] inputCommand = in.trim().split(" ");
         if (inputCommand[0].equalsIgnoreCase("q")
-                || inputCommand[0].equalsIgnoreCase("quit")) {
+            || inputCommand[0].equalsIgnoreCase("quit")) {
           return;
         }
 
@@ -130,7 +160,7 @@ public class IMEControllerImpl implements IMEController {
         }
 
         Function<String[], IMEModelCommand> cmd =
-                knownCommands.getOrDefault(inputCommand[0], null);
+            knownCommands.getOrDefault(inputCommand[0], null);
         if (cmd == null) {
           throw new IllegalArgumentException("Bad input command :- " + inputCommand[0]);
         } else {

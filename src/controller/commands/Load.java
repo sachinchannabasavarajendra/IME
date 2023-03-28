@@ -4,10 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Map;
 import model.IMEModel;
-import service.imagefileloader.LoadBMP;
 import service.imagefileloader.LoadImage;
-import service.imagefileloader.LoadJPG;
-import service.imagefileloader.LoadPNG;
+import service.imagefileloader.LoadImageFile;
 import service.imagefileloader.LoadPPM;
 
 /**
@@ -54,30 +52,14 @@ public class Load extends AbstractIMECommand {
         break;
 
       case "png":
-        LoadImage loadPNG = new LoadPNG();
-        try {
-          loadedImageObject = loadPNG.load(imagePath, imageName);
-        } catch (FileNotFoundException e) {
-          throw new IllegalArgumentException("PNG image file not found");
-        }
-        break;
-
       case "jpg":
       case "jpeg":
-        LoadImage loadJPG = new LoadJPG();
-        try {
-          loadedImageObject = loadJPG.load(imagePath, imageName);
-        } catch (FileNotFoundException e) {
-          throw new IllegalArgumentException("JPG image file not found");
-        }
-        break;
-
       case "bmp":
-        LoadImage loadBMP = new LoadBMP();
+        LoadImage loadImageFile = new LoadImageFile();
         try {
-          loadedImageObject = loadBMP.load(imagePath, imageName);
+          loadedImageObject = loadImageFile.load(imagePath, imageName);
         } catch (FileNotFoundException e) {
-          throw new IllegalArgumentException("BMP image file not found");
+          throw new IllegalArgumentException("PNG image file not found");
         }
         break;
 
