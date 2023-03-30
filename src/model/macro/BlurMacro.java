@@ -3,6 +3,9 @@ package model.macro;
 import model.IMEModel;
 import model.helpers.FilterImage;
 
+/**
+ * Marco class to convert an image to blurred image.
+ */
 public class BlurMacro implements IMacro{
 
   /**

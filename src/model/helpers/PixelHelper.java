@@ -2,6 +2,9 @@ package model.helpers;
 
 import model.IPixel;
 
+/**
+ * Helper class to manipulate a pixel/set of pixels in an image.
+ */
 public class PixelHelper {
 
   /**

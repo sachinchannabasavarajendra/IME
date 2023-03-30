@@ -7,6 +7,9 @@ import model.Pixel;
 
 import static model.helpers.PixelHelper.clamp;
 
+/**
+ * Helper class to transform an image based on color.
+ */
 public class ColorTransform {
 
   /**

@@ -4,20 +4,21 @@ import model.IMEModel;
 import model.helpers.ColorTransform;
 
 /**
- * Macro function class to convert an image to a sepia tone.
+ * Marco class to convert an image to greyscale image.
  */
-public class SepiaMacro implements IMacro{
+public class GreyscaleMacro implements IMacro{
 
   /**
-   * This is a method used to transform the color of the image and give it a sepia tone based on the
+   * This is a method used to transform the color of the image and give it a greyscale tone based on the
    * kernel filter value.
    *
    * @param model the image that needs to be transformed.
    * @return the resultant sepia color transformed image data
    */
+  @Override
   public IMEModel execute(IMEModel model) {
-    double[][] kernel = new double[][]{{0.393, 0.769, 0.189}, {0.349, 0.686, 0.168},
-            {0.272, 0.534, 0.131}};
+    double[][] kernel = new double[][]{{0.2126, 0.7152, 0.0722}, {0.2126, 0.7152, 0.0722},
+            {0.2126, 0.7152, 0.0722}};
     return ColorTransform.transform(kernel, model);
   }
 }

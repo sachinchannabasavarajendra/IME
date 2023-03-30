@@ -7,6 +7,9 @@ import model.Pixel;
 
 import static model.helpers.PixelHelper.clamp;
 
+/**
+ * Helper class to convert an image based on a filter.
+ */
 public class FilterImage {
 
   /**

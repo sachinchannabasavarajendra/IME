@@ -5,6 +5,9 @@ import model.IMEModelImpl;
 import model.IPixel;
 import model.Pixel;
 
+/**
+ * Marco class to convert an image to dithered image.
+ */
 public class DitherMacro implements IMacro{
 
   /**

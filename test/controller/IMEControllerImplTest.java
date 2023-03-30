@@ -417,6 +417,132 @@ public class IMEControllerImplTest {
   }
 
   @Test
+  public void testLoadAndSaveJPGImage() throws Exception {
+    StringBuffer out = new StringBuffer();
+    Reader in = new StringReader("load input/ms.jpg ms\n" +
+            "save output/ms.jpg ms");
+    controller = new IMEControllerImpl(in, out);
+    controller.execute();
+
+    BufferedImage img1 = ImageIO.read(new File("input/ms.jpg"));
+    BufferedImage img2 = ImageIO.read(new File("output/ms.jpg"));
+
+    assertEquals(0.0, CompareImages(img1, img2), 0.0);
+  }
+
+  @Test
+  public void testLoadAndSaveBMPImage() throws Exception {
+    StringBuffer out = new StringBuffer();
+    Reader in = new StringReader("load input/ms.bmp ms\n" +
+            "save output/ms.bmp ms");
+    controller = new IMEControllerImpl(in, out);
+    controller.execute();
+
+    BufferedImage img1 = ImageIO.read(new File("input/ms.bmp"));
+    BufferedImage img2 = ImageIO.read(new File("output/ms.bmp"));
+
+    assertEquals(0.0, CompareImages(img1, img2), 0.0);
+  }
+
+  @Test
+  public void testLoadAndSaveJPEGImage() throws Exception {
+    StringBuffer out = new StringBuffer();
+    Reader in = new StringReader("load input/ms.jpeg ms\n" +
+            "save output/ms.jpeg ms");
+    controller = new IMEControllerImpl(in, out);
+    controller.execute();
+
+    BufferedImage img1 = ImageIO.read(new File("input/ms.jpeg"));
+    BufferedImage img2 = ImageIO.read(new File("output/ms.jpeg"));
+
+    assertEquals(0.0, CompareImages(img1, img2), 0.0);
+  }
+
+  @Test
+  public void testLoadPngAndSaveJPGImage() throws Exception {
+    StringBuffer out = new StringBuffer();
+    Reader in = new StringReader("load input/ms.png ms\n" +
+            "save output/ms.jpg ms");
+    controller = new IMEControllerImpl(in, out);
+    controller.execute();
+
+    BufferedImage img1 = ImageIO.read(new File("input/ms.png"));
+    BufferedImage img2 = ImageIO.read(new File("output/ms.jpg"));
+
+    assertEquals(0.0, CompareImages(img1, img2), 2.0);
+  }
+
+  @Test
+  public void testLoadPngAndSaveJPEGImage() throws Exception {
+    StringBuffer out = new StringBuffer();
+    Reader in = new StringReader("load input/ms.png ms\n" +
+            "save output/ms.jpeg ms");
+    controller = new IMEControllerImpl(in, out);
+    controller.execute();
+
+    BufferedImage img1 = ImageIO.read(new File("input/ms.png"));
+    BufferedImage img2 = ImageIO.read(new File("output/ms.jpeg"));
+
+    assertEquals(0.0, CompareImages(img1, img2), 2.0);
+  }
+
+  @Test
+  public void testLoadPngAndSaveBMPImage() throws Exception {
+    StringBuffer out = new StringBuffer();
+    Reader in = new StringReader("load input/ms.png ms\n" +
+            "save output/ms.bmp ms");
+    controller = new IMEControllerImpl(in, out);
+    controller.execute();
+
+    BufferedImage img1 = ImageIO.read(new File("input/ms.png"));
+    BufferedImage img2 = ImageIO.read(new File("output/ms.bmp"));
+
+    assertEquals(0.0, CompareImages(img1, img2), 2.0);
+  }
+
+  @Test
+  public void testLoaBMPAndSavePNGImage() throws Exception {
+    StringBuffer out = new StringBuffer();
+    Reader in = new StringReader("load input/ms.bmp ms\n" +
+            "save output/ms.png ms");
+    controller = new IMEControllerImpl(in, out);
+    controller.execute();
+
+    BufferedImage img1 = ImageIO.read(new File("input/ms.bmp"));
+    BufferedImage img2 = ImageIO.read(new File("output/ms.png"));
+
+    assertEquals(0.0, CompareImages(img1, img2), 0.0);
+  }
+
+  @Test
+  public void testLoaBMPAndSaveJPGImage() throws Exception {
+    StringBuffer out = new StringBuffer();
+    Reader in = new StringReader("load input/ms.bmp ms\n" +
+            "save output/ms.jpg ms");
+    controller = new IMEControllerImpl(in, out);
+    controller.execute();
+
+    BufferedImage img1 = ImageIO.read(new File("input/ms.bmp"));
+    BufferedImage img2 = ImageIO.read(new File("output/ms.jpg"));
+
+    assertEquals(0.0, CompareImages(img1, img2), 1.5);
+  }
+
+  @Test
+  public void testLoaBMPAndSaveJPEGImage() throws Exception {
+    StringBuffer out = new StringBuffer();
+    Reader in = new StringReader("load input/ms.bmp ms\n" +
+            "save output/ms.jpeg ms");
+    controller = new IMEControllerImpl(in, out);
+    controller.execute();
+
+    BufferedImage img1 = ImageIO.read(new File("input/ms.bmp"));
+    BufferedImage img2 = ImageIO.read(new File("output/ms.jpeg"));
+
+    assertEquals(0.0, CompareImages(img1, img2), 1.5);
+  }
+
+  @Test
   public void testImageBlur() throws Exception {
     StringBuffer out = new StringBuffer();
     Reader in = new StringReader("load input/ms.png ms\n" +
@@ -522,6 +648,8 @@ public class IMEControllerImplTest {
 
     assertEquals(0.0, CompareImages(img1, img2), 0.0);
   }
+
+
 
   public double CompareImages(BufferedImage img1, BufferedImage img2) {
     int w1 = img1.getWidth();

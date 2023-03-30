@@ -3,6 +3,7 @@ package controller;
 import controller.commands.Blur;
 import controller.commands.Brighten;
 import controller.commands.Dither;
+import controller.commands.GreyScaleColorTransform;
 import controller.commands.Greyscale;
 import controller.commands.HorizontalFlip;
 import controller.commands.IMEModelCommand;
@@ -92,7 +93,7 @@ public class IMEControllerImpl implements IMEController {
     });
     knownCommands.put("greyscale", inputCommand -> {
       if(inputCommand.length == 3) {
-        return new Greyscale("luma-component", inputCommand[1], inputCommand[2]);
+        return new GreyScaleColorTransform(inputCommand[1], inputCommand[2]);
       }
       if (inputCommand.length != 4) {
         throw new IllegalArgumentException("Greyscale expects 3 parameters");

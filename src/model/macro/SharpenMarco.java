@@ -3,6 +3,10 @@ package model.macro;
 import model.IMEModel;
 import model.helpers.FilterImage;
 
+/**
+ * Marco class to sharpen an image.
+ */
+
 public class SharpenMarco implements IMacro{
 
   /**
