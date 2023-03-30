@@ -2,6 +2,7 @@ package controller.commands;
 
 import java.util.Map;
 import model.IMEModel;
+import model.macro.SepiaMacro;
 
 /**
  * This class is used to perform the operation of transforming the color of the image to give it a
@@ -33,7 +34,7 @@ public class SepiaColorTransform extends AbstractIMECommand {
   @Override
   public void execute(Map<String, IMEModel> objectMap) {
     IMEModel callingObject = getModelObject(objectMap, sourceImageName);
-    IMEModel greyscaleColorTransformedImage = callingObject.sepiaColorTransform();
+    IMEModel greyscaleColorTransformedImage = callingObject.executeMacro(new SepiaMacro());
     objectMap.put(destinationImageName, greyscaleColorTransformedImage);
   }
 }

@@ -3,6 +3,7 @@ package controller.commands;
 import java.util.Map;
 
 import model.IMEModel;
+import model.macro.DitherMacro;
 
 /**
  * This class is used to perform the operation of dithering the image.
@@ -32,7 +33,7 @@ public class Dither extends AbstractIMECommand {
   @Override
   public void execute(Map<String, IMEModel> objectMap) {
     IMEModel callingObject = getModelObject(objectMap, sourceImageName);
-    IMEModel ditheredImage = callingObject.dither();
+    IMEModel ditheredImage = callingObject.executeMacro(new DitherMacro());
     objectMap.put(destinationImageName, ditheredImage);
   }
 }

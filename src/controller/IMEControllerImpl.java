@@ -49,6 +49,7 @@ public class IMEControllerImpl implements IMEController {
    * This method processes and executes the given command.
    */
   public void execute() throws IOException {
+
     Scanner sc = new Scanner(this.in);
     IMEModelCommand imeModelCommand;
     boolean isScriptRunning = false;
@@ -91,7 +92,7 @@ public class IMEControllerImpl implements IMEController {
     });
     knownCommands.put("greyscale", inputCommand -> {
       if(inputCommand.length == 3) {
-        return new Greyscale("luma-component", inputCommand[2], inputCommand[3]);
+        return new Greyscale("luma-component", inputCommand[1], inputCommand[2]);
       }
       if (inputCommand.length != 4) {
         throw new IllegalArgumentException("Greyscale expects 3 parameters");

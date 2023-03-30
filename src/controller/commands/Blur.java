@@ -2,6 +2,7 @@ package controller.commands;
 
 import java.util.Map;
 import model.IMEModel;
+import model.macro.BlurMacro;
 
 /**
  * This class is used to perform the operation of blurring the image based on the kernel filter
@@ -33,7 +34,7 @@ public class Blur extends AbstractIMECommand {
   @Override
   public void execute(Map<String, IMEModel> objectMap) {
     IMEModel callingObject = getModelObject(objectMap, sourceImageName);
-    IMEModel blurredImage = callingObject.blur();
+    IMEModel blurredImage = callingObject.executeMacro(new BlurMacro());
     objectMap.put(destinationImageName, blurredImage);
   }
 }

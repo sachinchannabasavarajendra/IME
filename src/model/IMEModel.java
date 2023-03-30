@@ -3,6 +3,8 @@ package model;
 import java.util.List;
 import java.util.function.Function;
 
+import model.macro.IMacro;
+
 /**
  * This is an interface which specifies the operations/manipulations to be performed on an image.
  */
@@ -32,7 +34,7 @@ public interface IMEModel {
   /**
    * This is a method used to get the max value of each component of the image.
    *
-   * @return the max value of the each component.
+   * @return the max value of each component.
    */
   int getMaxValue();
 
@@ -90,31 +92,10 @@ public interface IMEModel {
   );
 
   /**
-   * This is a method used to blur the image based on the kernel filter value.
+   * Function to execute a Macro manipulation on the image.
    *
-   * @return the resultant blurred image data
+   * @param macro the macro manipulation object
+   * @return the manipulated image
    */
-  IMEModel blur();
-
-  /**
-   * This is a method used to sharpen the image based on the kernel filter value.
-   *
-   * @return the resultant sharpened image data
-   */
-  IMEModel sharpen();
-
-  /**
-   * This is a method used to transform the color of the image and give it a sepia tone based on the
-   * kernel filter value.
-   *
-   * @return the resultant sepia color transformed image data
-   */
-  IMEModel sepiaColorTransform();
-
-  /**
-   * This is a method used to dither an image.
-   *
-   * @return the resultant dithered image data.
-   */
-  IMEModel dither();
+  IMEModel executeMacro(IMacro macro);
 }

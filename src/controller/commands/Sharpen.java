@@ -2,6 +2,7 @@ package controller.commands;
 
 import java.util.Map;
 import model.IMEModel;
+import model.macro.SharpenMarco;
 
 /**
  * This class is used to perform the operation of sharpening the image based on the kernel filter
@@ -33,7 +34,7 @@ public class Sharpen extends AbstractIMECommand {
   @Override
   public void execute(Map<String, IMEModel> objectMap) {
     IMEModel callingObject = getModelObject(objectMap, sourceImageName);
-    IMEModel sharpenedImage = callingObject.sharpen();
+    IMEModel sharpenedImage = callingObject.executeMacro(new SharpenMarco());
     objectMap.put(destinationImageName, sharpenedImage);
   }
 }
