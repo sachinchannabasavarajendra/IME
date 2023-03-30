@@ -17,7 +17,7 @@ public class ColorTransform {
    * kernel filter value.
    *
    * @param kernel the filter value which is used to transform the components of the image
-   * @param image the image that needs to be tranformed
+   * @param image the image that needs to be transformed
    * @return the resultant color transformed image data
    */
   public static IMEModel transform(double[][] kernel, IMEModel image) {

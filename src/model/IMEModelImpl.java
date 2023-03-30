@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import model.macro.IMacro;
+
 import static model.helpers.PixelHelper.reverse;
 
 /**
@@ -209,6 +210,12 @@ public class IMEModelImpl implements IMEModel {
     return new IMEModelImpl(newImageData, height, width, maxValue);
   }
 
+  /**
+   * Function to execute a Macro manipulation on the image.
+   *
+   * @param macro the macro manipulation object
+   * @return the manipulated image
+   */
   public IMEModel executeMacro(IMacro macro) {
     return macro.execute(this);
   }

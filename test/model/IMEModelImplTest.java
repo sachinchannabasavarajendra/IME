@@ -11,14 +11,14 @@ import service.imagefileloader.LoadImage;
 import service.imagefileloader.LoadPPM;
 
 /**
- * Test class to test functionity of the model and its supporting functions.
+ * Test class to test functionality of the model and its supporting functions.
  */
 public class IMEModelImplTest {
 
   IMEModel image;
 
   /**
-   * Contructor to initialize an image which is used in all the test cases.
+   * Constructor to initialize an image which is used in all the test cases.
    */
   public IMEModelImplTest() {
     try {

@@ -8,7 +8,7 @@ import model.IPixel;
 public class PixelHelper {
 
   /**
-   * This is a helper method used to clamp a value between 0 and 255
+   * This is a helper method used to clamp a value between 0 and 255.
    *
    * @param value the value to be clamped between 0 and 255
    * @return the clamped value

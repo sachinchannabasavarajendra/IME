@@ -8,7 +8,8 @@ import model.IMEModel;
 public interface IMacro {
 
   /**
-   * Executes the macro image transformation on the image passed
+   * Executes the macro image transformation on the image passed.
+   *
    * @param model the image that needs to be manipulated
    * @return the manipulated image
    */

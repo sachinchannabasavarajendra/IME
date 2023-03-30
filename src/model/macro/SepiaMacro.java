@@ -12,7 +12,7 @@ public class SepiaMacro implements IMacro{
    * This is a method used to transform the color of the image and give it a sepia tone based on the
    * kernel filter value.
    *
-   * @param model the image that needs to be transformed.
+   * @param model the image that needs to be transformed
    * @return the resultant sepia color transformed image data
    */
   public IMEModel execute(IMEModel model) {
