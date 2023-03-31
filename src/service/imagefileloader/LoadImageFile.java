@@ -1,17 +1,19 @@
 package service.imagefileloader;
 
-import java.awt.*;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
-
 import javax.imageio.ImageIO;
-
 import model.IMEModel;
 import model.IMEModelImpl;
 import model.IPixel;
 import model.Pixel;
 
+/**
+ * This class is used to import and process the conventional file formats such as bmp, png and
+ * jpg/jpeg.
+ */
 public class LoadImageFile implements LoadImage {
 
   /**
@@ -43,7 +45,7 @@ public class LoadImageFile implements LoadImage {
     int height;
     int width;
     int[] pixelData = image.getRGB(0, 0, image.getWidth(), image.getHeight(),
-            new int[image.getWidth() * image.getHeight()], 0, image.getWidth());
+        new int[image.getWidth() * image.getHeight()], 0, image.getWidth());
     height = image.getHeight();
     width = image.getWidth();
     imageData = new Pixel[height][width];

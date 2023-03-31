@@ -92,7 +92,7 @@ public class IMEControllerImpl implements IMEController {
       return new HorizontalFlip(inputCommand[1], inputCommand[2]);
     });
     knownCommands.put("greyscale", inputCommand -> {
-      if(inputCommand.length == 3) {
+      if (inputCommand.length == 3) {
         return new GreyScaleColorTransform(inputCommand[1], inputCommand[2]);
       }
       if (inputCommand.length != 4) {

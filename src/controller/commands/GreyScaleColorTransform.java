@@ -1,10 +1,8 @@
 package controller.commands;
 
 import java.util.Map;
-
 import model.IMEModel;
 import model.macro.GreyscaleMacro;
-import model.macro.SepiaMacro;
 
 /**
  * This class is used to perform the operation of transforming the color of the image to give it a

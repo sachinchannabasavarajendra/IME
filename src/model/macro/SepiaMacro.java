@@ -6,7 +6,7 @@ import model.helpers.ColorTransform;
 /**
  * Macro function class to convert an image to a sepia tone.
  */
-public class SepiaMacro implements IMacro{
+public class SepiaMacro implements IMacro {
 
   /**
    * This is a method used to transform the color of the image and give it a sepia tone based on the
@@ -17,7 +17,7 @@ public class SepiaMacro implements IMacro{
    */
   public IMEModel execute(IMEModel model) {
     double[][] kernel = new double[][]{{0.393, 0.769, 0.189}, {0.349, 0.686, 0.168},
-            {0.272, 0.534, 0.131}};
+        {0.272, 0.534, 0.131}};
     return ColorTransform.transform(kernel, model);
   }
 }

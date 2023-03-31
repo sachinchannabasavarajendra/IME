@@ -1,18 +1,15 @@
 package controller;
 
+import java.awt.Color;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.Reader;
 import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-
 import javax.imageio.ImageIO;
-
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 

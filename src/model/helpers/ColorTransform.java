@@ -17,13 +17,13 @@ public class ColorTransform {
    * kernel filter value.
    *
    * @param kernel the filter value which is used to transform the components of the image
-   * @param image the image that needs to be transformed
+   * @param image  the image that needs to be transformed
    * @return the resultant color transformed image data
    */
   public static IMEModel transform(double[][] kernel, IMEModel image) {
     int height = image.getImageHeight();
     int width = image.getImageWidth();
-    IPixel[][] imageData= image.getImageData();
+    IPixel[][] imageData = image.getImageData();
     IPixel[][] newImageData = new Pixel[height][width];
     double red;
     double green;
@@ -31,14 +31,14 @@ public class ColorTransform {
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
         red = kernel[0][0] * imageData[i][j].getRedComponent()
-                + kernel[0][1] * imageData[i][j].getGreenComponent()
-                + kernel[0][2] * imageData[i][j].getBlueComponent();
+            + kernel[0][1] * imageData[i][j].getGreenComponent()
+            + kernel[0][2] * imageData[i][j].getBlueComponent();
         green = kernel[1][0] * imageData[i][j].getRedComponent()
-                + kernel[1][1] * imageData[i][j].getGreenComponent()
-                + kernel[1][2] * imageData[i][j].getBlueComponent();
+            + kernel[1][1] * imageData[i][j].getGreenComponent()
+            + kernel[1][2] * imageData[i][j].getBlueComponent();
         blue = kernel[2][0] * imageData[i][j].getRedComponent()
-                + kernel[2][1] * imageData[i][j].getGreenComponent()
-                + kernel[2][2] * imageData[i][j].getBlueComponent();
+            + kernel[2][1] * imageData[i][j].getGreenComponent()
+            + kernel[2][2] * imageData[i][j].getBlueComponent();
 
         red = clamp(red);
         green = clamp(green);
