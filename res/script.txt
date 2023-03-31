@@ -67,6 +67,12 @@ greyscale luma-component reindeer reindeer-luma-greyscale
 #save reindeer luma greyscale
 save res/reindeer-luma-greyscale.ppm reindeer-luma-greyscale
 
+#rgb-split
+rgb-split reindeer reindeer-red-greyscale reindeer-green-greyscale reindeer-blue-greyscale
+
+#rgb-combine
+rgb-combine reindeer-combine reindeer-red-greyscale reindeer-green-greyscale reindeer-blue-greyscale
+
 #load PNG image
 load res/reindeer.png reindeerPNG 
 
@@ -98,7 +104,7 @@ save res/reindeer-sharpen.bmp reindeer-sharpen
 dither reindeerPNG reindeer-dither
 
 #save dither image
-save res/reindeer-dither.png reindeer-dither
+save res/reindeer-dither.png reindeer-dither	
 
 #greyscale color transform 
 greyscale reindeerPNG reindeer-greyscale
