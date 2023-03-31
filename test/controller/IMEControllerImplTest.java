@@ -411,7 +411,7 @@ public class IMEControllerImplTest {
     BufferedImage img1 = ImageIO.read(new File("input/ms.png"));
     BufferedImage img2 = ImageIO.read(new File("output/ms.png"));
 
-    assertEquals(0.0, CompareImages(img1, img2), 0.0);
+    assertEquals(0.0, compareImages(img1, img2), 0.0);
   }
 
   @Test
@@ -425,7 +425,7 @@ public class IMEControllerImplTest {
     BufferedImage img1 = ImageIO.read(new File("input/ms.jpg"));
     BufferedImage img2 = ImageIO.read(new File("output/ms.jpg"));
 
-    assertEquals(0.0, CompareImages(img1, img2), 0.0);
+    assertEquals(0.0, compareImages(img1, img2), 0.0);
   }
 
   @Test
@@ -439,7 +439,7 @@ public class IMEControllerImplTest {
     BufferedImage img1 = ImageIO.read(new File("input/ms.bmp"));
     BufferedImage img2 = ImageIO.read(new File("output/ms.bmp"));
 
-    assertEquals(0.0, CompareImages(img1, img2), 0.0);
+    assertEquals(0.0, compareImages(img1, img2), 0.0);
   }
 
   @Test
@@ -453,7 +453,7 @@ public class IMEControllerImplTest {
     BufferedImage img1 = ImageIO.read(new File("input/ms.jpeg"));
     BufferedImage img2 = ImageIO.read(new File("output/ms.jpeg"));
 
-    assertEquals(0.0, CompareImages(img1, img2), 0.0);
+    assertEquals(0.0, compareImages(img1, img2), 0.0);
   }
 
   @Test
@@ -467,7 +467,7 @@ public class IMEControllerImplTest {
     BufferedImage img1 = ImageIO.read(new File("input/ms.png"));
     BufferedImage img2 = ImageIO.read(new File("output/ms.jpg"));
 
-    assertEquals(0.0, CompareImages(img1, img2), 2.0);
+    assertEquals(0.0, compareImages(img1, img2), 2.0);
   }
 
   @Test
@@ -481,7 +481,7 @@ public class IMEControllerImplTest {
     BufferedImage img1 = ImageIO.read(new File("input/ms.png"));
     BufferedImage img2 = ImageIO.read(new File("output/ms.jpeg"));
 
-    assertEquals(0.0, CompareImages(img1, img2), 2.0);
+    assertEquals(0.0, compareImages(img1, img2), 2.0);
   }
 
   @Test
@@ -495,7 +495,7 @@ public class IMEControllerImplTest {
     BufferedImage img1 = ImageIO.read(new File("input/ms.png"));
     BufferedImage img2 = ImageIO.read(new File("output/ms.bmp"));
 
-    assertEquals(0.0, CompareImages(img1, img2), 2.0);
+    assertEquals(0.0, compareImages(img1, img2), 2.0);
   }
 
   @Test
@@ -509,7 +509,7 @@ public class IMEControllerImplTest {
     BufferedImage img1 = ImageIO.read(new File("input/ms.bmp"));
     BufferedImage img2 = ImageIO.read(new File("output/ms.png"));
 
-    assertEquals(0.0, CompareImages(img1, img2), 0.0);
+    assertEquals(0.0, compareImages(img1, img2), 0.0);
   }
 
   @Test
@@ -523,7 +523,7 @@ public class IMEControllerImplTest {
     BufferedImage img1 = ImageIO.read(new File("input/ms.bmp"));
     BufferedImage img2 = ImageIO.read(new File("output/ms.jpg"));
 
-    assertEquals(0.0, CompareImages(img1, img2), 1.5);
+    assertEquals(0.0, compareImages(img1, img2), 1.5);
   }
 
   @Test
@@ -537,7 +537,7 @@ public class IMEControllerImplTest {
     BufferedImage img1 = ImageIO.read(new File("input/ms.bmp"));
     BufferedImage img2 = ImageIO.read(new File("output/ms.jpeg"));
 
-    assertEquals(0.0, CompareImages(img1, img2), 1.5);
+    assertEquals(0.0, compareImages(img1, img2), 1.5);
   }
 
   @Test
@@ -552,7 +552,7 @@ public class IMEControllerImplTest {
     BufferedImage img1 = ImageIO.read(new File("input/msb.png"));
     BufferedImage img2 = ImageIO.read(new File("output/msb.png"));
 
-    assertEquals(0.0, CompareImages(img1, img2), 0.0);
+    assertEquals(0.0, compareImages(img1, img2), 0.0);
   }
 
   @Test
@@ -567,7 +567,7 @@ public class IMEControllerImplTest {
     BufferedImage img1 = ImageIO.read(new File("input/msb.png"));
     BufferedImage img2 = ImageIO.read(new File("output/msb.bmp"));
 
-    assertEquals(0.0, CompareImages(img1, img2), 0.0);
+    assertEquals(0.0, compareImages(img1, img2), 0.0);
   }
 
   @Test
@@ -611,7 +611,7 @@ public class IMEControllerImplTest {
     BufferedImage img1 = ImageIO.read(new File("input/msbb.png"));
     BufferedImage img2 = ImageIO.read(new File("output/msbb.png"));
 
-    assertEquals(0.0, CompareImages(img1, img2), 0.0);
+    assertEquals(0.0, compareImages(img1, img2), 0.0);
   }
 
   @Test
@@ -626,7 +626,7 @@ public class IMEControllerImplTest {
     BufferedImage img1 = ImageIO.read(new File("input/mss.png"));
     BufferedImage img2 = ImageIO.read(new File("output/mss.png"));
 
-    assertEquals(0.0, CompareImages(img1, img2), 0.0);
+    assertEquals(0.0, compareImages(img1, img2), 0.0);
   }
 
   @Test
@@ -641,7 +641,7 @@ public class IMEControllerImplTest {
     BufferedImage img1 = ImageIO.read(new File("input/mss.png"));
     BufferedImage img2 = ImageIO.read(new File("output/mss.bmp"));
 
-    assertEquals(0.0, CompareImages(img1, img2), 0.0);
+    assertEquals(0.0, compareImages(img1, img2), 0.0);
   }
 
   @Test
@@ -685,7 +685,7 @@ public class IMEControllerImplTest {
     BufferedImage img1 = ImageIO.read(new File("input/msss.png"));
     BufferedImage img2 = ImageIO.read(new File("output/msss.png"));
 
-    assertEquals(0.0, CompareImages(img1, img2), 0.0);
+    assertEquals(0.0, compareImages(img1, img2), 0.0);
   }
 
   @Test
@@ -700,7 +700,7 @@ public class IMEControllerImplTest {
     BufferedImage img1 = ImageIO.read(new File("input/msg.png"));
     BufferedImage img2 = ImageIO.read(new File("output/msg.png"));
 
-    assertEquals(0.0, CompareImages(img1, img2), 0.0);
+    assertEquals(0.0, compareImages(img1, img2), 0.0);
   }
 
   @Test
@@ -715,7 +715,7 @@ public class IMEControllerImplTest {
     BufferedImage img1 = ImageIO.read(new File("input/msg.png"));
     BufferedImage img2 = ImageIO.read(new File("output/msg.bmp"));
 
-    assertEquals(0.0, CompareImages(img1, img2), 0.0);
+    assertEquals(0.0, compareImages(img1, img2), 0.0);
   }
 
   @Test
@@ -758,7 +758,7 @@ public class IMEControllerImplTest {
     BufferedImage img1 = ImageIO.read(new File("input/mssepia.png"));
     BufferedImage img2 = ImageIO.read(new File("output/mssepia.png"));
 
-    assertEquals(0.0, CompareImages(img1, img2), 0.0);
+    assertEquals(0.0, compareImages(img1, img2), 0.0);
   }
 
   @Test
@@ -773,7 +773,7 @@ public class IMEControllerImplTest {
     BufferedImage img1 = ImageIO.read(new File("input/mssepia.png"));
     BufferedImage img2 = ImageIO.read(new File("output/mssepia.bmp"));
 
-    assertEquals(0.0, CompareImages(img1, img2), 0.0);
+    assertEquals(0.0, compareImages(img1, img2), 0.0);
   }
 
   @Test
@@ -816,7 +816,7 @@ public class IMEControllerImplTest {
     BufferedImage img1 = ImageIO.read(new File("input/msd.png"));
     BufferedImage img2 = ImageIO.read(new File("output/msd.png"));
 
-    assertEquals(0.0, CompareImages(img1, img2), 0.0);
+    assertEquals(0.0, compareImages(img1, img2), 0.0);
   }
 
   @Test
@@ -831,7 +831,7 @@ public class IMEControllerImplTest {
     BufferedImage img1 = ImageIO.read(new File("input/msd.png"));
     BufferedImage img2 = ImageIO.read(new File("output/msd.bmp"));
 
-    assertEquals(0.0, CompareImages(img1, img2), 0.0);
+    assertEquals(0.0, compareImages(img1, img2), 0.0);
   }
 
   @Test
@@ -862,7 +862,7 @@ public class IMEControllerImplTest {
     assertEquals(0, new Color(blurredImage.getRGB(1, 1), true).getBlue(), 0);
   }
 
-  private double CompareImages(BufferedImage img1, BufferedImage img2) {
+  private double compareImages(BufferedImage img1, BufferedImage img2) {
     int w1 = img1.getWidth();
     int w2 = img2.getWidth();
     int h1 = img1.getHeight();
