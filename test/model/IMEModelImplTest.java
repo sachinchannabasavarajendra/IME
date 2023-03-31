@@ -15,7 +15,7 @@ import service.imagefileloader.LoadPPM;
  */
 public class IMEModelImplTest {
 
-  IMEModel image;
+  private final IMEModel image;
 
   /**
    * Constructor to initialize an image which is used in all the test cases.

@@ -559,6 +559,49 @@ public class IMEControllerImplTest {
   }
 
   @Test
+  public void testImageBlurWithDifferentFormats() throws Exception {
+    StringBuffer out = new StringBuffer();
+    Reader in = new StringReader("load input/ms.png ms\n" +
+        "blur ms msb\n" +
+        "save output/msb.bmp msb");
+    controller = new IMEControllerImpl(in, out);
+    controller.execute();
+
+    BufferedImage img1 = ImageIO.read(new File("input/msb.png"));
+    BufferedImage img2 = ImageIO.read(new File("output/msb.bmp"));
+
+    assertEquals(0.0, CompareImages(img1, img2), 0.0);
+  }
+
+  @Test
+  public void testImageBlurWithPPMAsSource() throws Exception {
+    StringBuffer out = new StringBuffer();
+    Reader in = new StringReader("load input/test.ppm test\n" +
+        "blur test test-blurred\n" +
+        "save output/test-blurred.bmp test-blurred");
+    controller = new IMEControllerImpl(in, out);
+    controller.execute();
+
+    BufferedImage blurredImage = ImageIO.read(new File("output/test-blurred.bmp"));
+
+    assertEquals(65, new Color(blurredImage.getRGB(0, 0), true).getRed(), 0);
+    assertEquals(33, new Color(blurredImage.getRGB(0, 0), true).getGreen(), 0);
+    assertEquals(33, new Color(blurredImage.getRGB(0, 0), true).getBlue(), 0);
+
+    assertEquals(34, new Color(blurredImage.getRGB(0, 1), true).getRed(), 0);
+    assertEquals(18, new Color(blurredImage.getRGB(0, 1), true).getGreen(), 0);
+    assertEquals(66, new Color(blurredImage.getRGB(0, 1), true).getBlue(), 0);
+
+    assertEquals(34, new Color(blurredImage.getRGB(1, 0), true).getRed(), 0);
+    assertEquals(66, new Color(blurredImage.getRGB(1, 0), true).getGreen(), 0);
+    assertEquals(18, new Color(blurredImage.getRGB(1, 0), true).getBlue(), 0);
+
+    assertEquals(21, new Color(blurredImage.getRGB(1, 1), true).getRed(), 0);
+    assertEquals(37, new Color(blurredImage.getRGB(1, 1), true).getGreen(), 0);
+    assertEquals(37, new Color(blurredImage.getRGB(1, 1), true).getBlue(), 0);
+  }
+
+  @Test
   public void testImageBlurTwice() throws Exception {
     StringBuffer out = new StringBuffer();
     Reader in = new StringReader("load input/ms.png ms\n" +
@@ -587,6 +630,49 @@ public class IMEControllerImplTest {
     BufferedImage img2 = ImageIO.read(new File("output/mss.png"));
 
     assertEquals(0.0, CompareImages(img1, img2), 0.0);
+  }
+
+  @Test
+  public void testImageSharpenWithDifferentFormats() throws Exception {
+    StringBuffer out = new StringBuffer();
+    Reader in = new StringReader("load input/ms.png ms\n" +
+        "sharpen ms mss\n" +
+        "save output/mss.bmp mss");
+    controller = new IMEControllerImpl(in, out);
+    controller.execute();
+
+    BufferedImage img1 = ImageIO.read(new File("input/mss.png"));
+    BufferedImage img2 = ImageIO.read(new File("output/mss.bmp"));
+
+    assertEquals(0.0, CompareImages(img1, img2), 0.0);
+  }
+
+  @Test
+  public void testImageSharpenWithPPMAsSource() throws Exception {
+    StringBuffer out = new StringBuffer();
+    Reader in = new StringReader("load input/test.ppm test\n" +
+        "blur test test-sharpen\n" +
+        "save output/test-sharpen.png test-sharpen");
+    controller = new IMEControllerImpl(in, out);
+    controller.execute();
+
+    BufferedImage blurredImage = ImageIO.read(new File("output/test-sharpen.png"));
+
+    assertEquals(255, new Color(blurredImage.getRGB(0, 0), true).getRed(), 0);
+    assertEquals(69, new Color(blurredImage.getRGB(0, 0), true).getGreen(), 0);
+    assertEquals(69, new Color(blurredImage.getRGB(0, 0), true).getBlue(), 0);
+
+    assertEquals(69, new Color(blurredImage.getRGB(0, 1), true).getRed(), 0);
+    assertEquals(69, new Color(blurredImage.getRGB(0, 1), true).getGreen(), 0);
+    assertEquals(255, new Color(blurredImage.getRGB(0, 1), true).getBlue(), 0);
+
+    assertEquals(69, new Color(blurredImage.getRGB(1, 0), true).getRed(), 0);
+    assertEquals(255, new Color(blurredImage.getRGB(1, 0), true).getGreen(), 0);
+    assertEquals(69, new Color(blurredImage.getRGB(1, 0), true).getBlue(), 0);
+
+    assertEquals(87, new Color(blurredImage.getRGB(1, 1), true).getRed(), 0);
+    assertEquals(87, new Color(blurredImage.getRGB(1, 1), true).getGreen(), 0);
+    assertEquals(87, new Color(blurredImage.getRGB(1, 1), true).getBlue(), 0);
   }
 
   @Test
@@ -621,6 +707,49 @@ public class IMEControllerImplTest {
   }
 
   @Test
+  public void testImageGreyScaleWithDifferentFormats() throws Exception {
+    StringBuffer out = new StringBuffer();
+    Reader in = new StringReader("load input/ms.png ms\n" +
+        "greyscale ms msg\n" +
+        "save output/msg.bmp msg");
+    controller = new IMEControllerImpl(in, out);
+    controller.execute();
+
+    BufferedImage img1 = ImageIO.read(new File("input/msg.png"));
+    BufferedImage img2 = ImageIO.read(new File("output/msg.bmp"));
+
+    assertEquals(0.0, CompareImages(img1, img2), 0.0);
+  }
+
+  @Test
+  public void testImageGreyscaleWithPPMAsSource() throws Exception {
+    StringBuffer out = new StringBuffer();
+    Reader in = new StringReader("load input/test.ppm test\n" +
+        "greyscale test test-greyscale\n" +
+        "save output/test-greyscale.png test-greyscale");
+    controller = new IMEControllerImpl(in, out);
+    controller.execute();
+
+    BufferedImage blurredImage = ImageIO.read(new File("output/test-greyscale.png"));
+
+    assertEquals(54, new Color(blurredImage.getRGB(0, 0), true).getRed(), 0);
+    assertEquals(54, new Color(blurredImage.getRGB(0, 0), true).getGreen(), 0);
+    assertEquals(54, new Color(blurredImage.getRGB(0, 0), true).getBlue(), 0);
+
+    assertEquals(18, new Color(blurredImage.getRGB(0, 1), true).getRed(), 0);
+    assertEquals(18, new Color(blurredImage.getRGB(0, 1), true).getGreen(), 0);
+    assertEquals(18, new Color(blurredImage.getRGB(0, 1), true).getBlue(), 0);
+
+    assertEquals(182, new Color(blurredImage.getRGB(1, 0), true).getRed(), 0);
+    assertEquals(182, new Color(blurredImage.getRGB(1, 0), true).getGreen(), 0);
+    assertEquals(182, new Color(blurredImage.getRGB(1, 0), true).getBlue(), 0);
+
+    assertEquals(24, new Color(blurredImage.getRGB(1, 1), true).getRed(), 0);
+    assertEquals(24, new Color(blurredImage.getRGB(1, 1), true).getGreen(), 0);
+    assertEquals(24, new Color(blurredImage.getRGB(1, 1), true).getBlue(), 0);
+  }
+
+  @Test
   public void testImageSepia() throws Exception {
     StringBuffer out = new StringBuffer();
     Reader in = new StringReader("load input/ms.png ms\n" +
@@ -633,6 +762,49 @@ public class IMEControllerImplTest {
     BufferedImage img2 = ImageIO.read(new File("output/mssepia.png"));
 
     assertEquals(0.0, CompareImages(img1, img2), 0.0);
+  }
+
+  @Test
+  public void testImageSepiaWithDifferentFormats() throws Exception {
+    StringBuffer out = new StringBuffer();
+    Reader in = new StringReader("load input/ms.png ms\n" +
+        "sepia ms mssepia\n" +
+        "save output/mssepia.bmp mssepia");
+    controller = new IMEControllerImpl(in, out);
+    controller.execute();
+
+    BufferedImage img1 = ImageIO.read(new File("input/mssepia.png"));
+    BufferedImage img2 = ImageIO.read(new File("output/mssepia.bmp"));
+
+    assertEquals(0.0, CompareImages(img1, img2), 0.0);
+  }
+
+  @Test
+  public void testImageSepiaWithPPMAsSource() throws Exception {
+    StringBuffer out = new StringBuffer();
+    Reader in = new StringReader("load input/test.ppm test\n" +
+        "sepia test test-sepia\n" +
+        "save output/test-sepia.png test-sepia");
+    controller = new IMEControllerImpl(in, out);
+    controller.execute();
+
+    BufferedImage blurredImage = ImageIO.read(new File("output/test-sepia.bmp"));
+
+    assertEquals(100, new Color(blurredImage.getRGB(0, 0), true).getRed(), 0);
+    assertEquals(88, new Color(blurredImage.getRGB(0, 0), true).getGreen(), 0);
+    assertEquals(69, new Color(blurredImage.getRGB(0, 0), true).getBlue(), 0);
+
+    assertEquals(48, new Color(blurredImage.getRGB(0, 1), true).getRed(), 0);
+    assertEquals(42, new Color(blurredImage.getRGB(0, 1), true).getGreen(), 0);
+    assertEquals(33, new Color(blurredImage.getRGB(0, 1), true).getBlue(), 0);
+
+    assertEquals(196, new Color(blurredImage.getRGB(1, 0), true).getRed(), 0);
+    assertEquals(174, new Color(blurredImage.getRGB(1, 0), true).getGreen(), 0);
+    assertEquals(136, new Color(blurredImage.getRGB(1, 0), true).getBlue(), 0);
+
+    assertEquals(32, new Color(blurredImage.getRGB(1, 1), true).getRed(), 0);
+    assertEquals(28, new Color(blurredImage.getRGB(1, 1), true).getGreen(), 0);
+    assertEquals(22, new Color(blurredImage.getRGB(1, 1), true).getBlue(), 0);
   }
 
   @Test
@@ -650,7 +822,50 @@ public class IMEControllerImplTest {
     assertEquals(0.0, CompareImages(img1, img2), 0.0);
   }
 
-  public double CompareImages(BufferedImage img1, BufferedImage img2) {
+  @Test
+  public void testImageDitherWithDifferentFormats() throws Exception {
+    StringBuffer out = new StringBuffer();
+    Reader in = new StringReader("load input/ms.png ms\n" +
+        "dither ms msd\n" +
+        "save output/msd.bmp msd");
+    controller = new IMEControllerImpl(in, out);
+    controller.execute();
+
+    BufferedImage img1 = ImageIO.read(new File("input/msd.png"));
+    BufferedImage img2 = ImageIO.read(new File("output/msd.bmp"));
+
+    assertEquals(0.0, CompareImages(img1, img2), 0.0);
+  }
+
+  @Test
+  public void testImageDitherWithPPMAsSource() throws Exception {
+    StringBuffer out = new StringBuffer();
+    Reader in = new StringReader("load input/test.ppm test\n" +
+        "sepia test test-dither\n" +
+        "save output/test-dither.png test-dither");
+    controller = new IMEControllerImpl(in, out);
+    controller.execute();
+
+    BufferedImage blurredImage = ImageIO.read(new File("output/test-dither.bmp"));
+
+    assertEquals(0, new Color(blurredImage.getRGB(0, 0), true).getRed(), 0);
+    assertEquals(0, new Color(blurredImage.getRGB(0, 0), true).getGreen(), 0);
+    assertEquals(0, new Color(blurredImage.getRGB(0, 0), true).getBlue(), 0);
+
+    assertEquals(0, new Color(blurredImage.getRGB(0, 1), true).getRed(), 0);
+    assertEquals(0, new Color(blurredImage.getRGB(0, 1), true).getGreen(), 0);
+    assertEquals(0, new Color(blurredImage.getRGB(0, 1), true).getBlue(), 0);
+
+    assertEquals(255, new Color(blurredImage.getRGB(1, 0), true).getRed(), 0);
+    assertEquals(255, new Color(blurredImage.getRGB(1, 0), true).getGreen(), 0);
+    assertEquals(255, new Color(blurredImage.getRGB(1, 0), true).getBlue(), 0);
+
+    assertEquals(0, new Color(blurredImage.getRGB(1, 1), true).getRed(), 0);
+    assertEquals(0, new Color(blurredImage.getRGB(1, 1), true).getGreen(), 0);
+    assertEquals(0, new Color(blurredImage.getRGB(1, 1), true).getBlue(), 0);
+  }
+
+  private double CompareImages(BufferedImage img1, BufferedImage img2) {
     int w1 = img1.getWidth();
     int w2 = img2.getWidth();
     int h1 = img1.getHeight();
