@@ -1,5 +1,5 @@
 #load reindeer.ppm and call it 'reindeer'
-load res/reindeer.ppm reindeer
+load reindeer.ppm reindeer
 
 #brighten reindeer by adding 50
 brighten 50 reindeer reindeer-brighter
@@ -74,7 +74,7 @@ rgb-split reindeer reindeer-red-greyscale reindeer-green-greyscale reindeer-blue
 rgb-combine reindeer-combine reindeer-red-greyscale reindeer-green-greyscale reindeer-blue-greyscale
 
 #load PNG image
-load res/reindeer.png reindeerPNG 
+load reindeer.png reindeerPNG 
 
 #blur reindeer
 blur reindeerPNG reindeer-blur
@@ -83,7 +83,7 @@ blur reindeerPNG reindeer-blur
 save res/reindeer-blur.png reindeer-blur
 
 #load JPG image
-load res/reindeer.jpg reindeerJPG
+load reindeer.jpg reindeerJPG
 
 #sepia image
 sepia reindeerJPG reindeer-sepia 
@@ -92,7 +92,7 @@ sepia reindeerJPG reindeer-sepia
 save res/reindeer-sepia.jpg reindeer-sepia 
 
 #load BMP image
-load res/reindeer.bmp reindeerBMP
+load reindeer.bmp reindeerBMP
 
 #sharpen image
 sharpen reindeerBMP reindeer-sharpen 
