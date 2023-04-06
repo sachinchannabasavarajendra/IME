@@ -4,18 +4,17 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-
 import model.IMEModel;
 import model.IPixel;
 
 /**
  * This is an implementation of the SaveImage interface which is used to save the manipulated image
- * files of ppm format.
+ * files in ppm format.
  */
-public class SavePPM implements SaveImage {
+public class SavePPM extends AbstractSaveImage {
 
   /**
-   * This method is used to save the manipulated image file at the given path.
+   * This method is used to save the manipulated image file at the given path with ppm format.
    *
    * @param imagePath the path where the file should be saved at
    * @param model     image data of the image to be saved in the file

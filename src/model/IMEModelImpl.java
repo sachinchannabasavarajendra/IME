@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
+import model.macro.IMacro;
+
+import static model.helpers.PixelHelper.reverse;
 
 /**
  * This class represents an implementation of the IMEModel interface which provides the
@@ -150,11 +153,11 @@ public class IMEModelImpl implements IMEModel {
       for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
           int redComponent =
-                  Math.min(this.imageData[i][j].getRedComponent() + delta, this.maxValue);
+              Math.min(this.imageData[i][j].getRedComponent() + delta, this.maxValue);
           int greenComponent =
-                  Math.min(this.imageData[i][j].getGreenComponent() + delta, this.maxValue);
+              Math.min(this.imageData[i][j].getGreenComponent() + delta, this.maxValue);
           int blueComponent =
-                  Math.min(this.imageData[i][j].getBlueComponent() + delta, this.maxValue);
+              Math.min(this.imageData[i][j].getBlueComponent() + delta, this.maxValue);
 
           newImageData[i][j] = new Pixel(redComponent, greenComponent, blueComponent);
         }
@@ -187,41 +190,33 @@ public class IMEModelImpl implements IMEModel {
    */
   @Override
   public IMEModel combineRGBImage(IMEModel greenScaleImage,
-                                  IMEModel blueScaleImage) {
+      IMEModel blueScaleImage) {
 
     if (!(this.height == greenScaleImage.getImageHeight()
-            && this.height == blueScaleImage.getImageHeight())
-            || !(this.width == greenScaleImage.getImageWidth()
-            && this.width == blueScaleImage.getImageWidth())) {
+        && this.height == blueScaleImage.getImageHeight())
+        || !(this.width == greenScaleImage.getImageWidth()
+        && this.width == blueScaleImage.getImageWidth())) {
       throw new IllegalStateException("The greyscale images are of different sizes!");
     }
     IPixel[][] newImageData = new Pixel[height][width];
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
         newImageData[i][j] = new Pixel(
-                this.getImageData()[i][j].getRedComponent(),
-                greenScaleImage.getImageData()[i][j].getGreenComponent(),
-                blueScaleImage.getImageData()[i][j].getBlueComponent());
+            this.getImageData()[i][j].getRedComponent(),
+            greenScaleImage.getImageData()[i][j].getGreenComponent(),
+            blueScaleImage.getImageData()[i][j].getBlueComponent());
       }
     }
     return new IMEModelImpl(newImageData, height, width, maxValue);
   }
 
   /**
-   * This is a helper method used to reverse the contents of an array.
+   * Function to execute a Macro manipulation on the image.
    *
-   * @param a the input array
-   * @return the reversed array
+   * @param macro the macro manipulation object
+   * @return the manipulated image
    */
-  private IPixel[] reverse(IPixel[] a) {
-    int n = a.length;
-    IPixel[] newRow = a.clone();
-    IPixel t;
-    for (int i = 0; i < n / 2; i++) {
-      t = newRow[i];
-      newRow[i] = newRow[n - i - 1];
-      newRow[n - i - 1] = t;
-    }
-    return newRow;
+  public IMEModel executeMacro(IMacro macro) {
+    return macro.execute(this);
   }
 }

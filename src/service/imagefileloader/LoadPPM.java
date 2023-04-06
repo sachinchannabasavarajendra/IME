@@ -6,6 +6,7 @@ import java.util.Scanner;
 
 import model.IMEModel;
 import model.IMEModelImpl;
+import model.IPixel;
 import model.Pixel;
 
 /**
@@ -26,7 +27,7 @@ public class LoadPPM implements LoadImage {
   }
 
   /**
-   * This method is used to load an image file located at the given path.
+   * This method is used to load a ppm image file located at the given path.
    *
    * @param imagePath the path of the image file
    * @param imageName the name of the image file
@@ -37,7 +38,7 @@ public class LoadPPM implements LoadImage {
   public IMEModel load(String imagePath, String imageName)
           throws FileNotFoundException, IllegalStateException {
     Scanner sc;
-    Pixel[][] imageData;
+    IPixel[][] imageData;
     int height;
     int width;
 

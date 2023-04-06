@@ -19,7 +19,7 @@ public abstract class AbstractIMECommand implements IMEModelCommand {
    * @return the image data object corresponding to the given key
    * @throws IllegalArgumentException if the given key is not found in the map
    */
-  public IMEModel getModelObject(Map<String, IMEModel> objectMap, String key) {
+  protected IMEModel getModelObject(Map<String, IMEModel> objectMap, String key) {
     try {
       return objectMap.get(key);
     } catch (Exception e) {

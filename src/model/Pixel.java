@@ -28,6 +28,7 @@ public class Pixel implements IPixel {
    *
    * @return the maximum value of the three components for each pixel
    */
+  @Override
   public int getValue() {
     return Math.max(redComponent, Math.max(blueComponent, greenComponent));
   }
@@ -37,6 +38,7 @@ public class Pixel implements IPixel {
    *
    * @return the average of the three components for each pixel
    */
+  @Override
   public int getIntensity() {
     return (int) Math.round(((double) redComponent + greenComponent + blueComponent) / 3);
   }
@@ -46,9 +48,11 @@ public class Pixel implements IPixel {
    *
    * @return the weighted sum
    */
+  @Override
   public int getLuma() {
-    return (int) Math.round(
+    int value = (int) Math.round(
             (0.2126 * redComponent) + (0.7152 * greenComponent) + (0.0722 * blueComponent));
+    return Math.min(value, 255);
   }
 
   /**
@@ -56,6 +60,7 @@ public class Pixel implements IPixel {
    *
    * @return the value of the red component
    */
+  @Override
   public int getRedComponent() {
     return redComponent;
   }
@@ -65,6 +70,7 @@ public class Pixel implements IPixel {
    *
    * @return the value of the green component
    */
+  @Override
   public int getGreenComponent() {
     return greenComponent;
   }
@@ -74,6 +80,7 @@ public class Pixel implements IPixel {
    *
    * @return the value of the blue component
    */
+  @Override
   public int getBlueComponent() {
     return blueComponent;
   }

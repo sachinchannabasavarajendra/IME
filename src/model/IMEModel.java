@@ -3,6 +3,8 @@ package model;
 import java.util.List;
 import java.util.function.Function;
 
+import model.macro.IMacro;
+
 /**
  * This is an interface which specifies the operations/manipulations to be performed on an image.
  */
@@ -32,7 +34,7 @@ public interface IMEModel {
   /**
    * This is a method used to get the max value of each component of the image.
    *
-   * @return the max value of the each component.
+   * @return the max value of each component.
    */
   int getMaxValue();
 
@@ -85,7 +87,15 @@ public interface IMEModel {
    * @return combined greyscale image with all the three components
    */
   IMEModel combineRGBImage(
-          IMEModel greenScaleImage,
-          IMEModel blueScaleImage
+      IMEModel greenScaleImage,
+      IMEModel blueScaleImage
   );
+
+  /**
+   * Function to execute a Macro manipulation on the image.
+   *
+   * @param macro the macro manipulation object
+   * @return the manipulated image
+   */
+  IMEModel executeMacro(IMacro macro);
 }

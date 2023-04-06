@@ -12,9 +12,9 @@ Instructions to run the script file :-
 Along with the console input commands, this user-interactive application also takes the text based script file and executes the supported commands in it. This application has a commands file called 'script.txt' which can be executed when the program runs using the console command - "run script.txt".
 
 Other supported commands:
-- load <imagePath> reindeer
+- load imagePath reindeer
 - brighten 50 reindeer reindeer-brighter
-- save <imagePath> reindeer-brighter
+- save imagePath reindeer-brighter
 - brighten -50 reindeer reindeer-darken (darken)
 - horizontal-flip reindeer reindeer-horizontal
 - vertical-flip reindeer-horizontal reindeer-horizontal-vertical
@@ -24,14 +24,50 @@ Other supported commands:
 - greyscale value-component reindeer reindeer-value-greyscale
 - greyscale intensity-component reindeer reindeer-intensity-greyscale
 - greyscale luma-component reindeer reindeer-luma-greyscale
-- run <filePath>
+- run filepath
+- rgb-split reindeer reindeer-red-greyscale reindeer-green-greyscale reindeer-blue-greyscale
+- rgb-combine reindeer-combine reindeer-red-greyscale reindeer-green-greyscale reindeer-blue-greyscale
+- greyscale reindeer reindeer-greyscale (Uses color transformation logic)
+- sepia reindeer reindeer-sepia
+- blur reindeer reindeer-blur
+- dither reindeer reindeer-dither
+- sharpen reindeer reindeer-sharpen
 
 Use 'q' or 'quit' to stop running the application.
 
-## Citation of the image used Filename: reindeer.ppm
+## Citation of the image used Filename: reindeer.ppm/png/bpm/jpg/jpeg
 
-Creator: Sachin Channabasavarajendra
-Location: Woodstock New Hampshire
+Creator: Sachin Channabasavarajendra.
+
+Location: Woodstock New Hampshire.
+
 From the creator's personal collection, permitted to use the image.
+
+## Parts of the Program that are complete
+
+1. Main Function (Entry point of the application).
+2. Controller Interface and Implementation. 
+3. Command Design pattern to invoke model methods.
+4. Controller contains the object hashmap that holds all the images that are loaded and manipulated by the application.
+5. Model interface and implementation with manipulation functions from assignment 4.
+6. Each model represents an image and each image is represented as a 2D array of IPixel objects.
+7. Additional macro method added to the model interface that accepts a macro object and performs the manipulation on the image.
+8. New manipulations are created as macro classes.
+9. Load and save image file that supports multiple formats (Written in service layer).
+10. The application supports command inputs from the user through keyboard and also through program arguments.
+11. The application also supports running commands from a script file using the run command.
+
+## Design Enhancements 
+
+The previous implementatation of IMEModel had all the manipulations as functions within the model and as well in the interface. As part of this
+iteration we have extended the model by adding a new method that accepts a macro object which represents a manipulation 
+and performs those operation on the image. Therefore in the future it will be easier to add more manipulations to an image without
+changing the model. Each manipulation is represented as a Macro class that implements the IMacro interface which accepts the image that needs
+to be manipulated and runs the operation on this image and returns a new manipulated image. The reason why we added a new method to the existing interface 
+is because each model in our design represents one image and once we manipulate an image we are returning a new model implementation that represents the new manipulated image.
+If we had to write a new interface called MIMEModel that extends IMEModel, the return type of all those existing model functions should have
+been updated. And for this very reason we have added only one new function called executeMacro() that accepts an object of IMacro interface and executes the macro function 
+on the image that is represented by the model. We could have moved all the existing manipulations also as macro functions but since the previous implementation is already being used by the controller and
+commands we didn't modify the existing flow. But in the future if there are more manipulations to be added all we need to do is add a new command in the command packge and a new macro in the macro package.
 
 
