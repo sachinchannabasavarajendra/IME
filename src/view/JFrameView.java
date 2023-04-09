@@ -1,16 +1,15 @@
 package view;
 
+import controller.Features;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class JFrameView extends JFrame implements IView, ActionListener {
+public class JFrameView extends JFrame implements IView {
 
   private JPanel histogramPanel;
   private JPanel commandsPanel;
@@ -59,12 +58,10 @@ public class JFrameView extends JFrame implements IView, ActionListener {
     //load image
     loadImageButton = new JButton("Load Image");
     loadImageButton.setActionCommand("Load Image");
-    //loadImageButton.addActionListener(this);
 
     //save image
     saveImageButton = new JButton("Save Image");
     saveImageButton.setActionCommand("Save Image");
-    //saveImageButton.addActionListener(this);
 
     // Add the histogram panel and commands panel to the left side
     leftPanel = new JPanel(new GridLayout(2, 1));
@@ -131,7 +128,7 @@ public class JFrameView extends JFrame implements IView, ActionListener {
   }
 
   @Override
-  public void actionPerformed(ActionEvent e) {
+  public void addFeatures(Features features) {
 
   }
 }

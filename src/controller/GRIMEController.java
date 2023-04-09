@@ -8,5 +8,6 @@ public class GRIMEController implements Features {
 
   public void setView(IView v) {
     view = v;
+    view.addFeatures(this);
   }
 }

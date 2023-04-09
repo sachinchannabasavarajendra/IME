@@ -1,5 +1,7 @@
 package view;
 
-public interface IView {
+import controller.Features;
 
+public interface IView {
+  void addFeatures(Features features);
 }
