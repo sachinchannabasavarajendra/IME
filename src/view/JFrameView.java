@@ -1,27 +1,28 @@
 package view;
 
 import controller.Features;
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.GridLayout;
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import model.IMEModel;
 import model.IPixel;
 
-public class JFrameView extends JFrame implements IView {
+import static java.util.UUID.randomUUID;
 
+public class JFrameView extends JFrame implements IView {
   private final JPanel histogramPanel;
   private JPanel commandsPanel;
   private JPanel imagePanel;
+  private JLabel imageLabel;
+  private JScrollPane imageScrollPane;
   private JPanel leftPanel;
   private JPanel rightPanel;
-
   private JButton loadImageButton;
   private JButton saveImageButton;
   private JButton blur;
@@ -35,6 +36,7 @@ public class JFrameView extends JFrame implements IView {
   private JButton greyscaleColorTransform;
   private JButton sepiaColorTransform;
   private JButton sharpen;
+  private String currentImage;
 
   public JFrameView(String caption) {
     super(caption);
@@ -44,6 +46,7 @@ public class JFrameView extends JFrame implements IView {
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     this.setLayout(new BorderLayout());
+    this.currentImage = null;
 
     // Create the histogram panel
     histogramPanel = new JPanel();
@@ -56,14 +59,19 @@ public class JFrameView extends JFrame implements IView {
     commandsPanel.setBackground(Color.WHITE);
     commandsPanel.setBorder(BorderFactory.createTitledBorder("Commands"));
 
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
     // Create the image panel
     imagePanel = new JPanel();
+    imageLabel = new JLabel();
+    imageScrollPane = new JScrollPane(imageLabel);
+    imageScrollPane.setPreferredSize(new Dimension((int)screenSize.getWidth() - 700, (int)screenSize.getHeight() - 100));
+    imagePanel.add(imageScrollPane);
     imagePanel.setBackground(Color.WHITE);
     imagePanel.setBorder(BorderFactory.createTitledBorder("Image"));
 
     //load image
     loadImageButton = new JButton("Load Image");
-    loadImageButton.setActionCommand("Load Image");
 
     //save image
     saveImageButton = new JButton("Save Image");
@@ -135,7 +143,74 @@ public class JFrameView extends JFrame implements IView {
 
   @Override
   public void addFeatures(Features features) {
-
+    loadImageButton.addActionListener(evt -> {
+      final JFileChooser fchooser = new JFileChooser(".");
+      FileNameExtensionFilter filter = new FileNameExtensionFilter(
+              "Images", "jpg", "png", "bmp", "ppm", "jpeg");
+      fchooser.setFileFilter(filter);
+      int retvalue = fchooser.showOpenDialog(JFrameView.this);
+      if (retvalue == JFileChooser.APPROVE_OPTION) {
+        File f = fchooser.getSelectedFile();
+        this.currentImage = randomUUID().toString();
+        String imagePath = f.getAbsolutePath();
+        features.LoadImage(imagePath, currentImage);
+        this.loadImageOnScreen(features);
+      }
+    });
+    blur.addActionListener(evt -> {
+      String destName = this.currentImage + "blur";
+      features.BlurImage(this.currentImage, destName);
+      this.currentImage = destName;
+      this.loadImageOnScreen(features);
+    });
+    brighten.addActionListener(evt -> {
+      String destName = this.currentImage + "brighten";
+      features.Brighten("10", this.currentImage, destName);
+      this.currentImage = destName;
+      this.loadImageOnScreen(features);
+    });
+    dither.addActionListener(evt -> {
+      String destName = this.currentImage + "dither";
+      features.Dither(this.currentImage, destName);
+      this.currentImage = destName;
+      this.loadImageOnScreen(features);
+    });
+    greyscale.addActionListener(evt -> {
+      String destName = this.currentImage + "greyscale";
+      features.GreyScale(this.currentImage, destName, "luma-component");
+      this.currentImage = destName;
+      this.loadImageOnScreen(features);
+    });
+    horizontalFlip.addActionListener(evt -> {
+      String destName = this.currentImage + "hf";
+      features.HorizontalFlip(this.currentImage, destName);
+      this.currentImage = destName;
+      this.loadImageOnScreen(features);
+    });
+    verticalFlip.addActionListener(evt -> {
+      String destName = this.currentImage + "vf";
+      features.VerticalFlip(this.currentImage, destName);
+      this.currentImage = destName;
+      this.loadImageOnScreen(features);
+    });
+    greyscaleColorTransform.addActionListener(evt -> {
+      String destName = this.currentImage + "greyscale";
+      features.GreyScale(this.currentImage, destName, "luma-component");
+      this.currentImage = destName;
+      this.loadImageOnScreen(features);
+    });
+    sepiaColorTransform.addActionListener(evt -> {
+      String destName = this.currentImage + "sepia";
+      features.Sepia(this.currentImage, destName);
+      this.currentImage = destName;
+      this.loadImageOnScreen(features);
+    });
+    sharpen.addActionListener(evt -> {
+      String destName = this.currentImage + "sharpen";
+      features.Sharpen(this.currentImage, destName);
+      this.currentImage = destName;
+      this.loadImageOnScreen(features);
+    });
   }
 
   @Override
@@ -279,5 +354,18 @@ public class JFrameView extends JFrame implements IView {
       }
     };
     return chartPanel;
+  }
+
+  private void loadImageOnScreen(Features features) {
+    String tempPath = "src/view/temp/"+currentImage+".png";
+    features.SaveImage(tempPath, currentImage);
+    try {
+      File tempFile = new File(tempPath);
+      BufferedImage bufferedImage = ImageIO.read(tempFile);
+      imageLabel.setIcon(new ImageIcon(bufferedImage));
+      tempFile.delete();
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+    }
   }
 }
