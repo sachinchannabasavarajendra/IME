@@ -16,6 +16,7 @@ import model.IPixel;
 import static java.util.UUID.randomUUID;
 
 public class JFrameView extends JFrame implements IView {
+
   private final JPanel histogramPanel;
   private JPanel commandsPanel;
   private JPanel imagePanel;
@@ -65,7 +66,8 @@ public class JFrameView extends JFrame implements IView {
     imagePanel = new JPanel();
     imageLabel = new JLabel();
     imageScrollPane = new JScrollPane(imageLabel);
-    imageScrollPane.setPreferredSize(new Dimension((int)screenSize.getWidth() - 700, (int)screenSize.getHeight() - 100));
+    imageScrollPane.setPreferredSize(
+        new Dimension((int) screenSize.getWidth() - 600, (int) screenSize.getHeight() - 130));
     imagePanel.add(imageScrollPane);
     imagePanel.setBackground(Color.WHITE);
     imagePanel.setBorder(BorderFactory.createTitledBorder("Image"));
@@ -146,7 +148,7 @@ public class JFrameView extends JFrame implements IView {
     loadImageButton.addActionListener(evt -> {
       final JFileChooser fchooser = new JFileChooser(".");
       FileNameExtensionFilter filter = new FileNameExtensionFilter(
-              "Images", "jpg", "png", "bmp", "ppm", "jpeg");
+          "Images", "jpg", "png", "bmp", "ppm", "jpeg");
       fchooser.setFileFilter(filter);
       int retvalue = fchooser.showOpenDialog(JFrameView.this);
       if (retvalue == JFileChooser.APPROVE_OPTION) {
@@ -214,18 +216,22 @@ public class JFrameView extends JFrame implements IView {
   }
 
   @Override
-  public void drawHistogram(IMEModel image) {
-    IPixel[][] imageData = image.getImageData();
+  public void drawHistogram(BufferedImage image) {
+    int[] pixelData = image.getRGB(0, 0, image.getWidth(), image.getHeight(),
+        new int[image.getWidth() * image.getHeight()], 0, image.getWidth());
     int[] redHistogram = new int[256];
     int[] greenHistogram = new int[256];
     int[] blueHistogram = new int[256];
     int[] intensityHistogram = new int[256];
-    for (int i = 0; i < image.getImageHeight(); i++) {
-      for (int j = 0; j < image.getImageWidth(); j++) {
-        redHistogram[imageData[i][j].getRedComponent()]++;
-        greenHistogram[imageData[i][j].getGreenComponent()]++;
-        blueHistogram[imageData[i][j].getBlueComponent()]++;
-        intensityHistogram[imageData[i][j].getIntensity()]++;
+    int index = 0;
+    for (int i = 0; i < image.getHeight(); i++) {
+      for (int j = 0; j < image.getWidth(); j++) {
+        Color color = new Color(pixelData[index++]);
+        redHistogram[color.getRed()]++;
+        greenHistogram[color.getGreen()]++;
+        blueHistogram[color.getBlue()]++;
+        intensityHistogram[(int) (0.299 * color.getRed() + 0.587 * color.getGreen()
+            + 0.114 * color.getBlue())]++;
       }
     }
 
@@ -285,14 +291,14 @@ public class JFrameView extends JFrame implements IView {
 
         Graphics2D g2 = (Graphics2D) g;
         g2.rotate(-Math.PI / 2);
-        g2.drawString("Frequency", -getHeight() / 2 - 30, 12);
+        g2.drawString("Frequency", -getHeight() / 2 - 33, 12);
         g2.rotate(Math.PI / 2);
 
         g.setColor(Color.BLACK);
-        for (int i = 0; i <= maxValue; i += maxValue / 5) {
+        for (int i = 0; i <= maxValue; i += maxValue / 3) {
           int y = getHeight() - (int) ((double) i / maxValue * (getHeight() - 110)) - 50;
           g.drawLine(47, y, 53, y);
-          g.drawString(Integer.toString(i), 20, y + 5);
+          g.drawString(Integer.toString(i), 7, y + 5);
         }
 
         // Draw the red histogram
@@ -357,13 +363,14 @@ public class JFrameView extends JFrame implements IView {
   }
 
   private void loadImageOnScreen(Features features) {
-    String tempPath = "src/view/temp/"+currentImage+".png";
+    String tempPath = "src/view/temp/" + currentImage + ".png";
     features.SaveImage(tempPath, currentImage);
     try {
       File tempFile = new File(tempPath);
       BufferedImage bufferedImage = ImageIO.read(tempFile);
       imageLabel.setIcon(new ImageIcon(bufferedImage));
       tempFile.delete();
+      drawHistogram(bufferedImage);
     } catch (Exception e) {
       System.out.println(e.getMessage());
     }
