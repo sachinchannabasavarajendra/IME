@@ -35,7 +35,9 @@ public abstract class AbstractSaveImage implements SaveImage {
           image.setRGB(j, i, color.getRGB());
         }
       }
-      ImageIO.write(image, format, new File(imagePath));
+      File output = new File(imagePath);
+      output.mkdirs();
+      ImageIO.write(image, format, output);
     } catch (Exception e) {
       throw new IOException(String.format("Error saving %s file: %s", format, imagePath));
     }

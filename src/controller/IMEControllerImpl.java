@@ -30,9 +30,10 @@ import model.IMEModel;
  */
 public class IMEControllerImpl implements IMEController {
 
-  private final Map<String, IMEModel> objectMap;
+  protected final Map<String, IMEModel> objectMap;
   private final Readable in;
   private final Appendable out;
+  protected final Map<String, Function<String[], IMEModelCommand>> knownCommands;
 
   /**
    * This is a constructor which is used to instantiate the above class.
@@ -44,18 +45,7 @@ public class IMEControllerImpl implements IMEController {
     this.objectMap = new HashMap<>();
     this.in = in;
     this.out = out;
-  }
-
-  /**
-   * This method processes and executes the given command.
-   */
-  public void execute() throws IOException {
-
-    Scanner sc = new Scanner(this.in);
-    IMEModelCommand imeModelCommand;
-    boolean isScriptRunning = false;
-
-    Map<String, Function<String[], IMEModelCommand>> knownCommands = new HashMap<>();
+    this.knownCommands = new HashMap<>();
     knownCommands.put("load", inputCommand -> {
       if (inputCommand.length != 3) {
         throw new IllegalArgumentException("Load expects 2 parameters");
@@ -77,7 +67,7 @@ public class IMEControllerImpl implements IMEController {
         throw new IllegalArgumentException("Brighten expects 3 parameters");
       }
       return new Brighten(Integer.parseInt(inputCommand[1]),
-          inputCommand[2], inputCommand[3]);
+              inputCommand[2], inputCommand[3]);
     });
     knownCommands.put("vertical-flip", inputCommand -> {
       if (inputCommand.length != 3) {
@@ -136,6 +126,16 @@ public class IMEControllerImpl implements IMEController {
       }
       return new Dither(inputCommand[1], inputCommand[2]);
     });
+  }
+
+  /**
+   * This method processes and executes the given command.
+   */
+  public void execute() throws IOException {
+
+    Scanner sc = new Scanner(this.in);
+    IMEModelCommand imeModelCommand;
+    boolean isScriptRunning = false;
 
     while (sc.hasNextLine() || isScriptRunning) {
       if (!sc.hasNextLine() && isScriptRunning) {
