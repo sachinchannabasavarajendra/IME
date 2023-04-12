@@ -1,19 +1,32 @@
 package view;
 
-import controller.Features;
+import static java.util.UUID.randomUUID;
+import static view.helpers.Histogram.createHistogramChartPanel;
+import static view.helpers.Histogram.getMaxValueToScale;
 
-import java.awt.*;
+import controller.Features;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
-
+import java.util.Enumeration;
 import javax.imageio.ImageIO;
-import javax.swing.*;
+import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
-import model.IMEModel;
-import model.IPixel;
-
-import static java.util.UUID.randomUUID;
 
 public class JFrameView extends JFrame implements IView {
 
@@ -146,13 +159,13 @@ public class JFrameView extends JFrame implements IView {
   @Override
   public void addFeatures(Features features) {
     loadImageButton.addActionListener(evt -> {
-      final JFileChooser fchooser = new JFileChooser(".");
+      final JFileChooser jFileChooser = new JFileChooser(".");
       FileNameExtensionFilter filter = new FileNameExtensionFilter(
           "Images", "jpg", "png", "bmp", "ppm", "jpeg");
-      fchooser.setFileFilter(filter);
-      int retvalue = fchooser.showOpenDialog(JFrameView.this);
-      if (retvalue == JFileChooser.APPROVE_OPTION) {
-        File f = fchooser.getSelectedFile();
+      jFileChooser.setFileFilter(filter);
+      int state = jFileChooser.showOpenDialog(JFrameView.this);
+      if (state == JFileChooser.APPROVE_OPTION) {
+        File f = jFileChooser.getSelectedFile();
         this.currentImage = randomUUID().toString();
         String imagePath = f.getAbsolutePath();
         features.LoadImage(imagePath, currentImage);
@@ -167,7 +180,14 @@ public class JFrameView extends JFrame implements IView {
     });
     brighten.addActionListener(evt -> {
       String destName = this.currentImage + "brighten";
-      features.Brighten("10", this.currentImage, destName);
+      String input = JOptionPane.showInputDialog(this,
+          "Enter a value to alter the brightness of the image:");
+      try {
+        int value = Integer.parseInt(input);
+        features.Brighten(String.valueOf(value), this.currentImage, destName);
+      } catch (NumberFormatException ex) {
+        JOptionPane.showMessageDialog(this, "Invalid input. Please enter an integer value.");
+      }
       this.currentImage = destName;
       this.loadImageOnScreen(features);
     });
@@ -179,7 +199,10 @@ public class JFrameView extends JFrame implements IView {
     });
     greyscale.addActionListener(evt -> {
       String destName = this.currentImage + "greyscale";
-      features.GreyScale(this.currentImage, destName, "luma-component");
+      String component = getValueComponent();
+      if (component != null) {
+        features.Greyscale(this.currentImage, destName, component);
+      }
       this.currentImage = destName;
       this.loadImageOnScreen(features);
     });
@@ -197,7 +220,7 @@ public class JFrameView extends JFrame implements IView {
     });
     greyscaleColorTransform.addActionListener(evt -> {
       String destName = this.currentImage + "greyscale";
-      features.GreyScale(this.currentImage, destName, "luma-component");
+      features.GreyscaleColorTransform(this.currentImage, destName);
       this.currentImage = destName;
       this.loadImageOnScreen(features);
     });
@@ -249,119 +272,6 @@ public class JFrameView extends JFrame implements IView {
     histogramPanel.repaint();
   }
 
-  private int getMaxValueToScale(int[] redHistogram, int[] greenHistogram, int[] blueHistogram,
-      int[] intensityHistogram) {
-    int maxValue = 0;
-    for (int i = 0; i < 255; i++) {
-      if (redHistogram[i] > maxValue) {
-        maxValue = redHistogram[i];
-      }
-      if (greenHistogram[i] > maxValue) {
-        maxValue = greenHistogram[i];
-      }
-      if (blueHistogram[i] > maxValue) {
-        maxValue = blueHistogram[i];
-      }
-      if (intensityHistogram[i] > maxValue) {
-        maxValue = intensityHistogram[i];
-      }
-    }
-    return maxValue;
-  }
-
-  private JPanel createHistogramChartPanel(int[] redHistogram, int[] greenHistogram,
-      int[] blueHistogram, int[] intensityHistogram, int maxValue) {
-    JPanel chartPanel = new JPanel() {
-      @Override
-      protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-
-        g.setColor(Color.BLACK);
-        g.drawLine(50, getHeight() - 50, getWidth() - 20, getHeight() - 50);
-        g.drawLine(50, getHeight() - 50, 50, 30);
-
-        g.setColor(Color.BLACK);
-        for (int i = 0; i <= 256; i += 32) {
-          int x = (int) ((double) i / 256 * (getWidth() - 70)) + 50;
-          g.drawLine(x, getHeight() - 50, x, getHeight() - 45);
-          g.drawString(Integer.toString(i), x - 10, getHeight() - 30);
-        }
-
-        g.drawString("Pixel Values", getWidth() / 2 - 20, getHeight() - 10);
-
-        Graphics2D g2 = (Graphics2D) g;
-        g2.rotate(-Math.PI / 2);
-        g2.drawString("Frequency", -getHeight() / 2 - 33, 12);
-        g2.rotate(Math.PI / 2);
-
-        g.setColor(Color.BLACK);
-        for (int i = 0; i <= maxValue; i += maxValue / 3) {
-          int y = getHeight() - (int) ((double) i / maxValue * (getHeight() - 110)) - 50;
-          g.drawLine(47, y, 53, y);
-          g.drawString(Integer.toString(i), 7, y + 5);
-        }
-
-        // Draw the red histogram
-        g.setColor(Color.RED);
-        for (int i = 0; i < 255; i++) {
-          int x1 = (int) ((double) i / 256 * (getWidth() - 70)) + 50;
-          int y1 =
-              getHeight() - (int) ((double) redHistogram[i] / maxValue * (getHeight() - 110))
-                  - 50;
-          int x2 = (int) ((double) (i + 1) / 256 * (getWidth() - 70)) + 50;
-          int y2 =
-              getHeight() - (int) ((double) redHistogram[i + 1] / maxValue * (getHeight() - 110))
-                  - 50;
-          g.drawLine(x1, y1, x2, y2);
-        }
-
-        // Draw the green histogram
-        g.setColor(Color.GREEN);
-        for (int i = 0; i < 255; i++) {
-          int x1 = (int) ((double) i / 256 * (getWidth() - 70)) + 50;
-          int y1 =
-              getHeight() - (int) ((double) greenHistogram[i] / maxValue * (getHeight() - 110))
-                  - 50;
-          int x2 = (int) ((double) (i + 1) / 256 * (getWidth() - 70)) + 50;
-          int y2 =
-              getHeight() - (int) ((double) greenHistogram[i + 1] / maxValue * (getHeight() - 110))
-                  - 50;
-          g.drawLine(x1, y1, x2, y2);
-        }
-
-        // Draw the blue histogram
-        g.setColor(Color.BLUE);
-        for (int i = 0; i < 255; i++) {
-          int x1 = (int) ((double) i / 256 * (getWidth() - 70)) + 50;
-          int y1 =
-              getHeight() - (int) ((double) blueHistogram[i] / maxValue * (getHeight() - 110))
-                  - 50;
-          int x2 = (int) ((double) (i + 1) / 256 * (getWidth() - 70)) + 50;
-          int y2 =
-              getHeight() - (int) ((double) blueHistogram[i + 1] / maxValue * (getHeight() - 110))
-                  - 50;
-          g.drawLine(x1, y1, x2, y2);
-        }
-
-        // Draw the intensity histogram
-        g.setColor(Color.BLACK);
-        for (int i = 0; i < 255; i++) {
-          int x1 = (int) ((double) i / 256 * (getWidth() - 70)) + 50;
-          int y1 =
-              getHeight() - (int) ((double) intensityHistogram[i] / maxValue * (getHeight() - 110))
-                  - 50;
-          int x2 = (int) ((double) (i + 1) / 256 * (getWidth() - 70)) + 50;
-          int y2 =
-              getHeight() - (int) ((double) intensityHistogram[i + 1] / maxValue * (getHeight()
-                  - 110))
-                  - 50;
-          g.drawLine(x1, y1, x2, y2);
-        }
-      }
-    };
-    return chartPanel;
-  }
-
   private void loadImageOnScreen(Features features) {
     String tempPath = "src/view/temp/" + currentImage + ".png";
     features.SaveImage(tempPath, currentImage);
@@ -374,5 +284,49 @@ public class JFrameView extends JFrame implements IView {
     } catch (Exception e) {
       System.out.println(e.getMessage());
     }
+  }
+
+  private String getValueComponent() {
+    JRadioButton redButton = new JRadioButton("red-component");
+    JRadioButton greenButton = new JRadioButton("green-component");
+    JRadioButton blueButton = new JRadioButton("blue-component");
+    JRadioButton valueButton = new JRadioButton("value-component");
+    JRadioButton intensityButton = new JRadioButton("intensity-component");
+    JRadioButton lumaButton = new JRadioButton("luma-component");
+
+    ButtonGroup group = new ButtonGroup();
+    group.add(redButton);
+    group.add(greenButton);
+    group.add(blueButton);
+    group.add(valueButton);
+    group.add(intensityButton);
+    group.add(lumaButton);
+
+    JPanel panel = new JPanel();
+    panel.setLayout(new GridLayout(0, 1));
+    panel.add(redButton);
+    panel.add(greenButton);
+    panel.add(blueButton);
+    panel.add(valueButton);
+    panel.add(intensityButton);
+    panel.add(lumaButton);
+
+    String component = "";
+    int result = JOptionPane.showConfirmDialog(this, panel, "Select Component",
+        JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE);
+    if (result == JOptionPane.OK_OPTION) {
+      JRadioButton selectedButton = null;
+      for (Enumeration<AbstractButton> buttons = group.getElements(); buttons.hasMoreElements(); ) {
+        AbstractButton button = buttons.nextElement();
+        if (button.isSelected()) {
+          selectedButton = (JRadioButton) button;
+          break;
+        }
+      }
+      if (selectedButton != null) {
+        component = selectedButton.getText();
+      }
+    }
+    return component;
   }
 }
