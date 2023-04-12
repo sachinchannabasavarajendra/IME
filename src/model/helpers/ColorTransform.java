@@ -30,19 +30,28 @@ public class ColorTransform {
     double blue;
     for (int i = 0; i < height; i++) {
       for (int j = 0; j < width; j++) {
-        red = kernel[0][0] * imageData[i][j].getRedComponent()
-            + kernel[0][1] * imageData[i][j].getGreenComponent()
-            + kernel[0][2] * imageData[i][j].getBlueComponent();
-        green = kernel[1][0] * imageData[i][j].getRedComponent()
-            + kernel[1][1] * imageData[i][j].getGreenComponent()
-            + kernel[1][2] * imageData[i][j].getBlueComponent();
-        blue = kernel[2][0] * imageData[i][j].getRedComponent()
-            + kernel[2][1] * imageData[i][j].getGreenComponent()
-            + kernel[2][2] * imageData[i][j].getBlueComponent();
+        double[][] rgbMatrix = {
+            {imageData[i][j].getRedComponent()},
+            {imageData[i][j].getGreenComponent()},
+            {imageData[i][j].getBlueComponent()}};
 
-        red = clamp(red);
-        green = clamp(green);
-        blue = clamp(blue);
+        int row1 = kernel.length;
+        int col1 = kernel[0].length;
+        int col2 = rgbMatrix[0].length;
+
+        double[][] result = new double[row1][col2];
+
+        for (int x = 0; x < row1; x++) {
+          for (int y = 0; y < col2; y++) {
+            for (int z = 0; z < col1; z++) {
+              result[x][y] += kernel[x][z] * rgbMatrix[z][y];
+            }
+          }
+        }
+
+        red = clamp(result[0][0]);
+        green = clamp(result[1][0]);
+        blue = clamp(result[2][0]);
 
         newImageData[i][j] = new Pixel((int) red, (int) green, (int) blue);
       }
