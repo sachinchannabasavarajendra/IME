@@ -56,6 +56,9 @@ From the creator's personal collection, permitted to use the image.
 9. Load and save image file that supports multiple formats (Written in service layer).
 10. The application supports command inputs from the user through keyboard and also through program arguments.
 11. The application also supports running commands from a script file using the run command.
+12. The application has a GUI which the user can use to interactively load, save and manipulate images.
+13. The application GUI displays the histogram of the image that is loaded.
+14. The application GUI also contains a set of buttons which performs manipulation on the image.
 
 ## Design Enhancements 
 
@@ -69,5 +72,12 @@ If we had to write a new interface called MIMEModel that extends IMEModel, the r
 been updated. And for this very reason we have added only one new function called executeMacro() that accepts an object of IMacro interface and executes the macro function 
 on the image that is represented by the model. We could have moved all the existing manipulations also as macro functions but since the previous implementation is already being used by the controller and
 commands we didn't modify the existing flow. But in the future if there are more manipulations to be added all we need to do is add a new command in the command packge and a new macro in the macro package.
+
+As part of the next iteration, we have added a View and a new Controller called GrimeController which is responsible for displaying the view. 
+The GrimeController has an instance of IMEController (Composition) to call the invokeCommand method and get the loaded image from the object hashmap. The GrimeController by itself does not have
+access to the knowncommands or the object hashmap, it has to use the IMEController instance to access those maps. The View contains three major areas, the top left shows the histogram of the image and the bottom left shows the buttons 
+that performs manipulations on the image, the top right contians the load and save buttons and the bottom right shows the image that is currently loaded.
+
+
 
 
