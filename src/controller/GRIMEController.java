@@ -5,16 +5,30 @@ import java.io.InputStreamReader;
 import java.util.List;
 import view.IView;
 
+
+/**
+ * This is an implementation of the features interface which supports the manipulations on the image
+ * by the graphical user interface.
+ */
+
 public class GRIMEController implements Features {
 
   IView view;
 
   private final IMEController imeController;
 
+  /**
+   * This is a constructor used to instantiate the above class.
+   */
   public GRIMEController() {
     imeController = new IMEControllerImpl(new InputStreamReader(System.in), System.out);
   }
 
+  /**
+   * This is a method used to set up the view to be displayed to the user
+   *
+   * @param view the view implementation object
+   */
   public void setView(IView v) {
     this.view = v;
     v.addFeatures(this);
