@@ -1,8 +1,12 @@
 package controller;
 
+import java.awt.image.BufferedImage;
 import java.io.InputStreamReader;
+import java.util.List;
 import java.util.function.Function;
 import controller.commands.IMEModelCommand;
+import model.IMEModel;
+import service.imagefilesaver.SaveHelper;
 import view.IView;
 
 public class GRIMEController extends IMEControllerImpl implements Features {
@@ -24,6 +28,12 @@ public class GRIMEController extends IMEControllerImpl implements Features {
         knownCommands.getOrDefault(command, null);
     imeModelCommand = cmd.apply(inputCommand);
     imeModelCommand.execute(this.objectMap);
+  }
+
+  @Override
+  public BufferedImage GetLoadedImage(String name) {
+    IMEModel image = this.objectMap.get(name);
+    return SaveHelper.createRGBBufferedImage(image);
   }
 
   @Override
@@ -90,5 +100,21 @@ public class GRIMEController extends IMEControllerImpl implements Features {
   public void SaveImage(String imagePath, String src) {
     String command = "save";
     invokeModelMethod(command, new String[]{command, imagePath, src});
+  }
+
+  @Override
+  public void RGBCombine(String dest, List<String> images) {
+    this.LoadImage(images.get(0), dest + "red");
+    this.LoadImage(images.get(1), dest + "green");
+    this.LoadImage(images.get(2), dest + "blue");
+
+    String command = "rgb-combine";
+    invokeModelMethod(command, new String[]{command, dest, dest + "red", dest + "green", dest + "blue"});
+  }
+
+  @Override
+  public void RGBSplit(String src, String red, String green, String blue) {
+    String command = "rgb-split";
+    invokeModelMethod(command, new String[]{command, src, red, green, blue});
   }
 }
