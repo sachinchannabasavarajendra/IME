@@ -41,12 +41,8 @@ import org.jfree.data.xy.DefaultXYDataset;
 public class JFrameView extends JFrame implements IView {
 
   private final JPanel histogramPanel;
-  private JPanel commandsPanel;
-  private JPanel imagePanel;
   private JLabel imageLabel;
   private JScrollPane imageScrollPane;
-  private JPanel leftPanel;
-  private JPanel rightPanel;
   private JButton loadImageButton;
   private JButton saveImageButton;
   private JButton blur;
@@ -83,14 +79,14 @@ public class JFrameView extends JFrame implements IView {
     histogramPanel.setBorder(BorderFactory.createTitledBorder("Histogram"));
 
     // Create the commands panel
-    commandsPanel = new JPanel(new GridLayout(5, 2));
+    JPanel commandsPanel = new JPanel(new GridLayout(5, 2));
     commandsPanel.setBackground(Color.WHITE);
     commandsPanel.setBorder(BorderFactory.createTitledBorder("Commands"));
 
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
     // Create the image panel
-    imagePanel = new JPanel();
+    JPanel imagePanel = new JPanel();
     imageLabel = new JLabel();
     imageScrollPane = new JScrollPane(imageLabel);
     imageScrollPane.setPreferredSize(
@@ -106,7 +102,7 @@ public class JFrameView extends JFrame implements IView {
     saveImageButton = new JButton("Save Image");
 
     // Add the histogram panel and commands panel to the left side
-    leftPanel = new JPanel(new GridLayout(2, 1));
+    JPanel leftPanel = new JPanel(new GridLayout(2, 1));
     leftPanel.add(histogramPanel);
     leftPanel.add(commandsPanel);
     getContentPane().add(leftPanel, BorderLayout.LINE_START);
@@ -615,7 +611,7 @@ public class JFrameView extends JFrame implements IView {
   }
 
   @Override
-  public void ShowErrorMessage(String message) {
+  public void showErrorMessage(String message) {
     JOptionPane.showMessageDialog(this, message, "Error!", JOptionPane.ERROR_MESSAGE,
             new ImageIcon(getClass().getResource("error.png")));
   }

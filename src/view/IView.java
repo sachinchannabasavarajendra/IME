@@ -30,5 +30,5 @@ public interface IView {
    *
    * @param message the description of the error to be shown.
    */
-  void ShowErrorMessage(String message);
+  void showErrorMessage(String message);
 }

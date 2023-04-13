@@ -1,6 +1,6 @@
 package service.imagefilesaver;
 
-import java.awt.*;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import model.IMEModel;
 import model.IPixel;
