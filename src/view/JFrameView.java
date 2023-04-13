@@ -14,19 +14,8 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
-import javax.swing.AbstractButton;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
+
+import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -591,8 +580,9 @@ public class JFrameView extends JFrame implements IView {
       if (state == JFileChooser.APPROVE_OPTION) {
         File f = jFileChooser.getSelectedFile();
         imagePath.set(f.getAbsolutePath());
-        String[] splitPath = f.getAbsolutePath().split("/");
-        loadLabel.setText(".../" + splitPath[splitPath.length - 1]);
+        String path = f.getAbsolutePath().replace("\\", "/");
+        String[] splitPath = path.split("/");
+        loadLabel.setText( ".../" + splitPath[splitPath.length - 1]);
       }
     });
   }
@@ -611,5 +601,11 @@ public class JFrameView extends JFrame implements IView {
       histogramArray[1][i] = frequency[i];
     }
     return histogramArray;
+  }
+
+  @Override
+  public void ShowErrorMessage(String message) {
+    JOptionPane.showMessageDialog(this, message, "Error!", JOptionPane.ERROR_MESSAGE,
+            new ImageIcon(getClass().getResource("error.png")));
   }
 }

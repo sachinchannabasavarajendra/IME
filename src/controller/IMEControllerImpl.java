@@ -15,6 +15,7 @@ import controller.commands.SepiaColorTransform;
 import controller.commands.Sharpen;
 import controller.commands.VerticalFlip;
 import java.awt.geom.IllegalPathStateException;
+import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -23,6 +24,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.function.Function;
 import model.IMEModel;
+import service.imagefilesaver.SaveHelper;
 
 /**
  * This is an implementation of the controller interface which supports both text-based scripting
@@ -46,6 +48,10 @@ public class IMEControllerImpl implements IMEController {
     this.in = in;
     this.out = out;
     this.knownCommands = new HashMap<>();
+    initializeCommands();
+  }
+
+  private void initializeCommands() {
     knownCommands.put("load", inputCommand -> {
       if (inputCommand.length != 3) {
         throw new IllegalArgumentException("Load expects 2 parameters");
@@ -128,13 +134,32 @@ public class IMEControllerImpl implements IMEController {
     });
   }
 
+  @Override
+  public void invokeCommand(String[] inputCommand) {
+    IMEModelCommand imeModelCommand;
+    Function<String[], IMEModelCommand> cmd =
+            knownCommands.getOrDefault(inputCommand[0], null);
+    if (cmd == null) {
+      throw new IllegalArgumentException("Bad input command :- " + inputCommand[0]);
+    } else {
+      imeModelCommand = cmd.apply(inputCommand);
+      imeModelCommand.execute(this.objectMap);
+    }
+  }
+
+  @Override
+  public BufferedImage GetLoadedImage(String name) {
+    IMEModel image = this.objectMap.get(name);
+    return SaveHelper.createRGBBufferedImage(image);
+  }
+
   /**
    * This method processes and executes the given command.
    */
+  @Override
   public void execute() throws IOException {
 
     Scanner sc = new Scanner(this.in);
-    IMEModelCommand imeModelCommand;
     boolean isScriptRunning = false;
 
     while (sc.hasNextLine() || isScriptRunning) {
@@ -148,10 +173,11 @@ public class IMEControllerImpl implements IMEController {
       while (in.startsWith("#") || in.trim().equals("")) {
         in = sc.nextLine();
       }
+
       try {
         String[] inputCommand = in.trim().split(" ");
         if (inputCommand[0].equalsIgnoreCase("q")
-            || inputCommand[0].equalsIgnoreCase("quit")) {
+                || inputCommand[0].equalsIgnoreCase("quit")) {
           return;
         }
 
@@ -160,16 +186,8 @@ public class IMEControllerImpl implements IMEController {
           isScriptRunning = true;
           continue;
         }
-
-        Function<String[], IMEModelCommand> cmd =
-            knownCommands.getOrDefault(inputCommand[0], null);
-        if (cmd == null) {
-          throw new IllegalArgumentException("Bad input command :- " + inputCommand[0]);
-        } else {
-          imeModelCommand = cmd.apply(inputCommand);
-          imeModelCommand.execute(this.objectMap);
-        }
-      } catch (Exception e) {
+        this.invokeCommand(inputCommand);
+      }  catch (Exception e) {
         this.out.append("Error!: ").append(e.getMessage());
       }
     }
