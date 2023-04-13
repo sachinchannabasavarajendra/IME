@@ -80,10 +80,10 @@ public class JFrameView extends JFrame implements IView {
 
     // Create the image panel
     imagePanel = new JPanel();
+    imagePanel.setLayout(new BoxLayout(imagePanel, BoxLayout.PAGE_AXIS));
     imageLabel = new JLabel();
     imageScrollPane = new JScrollPane(imageLabel);
-    imageScrollPane.setPreferredSize(
-        new Dimension((int) screenSize.getWidth() - 600, (int) screenSize.getHeight() - 130));
+    imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
     imagePanel.add(imageScrollPane);
     imagePanel.setBackground(Color.WHITE);
     imagePanel.setBorder(BorderFactory.createTitledBorder("Image"));
@@ -102,7 +102,7 @@ public class JFrameView extends JFrame implements IView {
 
     // Add the image panel and buttons to the right side
     JPanel rightPanel = new JPanel(new BorderLayout());
-    rightPanel.add(imagePanel, BorderLayout.CENTER);
+    rightPanel.add(imagePanel);
     JPanel buttonsPanel = new JPanel(new GridLayout(1, 2));
     buttonsPanel.add(loadImageButton);
     buttonsPanel.add(saveImageButton);
