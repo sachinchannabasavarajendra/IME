@@ -27,7 +27,8 @@ public interface IView {
 
   /**
    * Shows the error message as a pop up.
+   *
    * @param message the description of the error to be shown.
    */
-  void ShowErrorMessage(String message);
+  void showErrorMessage(String message);
 }

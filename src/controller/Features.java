@@ -14,7 +14,7 @@ public interface Features {
    * @param name the name of the image
    * @return buffered image
    */
-  BufferedImage GetLoadedImage(String name);
+  BufferedImage getLoadedImage(String name);
 
   /**
    * Load image with the given image name at the specified path.
@@ -22,7 +22,7 @@ public interface Features {
    * @param imagePath the path of the image
    * @param imageName the name of the image file
    */
-  void LoadImage(String imagePath, String imageName);
+  void loadImage(String imagePath, String imageName);
 
   /**
    * This is a method used to blur the image.
@@ -30,7 +30,7 @@ public interface Features {
    * @param src  the name of the source image on which the operation is to be performed
    * @param dest the name of the resultant image obtained after manipulation
    */
-  void BlurImage(String src, String dest);
+  void blurImage(String src, String dest);
 
   /**
    * This is a method used to brighten or darken the image based on the given delta value.
@@ -39,7 +39,7 @@ public interface Features {
    * @param src   the name of the source image on which the operation is to be performed
    * @param dest  the name of the resultant image obtained after manipulation
    */
-  void Brighten(String delta, String src, String dest);
+  void brighten(String delta, String src, String dest);
 
   /**
    * This is a method used to perform the operation of dithering the image.
@@ -47,7 +47,7 @@ public interface Features {
    * @param src  the name of the source image on which the operation is to be performed
    * @param dest the name of the resultant image obtained after manipulation
    */
-  void Dither(String src, String dest);
+  void dither(String src, String dest);
 
   /**
    * This is a method used to perform the operation of converting the given image into a greyscale
@@ -57,7 +57,7 @@ public interface Features {
    * @param dest      the name of the resultant image obtained after manipulation
    * @param component the color component based on which the image is to be greyscaled into
    */
-  void Greyscale(String src, String dest, String component);
+  void greyscale(String src, String dest, String component);
 
   /**
    * This is a method used to perform the operation of transforming the color of the image to give
@@ -66,7 +66,7 @@ public interface Features {
    * @param src  the name of the source image on which the operation is to be performed
    * @param dest the name of the resultant image obtained after manipulation
    */
-  void GreyscaleColorTransform(String src, String dest);
+  void greyscaleColorTransform(String src, String dest);
 
   /**
    * This is a method used to perform the operation of flipping the given image horizontally.
@@ -74,7 +74,7 @@ public interface Features {
    * @param src  the name of the source image on which the operation is to be performed
    * @param dest the name of the resultant image obtained after manipulation
    */
-  void HorizontalFlip(String src, String dest);
+  void horizontalFlip(String src, String dest);
 
   /**
    * This is a method used to perform the operation of flipping the given image vertically.
@@ -82,7 +82,7 @@ public interface Features {
    * @param src  the name of the source image on which the operation is to be performed
    * @param dest the name of the resultant image obtained after manipulation
    */
-  void VerticalFlip(String src, String dest);
+  void verticalFlip(String src, String dest);
 
   /**
    * This is a method used to perform the operation of transforming the color of the image to give
@@ -91,7 +91,7 @@ public interface Features {
    * @param src  the name of the source image on which the operation is to be performed
    * @param dest the name of the resultant image obtained after manipulation
    */
-  void Sepia(String src, String dest);
+  void sepiaColorTransform(String src, String dest);
 
   /**
    * This is a method used to perform the operation of sharpening the given image.
@@ -99,7 +99,7 @@ public interface Features {
    * @param src  the name of the source image on which the operation is to be performed
    * @param dest the name of the resultant image obtained after manipulation
    */
-  void Sharpen(String src, String dest);
+  void sharpen(String src, String dest);
 
   /**
    * This method is used to save the image with the given name at the specified path.
@@ -107,7 +107,7 @@ public interface Features {
    * @param imagePath the path where the image should be saved at
    * @param src       the image name
    */
-  void SaveImage(String imagePath, String src);
+  void saveImage(String imagePath, String src);
 
   /**
    * This is a method used to perform the operation of combining the three images into a single
@@ -116,7 +116,7 @@ public interface Features {
    * @param dest   the name of the resultant image obtained after manipulation
    * @param images three source images
    */
-  void RGBCombine(String dest, List<String> images);
+  void rgbCombine(String dest, List<String> images);
 
   /**
    * This is a method used to perform the operation of splitting the given image into three images
@@ -127,5 +127,5 @@ public interface Features {
    * @param green the destination image name of the green image component
    * @param blue  the destination image name of the blue image component
    */
-  void RGBSplit(String src, String red, String green, String blue);
+  void rgbSplit(String src, String red, String green, String blue);
 }

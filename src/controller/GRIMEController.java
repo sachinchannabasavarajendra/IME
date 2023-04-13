@@ -13,7 +13,7 @@ import view.IView;
 
 public class GRIMEController implements Features {
 
-  IView view;
+  private IView view;
 
   private final IMEController imeController;
 
@@ -25,106 +25,106 @@ public class GRIMEController implements Features {
   }
 
   /**
-   * This is a method used to set up the view to be displayed to the user
+   * This is a method used to set up the view to be displayed to the user.
    *
    * @param view the view implementation object
    */
-  public void setView(IView v) {
-    this.view = v;
-    v.addFeatures(this);
+  public void setView(IView view) {
+    this.view = view;
+    view.addFeatures(this);
   }
 
   private void invokeCommand(String[] inputCommand) {
     try {
       imeController.invokeCommand(inputCommand);
     } catch (Exception e) {
-      this.view.ShowErrorMessage(e.getMessage());
+      this.view.showErrorMessage(e.getMessage());
     }
   }
 
   @Override
-  public BufferedImage GetLoadedImage(String name) {
-    return imeController.GetLoadedImage(name);
+  public BufferedImage getLoadedImage(String name) {
+    return imeController.getLoadedImage(name);
   }
 
   @Override
-  public void LoadImage(String imagePath, String imageName) {
+  public void loadImage(String imagePath, String imageName) {
     String command = "load";
     invokeCommand(new String[]{command, imagePath, imageName});
   }
 
   @Override
-  public void BlurImage(String src, String dest) {
+  public void blurImage(String src, String dest) {
     String command = "blur";
     invokeCommand(new String[]{command, src, dest});
   }
 
   @Override
-  public void Brighten(String delta, String src, String dest) {
+  public void brighten(String delta, String src, String dest) {
     String command = "brighten";
     invokeCommand(new String[]{command, delta, src, dest});
   }
 
   @Override
-  public void Dither(String src, String dest) {
+  public void dither(String src, String dest) {
     String command = "dither";
     invokeCommand(new String[]{command, src, dest});
   }
 
   @Override
-  public void Greyscale(String src, String dest, String component) {
+  public void greyscale(String src, String dest, String component) {
     String command = "greyscale";
     invokeCommand(new String[]{command, component, src, dest});
   }
 
   @Override
-  public void GreyscaleColorTransform(String src, String dest) {
+  public void greyscaleColorTransform(String src, String dest) {
     String command = "greyscale";
     invokeCommand(new String[]{command, src, dest});
   }
 
   @Override
-  public void HorizontalFlip(String src, String dest) {
+  public void horizontalFlip(String src, String dest) {
     String command = "horizontal-flip";
     invokeCommand(new String[]{command, src, dest});
   }
 
   @Override
-  public void VerticalFlip(String src, String dest) {
+  public void verticalFlip(String src, String dest) {
     String command = "vertical-flip";
     invokeCommand(new String[]{command, src, dest});
   }
 
   @Override
-  public void Sepia(String src, String dest) {
+  public void sepiaColorTransform(String src, String dest) {
     String command = "sepia";
     invokeCommand(new String[]{command, src, dest});
   }
 
   @Override
-  public void Sharpen(String src, String dest) {
+  public void sharpen(String src, String dest) {
     String command = "sharpen";
     invokeCommand(new String[]{command, src, dest});
   }
 
   @Override
-  public void SaveImage(String imagePath, String src) {
+  public void saveImage(String imagePath, String src) {
     String command = "save";
     invokeCommand(new String[]{command, imagePath, src});
   }
 
   @Override
-  public void RGBCombine(String dest, List<String> images) {
-    this.LoadImage(images.get(0), dest + "red");
-    this.LoadImage(images.get(1), dest + "green");
-    this.LoadImage(images.get(2), dest + "blue");
+  public void rgbCombine(String dest, List<String> images) {
+    this.loadImage(images.get(0), dest + "red");
+    this.loadImage(images.get(1), dest + "green");
+    this.loadImage(images.get(2), dest + "blue");
 
     String command = "rgb-combine";
     invokeCommand(new String[]{command, dest, dest + "red", dest + "green", dest + "blue"});
   }
 
   @Override
-  public void RGBSplit(String src, String red, String green, String blue) {
+  public void rgbSplit(String src, String red, String green, String blue) {
     String command = "rgb-split";
     invokeCommand(new String[]{command, src, red, green, blue});
   }
