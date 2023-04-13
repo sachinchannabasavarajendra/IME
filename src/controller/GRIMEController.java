@@ -9,19 +9,37 @@ import model.IMEModel;
 import service.imagefilesaver.SaveHelper;
 import view.IView;
 
+/**
+ * This is an implementation of the features interface which supports the manipulations on the image
+ * by the graphical user interface.
+ */
 public class GRIMEController extends IMEControllerImpl implements Features {
 
   private IView view;
 
+  /**
+   * This is a constructor used to instantiate the above class.
+   */
   public GRIMEController() {
     super(new InputStreamReader(System.in), System.out);
   }
 
-  public void setView(IView v) {
-    view = v;
-    view.addFeatures(this);
+  /**
+   * This is a method used to set up the view to be displayed to the user
+   *
+   * @param view the view implementation object
+   */
+  public void setView(IView view) {
+    this.view = view;
+    this.view.addFeatures(this);
   }
 
+  /**
+   * This is a helper command used to execute the command selected by the user via the GUI.
+   *
+   * @param command      the command selected by the user
+   * @param inputCommand the supporting arguments of the command selected
+   */
   private void invokeModelMethod(String command, String[] inputCommand) {
     IMEModelCommand imeModelCommand;
     Function<String[], IMEModelCommand> cmd =
@@ -109,7 +127,8 @@ public class GRIMEController extends IMEControllerImpl implements Features {
     this.LoadImage(images.get(2), dest + "blue");
 
     String command = "rgb-combine";
-    invokeModelMethod(command, new String[]{command, dest, dest + "red", dest + "green", dest + "blue"});
+    invokeModelMethod(command,
+        new String[]{command, dest, dest + "red", dest + "green", dest + "blue"});
   }
 
   @Override

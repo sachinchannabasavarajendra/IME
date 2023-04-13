@@ -1,12 +1,10 @@
 package service.imagefilesaver;
 
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import model.IMEModel;
-import model.IPixel;
 
 /**
  * This is an abstract class which implements the SaveImage interface and provides the functionality
