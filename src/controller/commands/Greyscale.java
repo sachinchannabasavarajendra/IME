@@ -6,8 +6,8 @@ import model.IMEModel;
 import model.IPixel;
 
 /**
- * This class is used to perform the operation of convert the given image into a greyscale image of
- * the given component.
+ * This class is used to perform the operation of converting the given image into a greyscale image
+ * of the given component.
  */
 public class Greyscale extends AbstractIMECommand {
 

@@ -3,24 +3,41 @@ package view;
 import static java.util.UUID.randomUUID;
 
 import controller.Features;
-import service.imagefilesaver.SaveHelper;
-
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
-
-import javax.swing.*;
+import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.xy.DefaultXYDataset;
 
+/**
+ * This is a class which handles the view or the frontend of the application.
+ */
 public class JFrameView extends JFrame implements IView {
 
   private final JPanel histogramPanel;
@@ -45,11 +62,15 @@ public class JFrameView extends JFrame implements IView {
   private JButton sharpen;
   private String currentImage;
 
+  /**
+   * This is a constructor used to instantiate the above class.
+   *
+   * @param caption the title for the frame
+   */
   public JFrameView(String caption) {
     super(caption);
 
     setSize(800, 600);
-    //setLocation(200, 200);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     this.setLayout(new BorderLayout());
@@ -143,10 +164,15 @@ public class JFrameView extends JFrame implements IView {
     sharpen.setActionCommand("Sharpen");
     commandsPanel.add(sharpen);
 
-    //pack();
     setVisible(true);
   }
 
+  /**
+   * This is a method which handles the functionality of performing the action based on the set
+   * action listener event.
+   *
+   * @param features the different methods supported by the application
+   */
   @Override
   public void addFeatures(Features features) {
     loadImageButton.addActionListener(evt -> {
@@ -207,16 +233,16 @@ public class JFrameView extends JFrame implements IView {
       }
     });
     rgbSplit.addActionListener(evt -> {
-      features.RGBSplit(currentImage, currentImage+"rsplit", currentImage+"gsplit",
-              currentImage+"bsplit");
-      BufferedImage red = features.GetLoadedImage(currentImage+"rsplit");
-      BufferedImage green = features.GetLoadedImage(currentImage+"gsplit");
-      BufferedImage blue = features.GetLoadedImage(currentImage+"bsplit");
+      features.RGBSplit(currentImage, currentImage + "rsplit", currentImage + "gsplit",
+          currentImage + "bsplit");
+      BufferedImage red = features.GetLoadedImage(currentImage + "rsplit");
+      BufferedImage green = features.GetLoadedImage(currentImage + "gsplit");
+      BufferedImage blue = features.GetLoadedImage(currentImage + "bsplit");
       List<String> component = getRGBSplitImages(red, green, blue);
       if (component.size() == 3) {
-        features.SaveImage(component.get(0), currentImage+"rsplit");
-        features.SaveImage(component.get(1), currentImage+"gsplit");
-        features.SaveImage(component.get(2), currentImage+"bsplit");
+        features.SaveImage(component.get(0), currentImage + "rsplit");
+        features.SaveImage(component.get(1), currentImage + "gsplit");
+        features.SaveImage(component.get(2), currentImage + "bsplit");
       }
     });
     horizontalFlip.addActionListener(evt -> {
@@ -252,7 +278,7 @@ public class JFrameView extends JFrame implements IView {
     saveImageButton.addActionListener(evt -> {
       final JFileChooser fchooser = new JFileChooser(".");
       FileNameExtensionFilter filter = new FileNameExtensionFilter(
-              "Images", "jpg", "png", "bmp", "ppm", "jpeg");
+          "Images", "jpg", "png", "bmp", "ppm", "jpeg");
       fchooser.setFileFilter(filter);
       int retvalue = fchooser.showSaveDialog(JFrameView.this);
       if (retvalue == JFileChooser.APPROVE_OPTION) {
@@ -262,6 +288,12 @@ public class JFrameView extends JFrame implements IView {
     });
   }
 
+  /**
+   * This is a method used to display the histogram of the image that is currently being viewed by
+   * the user of the application.
+   *
+   * @param image the buffered image
+   */
   @Override
   public void drawHistogram(BufferedImage image) {
     int[] pixelData = image.getRGB(0, 0, image.getWidth(), image.getHeight(),
@@ -271,7 +303,7 @@ public class JFrameView extends JFrame implements IView {
     double[] blueHistogram = new double[256];
     double[] intensityHistogram = new double[256];
     int index = 0;
-    for (int i = 0; i < image.getHeight(); i++ ) {
+    for (int i = 0; i < image.getHeight(); i++) {
       for (int j = 0; j < image.getWidth(); j++) {
         Color color = new Color(pixelData[index++]);
         redHistogram[color.getRed()]++;
@@ -288,6 +320,8 @@ public class JFrameView extends JFrame implements IView {
     dataset.addSeries("Blue", getHistogramData(blueHistogram));
     dataset.addSeries("Intensity", getHistogramData(intensityHistogram));
 
+    Color[] colors = {Color.RED, Color.GREEN, Color.BLUE, Color.BLACK};
+
     JFreeChart chart = ChartFactory.createXYLineChart(
         "Histogram",
         "Pixel Values",
@@ -298,6 +332,11 @@ public class JFrameView extends JFrame implements IView {
         true,
         false
     );
+
+    XYPlot plot = (XYPlot) chart.getPlot();
+    for (int i = 0; i < colors.length; i++) {
+      plot.getRenderer().setSeriesPaint(i, colors[i]);
+    }
 
     chart.setBackgroundPaint(Color.WHITE);
 
@@ -310,6 +349,11 @@ public class JFrameView extends JFrame implements IView {
     histogramPanel.repaint();
   }
 
+  /**
+   * This is a method used to display the image and its corresponding histogram on the screen.
+   *
+   * @param features the feature interface
+   */
   private void loadImageOnScreen(Features features) {
     try {
       BufferedImage bufferedImage = features.GetLoadedImage(this.currentImage);
@@ -320,6 +364,12 @@ public class JFrameView extends JFrame implements IView {
     }
   }
 
+  /**
+   * This is a method used to display the popup for the user to select the component to obtain the
+   * greyscale image.
+   *
+   * @return the value component
+   */
   private String getValueComponent() {
     JRadioButton redButton = new JRadioButton("red-component");
     JRadioButton greenButton = new JRadioButton("green-component");
@@ -364,39 +414,44 @@ public class JFrameView extends JFrame implements IView {
     return component;
   }
 
+  /**
+   * This is a method used to handle the popup for the rgb combine operation.
+   *
+   * @return the image names of the three images to be combined
+   */
   private List<String> getRGBCombineImages() {
-    JButton load1 = new JButton("Select Red Scale Image");
-    JLabel load1Label = new JLabel("No File Selected");
-    JButton load2 = new JButton("Select Green Scale Image");
-    JLabel load2Label = new JLabel("No File Selected");
-    JButton load3 = new JButton("Select Blue Scale Image");
-    JLabel load3Label = new JLabel("No File Selected");
+    JButton loadRed = new JButton("Select Red Scale Image");
+    JLabel loadRedLabel = new JLabel("No File Selected");
+    JButton loadGreen = new JButton("Select Green Scale Image");
+    JLabel loadGreenLabel = new JLabel("No File Selected");
+    JButton loadBlue = new JButton("Select Blue Scale Image");
+    JLabel loadBlueLabel = new JLabel("No File Selected");
 
-    List<String> images =new ArrayList<String>();
+    List<String> images = new ArrayList<>();
 
     AtomicReference<String> redImagePath = new AtomicReference<>("");
     AtomicReference<String> greenImagePath = new AtomicReference<>("");
     AtomicReference<String> blueImagePath = new AtomicReference<>("");
 
-    showFilePicker(load1, load1Label, redImagePath);
-    showFilePicker(load2, load2Label, greenImagePath);
-    showFilePicker(load3, load3Label, blueImagePath);
+    showFilePicker(loadRed, loadRedLabel, redImagePath);
+    showFilePicker(loadGreen, loadGreenLabel, greenImagePath);
+    showFilePicker(loadBlue, loadBlueLabel, blueImagePath);
 
     JPanel panel = new JPanel();
     panel.setLayout(new GridLayout(0, 1));
     panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-    panel.add(load1);
-    panel.add(load1Label);
-    panel.add(load2);
-    panel.add(load2Label);
-    panel.add(load3);
-    panel.add(load3Label);
+    panel.add(loadRed);
+    panel.add(loadRedLabel);
+    panel.add(loadGreen);
+    panel.add(loadGreenLabel);
+    panel.add(loadBlue);
+    panel.add(loadBlueLabel);
 
     int result = JOptionPane.showConfirmDialog(this, panel, "Select Images to Combine",
-            JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE);
+        JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE);
     if (result == JOptionPane.OK_OPTION) {
-      if(redImagePath.toString().equals("") || greenImagePath.toString().equals("")
-      || blueImagePath.toString().equals("")) {
+      if (redImagePath.toString().equals("") || greenImagePath.toString().equals("")
+          || blueImagePath.toString().equals("")) {
         JOptionPane.showMessageDialog(this, "Please select all 3 images.");
       } else {
         images.add(redImagePath.toString());
@@ -408,73 +463,81 @@ public class JFrameView extends JFrame implements IView {
     return new ArrayList<>();
   }
 
+  /**
+   * This is a method used to handle the popup for the rgb split operation.
+   *
+   * @param red   the red component buffered image
+   * @param green the green component buffered image
+   * @param blue  the blue component buffered image
+   * @return the path where the three split images needs to be saved at
+   */
   private List<String> getRGBSplitImages(BufferedImage red, BufferedImage green,
-                                         BufferedImage blue) {
+      BufferedImage blue) {
 
-    List<String> images =new ArrayList<String>();
-    JButton load1 = new JButton("Save Red Scale Image");
-    JLabel load1Label = new JLabel("No Path Selected");
-    JButton load2 = new JButton("Save Green Scale Image");
-    JLabel load2Label = new JLabel("No Path Selected");
-    JButton load3 = new JButton("Save Blue Scale Image");
-    JLabel load3Label = new JLabel("No Path Selected");
+    List<String> images = new ArrayList<>();
+    JButton loadRed = new JButton("Save Red Scale Image");
+    JLabel loadRedLabel = new JLabel("No Path Selected");
+    JButton loadGreen = new JButton("Save Green Scale Image");
+    JLabel loadGreenLabel = new JLabel("No Path Selected");
+    JButton loadBlue = new JButton("Save Blue Scale Image");
+    JLabel loadBlueLabel = new JLabel("No Path Selected");
 
     AtomicReference<String> redImagePath = new AtomicReference<>("");
     AtomicReference<String> greenImagePath = new AtomicReference<>("");
     AtomicReference<String> blueImagePath = new AtomicReference<>("");
 
-    showSaveFilePicker(load1, load1Label, redImagePath);
-    showSaveFilePicker(load2, load2Label, greenImagePath);
-    showSaveFilePicker(load3, load3Label, blueImagePath);
+    showSaveFilePicker(loadRed, loadRedLabel, redImagePath);
+    showSaveFilePicker(loadGreen, loadGreenLabel, greenImagePath);
+    showSaveFilePicker(loadBlue, loadBlueLabel, blueImagePath);
 
-    JPanel imagePanel1 = new JPanel();
-    imagePanel1.setLayout(new BoxLayout(imagePanel1, BoxLayout.PAGE_AXIS));
-    JLabel imageLabel1 = new JLabel(new ImageIcon(red));
-    JScrollPane imageScrollPane1 = new JScrollPane(imageLabel1);
-    imageScrollPane1.setPreferredSize(
-            new Dimension(300, 400));
-    imagePanel1.add(imageScrollPane1);
-    imagePanel1.add(load1);
-    imagePanel1.add(load1Label);
-    imagePanel1.setBackground(Color.WHITE);
-    imagePanel1.setBorder(BorderFactory.createTitledBorder("Red Scale Image"));
+    JPanel imagePanelRed = new JPanel();
+    imagePanelRed.setLayout(new BoxLayout(imagePanelRed, BoxLayout.PAGE_AXIS));
+    JLabel imageLabelRed = new JLabel(new ImageIcon(red));
+    JScrollPane imageScrollPaneRed = new JScrollPane(imageLabelRed);
+    imageScrollPaneRed.setPreferredSize(
+        new Dimension(300, 400));
+    imagePanelRed.add(imageScrollPaneRed);
+    imagePanelRed.add(loadRed);
+    imagePanelRed.add(loadRedLabel);
+    imagePanelRed.setBackground(Color.WHITE);
+    imagePanelRed.setBorder(BorderFactory.createTitledBorder("Red Scale Image"));
 
-    JPanel imagePanel2 = new JPanel();
-    imagePanel2.setLayout(new BoxLayout(imagePanel2, BoxLayout.PAGE_AXIS));
-    JLabel imageLabel2 = new JLabel(new ImageIcon(green));
-    JScrollPane imageScrollPane2 = new JScrollPane(imageLabel2);
-    imageScrollPane2.setPreferredSize(
-            new Dimension(300, 400));
-    imagePanel2.add(imageScrollPane2);
-    imagePanel2.setBackground(Color.WHITE);
-    imagePanel2.setBorder(BorderFactory.createTitledBorder("Green Scale Image"));
-    imagePanel2.add(load2);
-    imagePanel2.add(load2Label);
+    JPanel imagePanelGreen = new JPanel();
+    imagePanelGreen.setLayout(new BoxLayout(imagePanelGreen, BoxLayout.PAGE_AXIS));
+    JLabel imageLabelGreen = new JLabel(new ImageIcon(green));
+    JScrollPane imageScrollPaneGreen = new JScrollPane(imageLabelGreen);
+    imageScrollPaneGreen.setPreferredSize(
+        new Dimension(300, 400));
+    imagePanelGreen.add(imageScrollPaneGreen);
+    imagePanelGreen.setBackground(Color.WHITE);
+    imagePanelGreen.setBorder(BorderFactory.createTitledBorder("Green Scale Image"));
+    imagePanelGreen.add(loadGreen);
+    imagePanelGreen.add(loadGreenLabel);
 
-    JPanel imagePanel3 = new JPanel();
-    imagePanel3.setLayout(new BoxLayout(imagePanel3, BoxLayout.PAGE_AXIS));
-    JLabel imageLabel3 = new JLabel(new ImageIcon(blue));
-    JScrollPane imageScrollPane3 = new JScrollPane(imageLabel3);
-    imageScrollPane3.setPreferredSize(
-            new Dimension(300, 400));
-    imagePanel3.add(imageScrollPane3);
-    imagePanel3.setBackground(Color.WHITE);
-    imagePanel3.setBorder(BorderFactory.createTitledBorder("Blue Scale Image"));
-    imagePanel3.add(load3);
-    imagePanel3.add(load3Label);
+    JPanel imagePanelBlue = new JPanel();
+    imagePanelBlue.setLayout(new BoxLayout(imagePanelBlue, BoxLayout.PAGE_AXIS));
+    JLabel imageLabelBlue = new JLabel(new ImageIcon(blue));
+    JScrollPane imageScrollPaneBlue = new JScrollPane(imageLabelBlue);
+    imageScrollPaneBlue.setPreferredSize(
+        new Dimension(300, 400));
+    imagePanelBlue.add(imageScrollPaneBlue);
+    imagePanelBlue.setBackground(Color.WHITE);
+    imagePanelBlue.setBorder(BorderFactory.createTitledBorder("Blue Scale Image"));
+    imagePanelBlue.add(loadBlue);
+    imagePanelBlue.add(loadBlueLabel);
 
     JPanel panel = new JPanel();
     panel.setLayout(new GridLayout(0, 1));
     panel.setLayout(new BorderLayout());
-    panel.add(imagePanel1, BorderLayout.LINE_START);
-    panel.add(imagePanel2, BorderLayout.CENTER);
-    panel.add(imagePanel3, BorderLayout.LINE_END);
+    panel.add(imagePanelRed, BorderLayout.LINE_START);
+    panel.add(imagePanelGreen, BorderLayout.CENTER);
+    panel.add(imagePanelBlue, BorderLayout.LINE_END);
 
     int result = JOptionPane.showConfirmDialog(this, panel, "Save Split Images",
-            JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE);
+        JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE);
     if (result == JOptionPane.OK_OPTION) {
-      if(redImagePath.toString().equals("") || greenImagePath.toString().equals("")
-              || blueImagePath.toString().equals("")) {
+      if (redImagePath.toString().equals("") || greenImagePath.toString().equals("")
+          || blueImagePath.toString().equals("")) {
         JOptionPane.showMessageDialog(this, "Please select path to save all 3 images.");
       } else {
         images.add(redImagePath.toString());
@@ -486,37 +549,61 @@ public class JFrameView extends JFrame implements IView {
     return new ArrayList<>();
   }
 
-  private void showFilePicker(JButton load1, JLabel load1Label, AtomicReference<String> redImagePath) {
-    load1.addActionListener(evt -> {
+  /**
+   * This is a method used to show the popup for the user to load the image on to the screen.
+   *
+   * @param load      the button upon clicking which the user can select the image and load it
+   * @param loadLabel the label for the popup loader
+   * @param imagePath the path selected by the user
+   */
+  private void showFilePicker(JButton load, JLabel loadLabel,
+      AtomicReference<String> imagePath) {
+    load.addActionListener(evt -> {
       final JFileChooser jFileChooser = new JFileChooser(".");
       FileNameExtensionFilter filter = new FileNameExtensionFilter(
-              "Images", "jpg", "png", "bmp", "ppm", "jpeg");
+          "Images", "jpg", "png", "bmp", "ppm", "jpeg");
       jFileChooser.setFileFilter(filter);
       int state = jFileChooser.showOpenDialog(JFrameView.this);
       if (state == JFileChooser.APPROVE_OPTION) {
         File f = jFileChooser.getSelectedFile();
-        redImagePath.set(f.getAbsolutePath());
-        load1Label.setText(f.getAbsolutePath());
+        imagePath.set(f.getAbsolutePath());
+        loadLabel.setText(f.getAbsolutePath());
       }
     });
   }
 
-  private void showSaveFilePicker(JButton load1, JLabel load1Label, AtomicReference<String> redImagePath) {
-    load1.addActionListener(evt -> {
+  /**
+   * This is a method used to show the popup for the user to save the image displayed on the
+   * screen.
+   *
+   * @param load      the button upon clicking which the user can save the image
+   * @param loadLabel the label for the popup loader
+   * @param imagePath the path selected by the user
+   */
+  private void showSaveFilePicker(JButton load, JLabel loadLabel,
+      AtomicReference<String> imagePath) {
+    load.addActionListener(evt -> {
       final JFileChooser jFileChooser = new JFileChooser(".");
       FileNameExtensionFilter filter = new FileNameExtensionFilter(
-              "Images", "jpg", "png", "bmp", "ppm", "jpeg");
+          "Images", "jpg", "png", "bmp", "ppm", "jpeg");
       jFileChooser.setFileFilter(filter);
       int state = jFileChooser.showSaveDialog(JFrameView.this);
       if (state == JFileChooser.APPROVE_OPTION) {
         File f = jFileChooser.getSelectedFile();
-        redImagePath.set(f.getAbsolutePath());
+        imagePath.set(f.getAbsolutePath());
         String[] splitPath = f.getAbsolutePath().split("/");
-        load1Label.setText( ".../" + splitPath[splitPath.length - 1]);
+        loadLabel.setText(".../" + splitPath[splitPath.length - 1]);
       }
     });
   }
 
+  /**
+   * This is a helper method used to get the frequency histogram array data used to plot the
+   * histogram.
+   *
+   * @param frequency the frequency array
+   * @return the frequency histogram array data
+   */
   private double[][] getHistogramData(double[] frequency) {
     double[][] histogramArray = new double[2][256];
     for (int i = 0; i < 256; i++) {
