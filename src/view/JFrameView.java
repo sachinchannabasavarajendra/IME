@@ -1,8 +1,6 @@
 package view;
 
 import static java.util.UUID.randomUUID;
-import static view.helpers.Histogram.createHistogramChartPanel;
-import static view.helpers.Histogram.getMaxValueToScale;
 
 import controller.Features;
 import service.imagefilesaver.SaveHelper;
@@ -17,6 +15,11 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.xy.DefaultXYDataset;
 
 public class JFrameView extends JFrame implements IView {
 
@@ -263,10 +266,10 @@ public class JFrameView extends JFrame implements IView {
   public void drawHistogram(BufferedImage image) {
     int[] pixelData = image.getRGB(0, 0, image.getWidth(), image.getHeight(),
         new int[image.getWidth() * image.getHeight()], 0, image.getWidth());
-    int[] redHistogram = new int[256];
-    int[] greenHistogram = new int[256];
-    int[] blueHistogram = new int[256];
-    int[] intensityHistogram = new int[256];
+    double[] redHistogram = new double[256];
+    double[] greenHistogram = new double[256];
+    double[] blueHistogram = new double[256];
+    double[] intensityHistogram = new double[256];
     int index = 0;
     for (int i = 0; i < image.getHeight(); i++ ) {
       for (int j = 0; j < image.getWidth(); j++) {
@@ -279,12 +282,26 @@ public class JFrameView extends JFrame implements IView {
       }
     }
 
-    int maxValue = getMaxValueToScale(redHistogram, greenHistogram, blueHistogram,
-        intensityHistogram);
+    DefaultXYDataset dataset = new DefaultXYDataset();
+    dataset.addSeries("Red", getHistogramData(redHistogram));
+    dataset.addSeries("Green", getHistogramData(greenHistogram));
+    dataset.addSeries("Blue", getHistogramData(blueHistogram));
+    dataset.addSeries("Intensity", getHistogramData(intensityHistogram));
 
-    JPanel chartPanel = createHistogramChartPanel(redHistogram, greenHistogram, blueHistogram,
-        intensityHistogram, maxValue);
+    JFreeChart chart = ChartFactory.createXYLineChart(
+        "Histogram",
+        "Pixel Values",
+        "Frequency",
+        dataset,
+        PlotOrientation.VERTICAL,
+        true,
+        true,
+        false
+    );
 
+    chart.setBackgroundPaint(Color.WHITE);
+
+    ChartPanel chartPanel = new ChartPanel(chart);
     chartPanel.setPreferredSize(new Dimension(550, 360));
 
     histogramPanel.removeAll();
@@ -498,5 +515,14 @@ public class JFrameView extends JFrame implements IView {
         load1Label.setText( ".../" + splitPath[splitPath.length - 1]);
       }
     });
+  }
+
+  private double[][] getHistogramData(double[] frequency) {
+    double[][] histogramArray = new double[2][256];
+    for (int i = 0; i < 256; i++) {
+      histogramArray[0][i] = i;
+      histogramArray[1][i] = frequency[i];
+    }
+    return histogramArray;
   }
 }
