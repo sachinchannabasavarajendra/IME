@@ -41,21 +41,20 @@ import org.jfree.data.xy.DefaultXYDataset;
 public class JFrameView extends JFrame implements IView {
 
   private final JPanel histogramPanel;
-  private JLabel imageLabel;
-  private JScrollPane imageScrollPane;
-  private JButton loadImageButton;
-  private JButton saveImageButton;
-  private JButton blur;
-  private JButton brighten;
-  private JButton dither;
-  private JButton greyscale;
-  private JButton horizontalFlip;
-  private JButton verticalFlip;
-  private JButton rgbCombine;
-  private JButton rgbSplit;
-  private JButton greyscaleColorTransform;
-  private JButton sepiaColorTransform;
-  private JButton sharpen;
+  private final JLabel imageLabel;
+  private final JButton loadImageButton;
+  private final JButton saveImageButton;
+  private final JButton blur;
+  private final JButton brighten;
+  private final JButton dither;
+  private final JButton greyscale;
+  private final JButton horizontalFlip;
+  private final JButton verticalFlip;
+  private final JButton rgbCombine;
+  private final JButton rgbSplit;
+  private final JButton greyscaleColorTransform;
+  private final JButton sepiaColorTransform;
+  private final JButton sharpen;
   private String currentImage;
 
   /**
@@ -88,7 +87,7 @@ public class JFrameView extends JFrame implements IView {
     // Create the image panel
     JPanel imagePanel = new JPanel();
     imageLabel = new JLabel();
-    imageScrollPane = new JScrollPane(imageLabel);
+    JScrollPane imageScrollPane = new JScrollPane(imageLabel);
     imageScrollPane.setPreferredSize(
         new Dimension((int) screenSize.getWidth() - 600, (int) screenSize.getHeight() - 130));
     imagePanel.add(imageScrollPane);

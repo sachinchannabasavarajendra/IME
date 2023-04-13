@@ -38,7 +38,7 @@ public class GRIMEController implements Features {
     try {
       imeController.invokeCommand(inputCommand);
     } catch (Exception e) {
-      this.view.ShowErrorMessage(e.getMessage());
+      this.view.showErrorMessage(e.getMessage());
     }
   }
 
