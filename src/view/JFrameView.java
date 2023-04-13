@@ -162,13 +162,15 @@ public class JFrameView extends JFrame implements IView {
   @Override
   public void addFeatures(Features features) {
     loadImageButton.addActionListener(evt -> {
-      final JFileChooser jFileChooser = new JFileChooser(".");
-      FileNameExtensionFilter filter = new FileNameExtensionFilter(
-          "Images", "jpg", "png", "bmp", "ppm", "jpeg");
-      jFileChooser.setFileFilter(filter);
-      int state = jFileChooser.showOpenDialog(JFrameView.this);
-      if (state == JFileChooser.APPROVE_OPTION) {
-        File f = jFileChooser.getSelectedFile();
+        String filePath = new File("").getAbsolutePath();
+        final JFileChooser jFileChooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+            "Images", "jpg", "png", "bmp", "ppm", "jpeg");
+        jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        jFileChooser.setFileFilter(filter);
+        int state = jFileChooser.showOpenDialog(JFrameView.this);
+        if (state == JFileChooser.APPROVE_OPTION) {
+          File f = jFileChooser.getSelectedFile();
         this.currentImage = randomUUID().toString();
         String imagePath = f.getAbsolutePath();
         features.loadImage(imagePath, currentImage);
