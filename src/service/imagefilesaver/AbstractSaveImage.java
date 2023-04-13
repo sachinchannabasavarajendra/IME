@@ -25,16 +25,7 @@ public abstract class AbstractSaveImage implements SaveImage {
   protected void saveImage(String format, String imagePath, IMEModel model)
       throws IOException {
     try {
-      BufferedImage image = new BufferedImage(model.getImageWidth(), model.getImageHeight(),
-          BufferedImage.TYPE_INT_RGB);
-      IPixel[][] imageData = model.getImageData();
-      for (int i = 0; i < model.getImageHeight(); i++) {
-        for (int j = 0; j < model.getImageWidth(); j++) {
-          Color color = new Color(imageData[i][j].getRedComponent(),
-              imageData[i][j].getGreenComponent(), imageData[i][j].getBlueComponent());
-          image.setRGB(j, i, color.getRGB());
-        }
-      }
+      BufferedImage image = SaveHelper.createRGBBufferedImage(model);
       File output = new File(imagePath);
       output.mkdirs();
       ImageIO.write(image, format, output);

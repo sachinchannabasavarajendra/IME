@@ -1,7 +1,10 @@
 package controller;
 
-public interface Features {
+import java.awt.image.BufferedImage;
+import java.util.List;
 
+public interface Features {
+  BufferedImage GetLoadedImage(String name);
   void LoadImage(String imagePath, String imageName);
 
   void BlurImage(String src, String dest);
@@ -23,4 +26,8 @@ public interface Features {
   void Sharpen(String src, String dest);
 
   void SaveImage(String imagePath, String src);
+
+  void RGBCombine(String dest, List<String> images);
+
+  void RGBSplit(String src, String red, String green, String blue);
 }
