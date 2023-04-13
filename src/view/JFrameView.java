@@ -14,19 +14,8 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
-import javax.swing.AbstractButton;
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JScrollPane;
+
+import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -590,10 +579,10 @@ public class JFrameView extends JFrame implements IView {
       int state = jFileChooser.showSaveDialog(JFrameView.this);
       if (state == JFileChooser.APPROVE_OPTION) {
         File f = jFileChooser.getSelectedFile();
-        redImagePath.set(f.getAbsolutePath());
+        imagePath.set(f.getAbsolutePath());
         String path = f.getAbsolutePath().replace("\\", "/");
         String[] splitPath = path.split("/");
-        load1Label.setText( ".../" + splitPath[splitPath.length - 1]);
+        loadLabel.setText( ".../" + splitPath[splitPath.length - 1]);
       }
     });
   }
@@ -616,6 +605,7 @@ public class JFrameView extends JFrame implements IView {
 
   @Override
   public void ShowErrorMessage(String message) {
-    JOptionPane.showMessageDialog(this, message);
+    JOptionPane.showMessageDialog(this, message, "Error!", JOptionPane.ERROR_MESSAGE,
+            new ImageIcon(getClass().getResource("error.png")));
   }
 }
