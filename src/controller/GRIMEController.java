@@ -27,7 +27,7 @@ public class GRIMEController implements Features {
   /**
    * This is a method used to set up the view to be displayed to the user.
    *
-   * @param view the view implementation object
+   * @param v the view implementation object
    */
   public void setView(IView view) {
     this.view = view;
