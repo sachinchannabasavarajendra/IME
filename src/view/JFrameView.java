@@ -14,8 +14,19 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
-
-import javax.swing.*;
+import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -174,13 +185,13 @@ public class JFrameView extends JFrame implements IView {
         File f = jFileChooser.getSelectedFile();
         this.currentImage = randomUUID().toString();
         String imagePath = f.getAbsolutePath();
-        features.LoadImage(imagePath, currentImage);
+        features.loadImage(imagePath, currentImage);
         this.loadImageOnScreen(features);
       }
     });
     blur.addActionListener(evt -> {
       String destName = this.currentImage + "blur";
-      features.BlurImage(this.currentImage, destName);
+      features.blurImage(this.currentImage, destName);
       this.currentImage = destName;
       this.loadImageOnScreen(features);
     });
@@ -190,7 +201,7 @@ public class JFrameView extends JFrame implements IView {
           "Enter a value to alter the brightness of the image:");
       try {
         int value = Integer.parseInt(input);
-        features.Brighten(String.valueOf(value), this.currentImage, destName);
+        features.brighten(String.valueOf(value), this.currentImage, destName);
         this.currentImage = destName;
         this.loadImageOnScreen(features);
       } catch (NumberFormatException ex) {
@@ -199,7 +210,7 @@ public class JFrameView extends JFrame implements IView {
     });
     dither.addActionListener(evt -> {
       String destName = this.currentImage + "dither";
-      features.Dither(this.currentImage, destName);
+      features.dither(this.currentImage, destName);
       this.currentImage = destName;
       this.loadImageOnScreen(features);
     });
@@ -207,7 +218,7 @@ public class JFrameView extends JFrame implements IView {
       String destName = this.currentImage + "greyscale";
       String component = getValueComponent();
       if (component != null) {
-        features.Greyscale(this.currentImage, destName, component);
+        features.greyscale(this.currentImage, destName, component);
         this.currentImage = destName;
         this.loadImageOnScreen(features);
       }
@@ -216,51 +227,51 @@ public class JFrameView extends JFrame implements IView {
       String destName = this.currentImage + "combine";
       List<String> component = getRGBCombineImages();
       if (component.size() == 3) {
-        features.RGBCombine(destName, component);
+        features.rgbCombine(destName, component);
         this.currentImage = destName;
         this.loadImageOnScreen(features);
       }
     });
     rgbSplit.addActionListener(evt -> {
-      features.RGBSplit(currentImage, currentImage + "rsplit", currentImage + "gsplit",
+      features.rgbSplit(currentImage, currentImage + "rsplit", currentImage + "gsplit",
           currentImage + "bsplit");
-      BufferedImage red = features.GetLoadedImage(currentImage + "rsplit");
-      BufferedImage green = features.GetLoadedImage(currentImage + "gsplit");
-      BufferedImage blue = features.GetLoadedImage(currentImage + "bsplit");
+      BufferedImage red = features.getLoadedImage(currentImage + "rsplit");
+      BufferedImage green = features.getLoadedImage(currentImage + "gsplit");
+      BufferedImage blue = features.getLoadedImage(currentImage + "bsplit");
       List<String> component = getRGBSplitImages(red, green, blue);
       if (component.size() == 3) {
-        features.SaveImage(component.get(0), currentImage + "rsplit");
-        features.SaveImage(component.get(1), currentImage + "gsplit");
-        features.SaveImage(component.get(2), currentImage + "bsplit");
+        features.saveImage(component.get(0), currentImage + "rsplit");
+        features.saveImage(component.get(1), currentImage + "gsplit");
+        features.saveImage(component.get(2), currentImage + "bsplit");
       }
     });
     horizontalFlip.addActionListener(evt -> {
       String destName = this.currentImage + "hf";
-      features.HorizontalFlip(this.currentImage, destName);
+      features.horizontalFlip(this.currentImage, destName);
       this.currentImage = destName;
       this.loadImageOnScreen(features);
     });
     verticalFlip.addActionListener(evt -> {
       String destName = this.currentImage + "vf";
-      features.VerticalFlip(this.currentImage, destName);
+      features.verticalFlip(this.currentImage, destName);
       this.currentImage = destName;
       this.loadImageOnScreen(features);
     });
     greyscaleColorTransform.addActionListener(evt -> {
       String destName = this.currentImage + "greyscale";
-      features.GreyscaleColorTransform(this.currentImage, destName);
+      features.greyscaleColorTransform(this.currentImage, destName);
       this.currentImage = destName;
       this.loadImageOnScreen(features);
     });
     sepiaColorTransform.addActionListener(evt -> {
       String destName = this.currentImage + "sepia";
-      features.Sepia(this.currentImage, destName);
+      features.sepiaColorTransform(this.currentImage, destName);
       this.currentImage = destName;
       this.loadImageOnScreen(features);
     });
     sharpen.addActionListener(evt -> {
       String destName = this.currentImage + "sharpen";
-      features.Sharpen(this.currentImage, destName);
+      features.sharpen(this.currentImage, destName);
       this.currentImage = destName;
       this.loadImageOnScreen(features);
     });
@@ -272,7 +283,7 @@ public class JFrameView extends JFrame implements IView {
       int retvalue = fchooser.showSaveDialog(JFrameView.this);
       if (retvalue == JFileChooser.APPROVE_OPTION) {
         File f = fchooser.getSelectedFile();
-        features.SaveImage(f.getAbsolutePath(), this.currentImage);
+        features.saveImage(f.getAbsolutePath(), this.currentImage);
       }
     });
   }
@@ -345,7 +356,7 @@ public class JFrameView extends JFrame implements IView {
    */
   private void loadImageOnScreen(Features features) {
     try {
-      BufferedImage bufferedImage = features.GetLoadedImage(this.currentImage);
+      BufferedImage bufferedImage = features.getLoadedImage(this.currentImage);
       imageLabel.setIcon(new ImageIcon(bufferedImage));
       drawHistogram(bufferedImage);
     } catch (Exception e) {

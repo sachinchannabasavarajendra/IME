@@ -148,7 +148,7 @@ public class IMEControllerImpl implements IMEController {
   }
 
   @Override
-  public BufferedImage GetLoadedImage(String name) {
+  public BufferedImage getLoadedImage(String name) {
     IMEModel image = this.objectMap.get(name);
     return SaveHelper.createRGBBufferedImage(image);
   }
