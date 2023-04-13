@@ -511,7 +511,8 @@ public class JFrameView extends JFrame implements IView {
       if (state == JFileChooser.APPROVE_OPTION) {
         File f = jFileChooser.getSelectedFile();
         redImagePath.set(f.getAbsolutePath());
-        String[] splitPath = f.getAbsolutePath().split("/");
+        String path = f.getAbsolutePath().replace("\\", "/");
+        String[] splitPath = path.split("/");
         load1Label.setText( ".../" + splitPath[splitPath.length - 1]);
       }
     });
@@ -524,5 +525,10 @@ public class JFrameView extends JFrame implements IView {
       histogramArray[1][i] = frequency[i];
     }
     return histogramArray;
+  }
+
+  @Override
+  public void ShowErrorMessage(String message) {
+    JOptionPane.showMessageDialog(this, message);
   }
 }
