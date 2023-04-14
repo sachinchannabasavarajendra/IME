@@ -1,3 +1,4 @@
+import controller.Features;
 import controller.GRIMEController;
 import controller.IMEController;
 import controller.IMEControllerImpl;
@@ -20,7 +21,7 @@ public class Main {
    */
   public static void main(String[] args) {
     IMEController imeController;
-    GRIMEController grimeController;
+    Features grimeController;
     try {
       if (args.length == 2 && args[0].equalsIgnoreCase("-file")) {
         imeController = new IMEControllerImpl(new InputStreamReader(new FileInputStream(args[1])),
@@ -30,9 +31,8 @@ public class Main {
         imeController = new IMEControllerImpl(new InputStreamReader(System.in), System.out);
         imeController.execute();
       } else if (args.length == 0) {
-        grimeController = new GRIMEController();
         IView view = new JFrameView("Image Processing Application");
-        grimeController.setView(view);
+        grimeController = new GRIMEController(view);
       } else {
         System.out.println("Invalid command-line arguments.");
         System.exit(1);

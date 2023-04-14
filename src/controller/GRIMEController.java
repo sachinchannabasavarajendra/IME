@@ -20,16 +20,8 @@ public class GRIMEController implements Features {
   /**
    * This is a constructor used to instantiate the above class.
    */
-  public GRIMEController() {
+  public GRIMEController(IView view) {
     imeController = new IMEControllerImpl(new InputStreamReader(System.in), System.out);
-  }
-
-  /**
-   * This is a method used to set up the view to be displayed to the user.
-   *
-   * @param v the view implementation object
-   */
-  public void setView(IView view) {
     this.view = view;
     view.addFeatures(this);
   }

@@ -14,8 +14,20 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
-
-import javax.swing.*;
+import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -31,8 +43,6 @@ public class JFrameView extends JFrame implements IView {
 
   private final JPanel histogramPanel;
   private final JLabel imageLabel;
-  private final JPanel imagePanel;
-  private final JScrollPane imageScrollPane;
   private final JButton loadImageButton;
   private final JButton saveImageButton;
   private final JButton blur;
@@ -76,10 +86,10 @@ public class JFrameView extends JFrame implements IView {
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
     // Create the image panel
-    imagePanel = new JPanel();
+    JPanel imagePanel = new JPanel();
     imagePanel.setLayout(new BoxLayout(imagePanel, BoxLayout.PAGE_AXIS));
     imageLabel = new JLabel();
-    imageScrollPane = new JScrollPane(imageLabel);
+    JScrollPane imageScrollPane = new JScrollPane(imageLabel);
     imageLabel.setHorizontalAlignment(SwingConstants.CENTER);
     imagePanel.add(imageScrollPane);
     imagePanel.setBackground(Color.WHITE);

@@ -1,58 +1,60 @@
 package controller;
 
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
-import java.awt.*;
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.Reader;
-import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import javax.imageio.ImageIO;
+import org.junit.Test;
+import view.IView;
+import view.JFrameView;
 
-import static org.junit.Assert.*;
-
+/**
+ * A JUnit test class for the GRIMEController class for the view.
+ */
 public class GRIMEControllerTest {
-  GRIMEController grimeController;
+
+  private final Features grimeController;
 
   public GRIMEControllerTest() {
-    grimeController = new GRIMEController();
+    IView view = new JFrameView("Image Processing Application");
+    grimeController = new GRIMEController(view);
   }
 
   @Test
-  public void loadImage() throws Exception{
+  public void loadImage() throws Exception {
     grimeController.loadImage("./input/koala.ppm", "test");
     grimeController.saveImage("./output/koalaSave.ppm", "test");
     assertArrayEquals(Files.readAllBytes(Path.of("./input/koala.ppm")),
-            Files.readAllBytes(Path.of("output/koalaSave.ppm")));
+        Files.readAllBytes(Path.of("output/koalaSave.ppm")));
   }
 
   @Test
-  public void blurImage() throws Exception{
+  public void blurImage() throws Exception {
     grimeController.loadImage("./input/ms.png", "test");
     grimeController.blurImage("test", "testBlur");
     grimeController.saveImage("./output/msBlur.png", "testBlur");
     assertArrayEquals(Files.readAllBytes(Path.of("./input/msb.png")),
-            Files.readAllBytes(Path.of("output/msBlur.png")));
+        Files.readAllBytes(Path.of("output/msBlur.png")));
   }
 
   @Test
-  public void brighten() throws Exception{
+  public void brighten() throws Exception {
     grimeController.loadImage("./input/koala.ppm", "test");
     grimeController.brighten("100", "test", "testBlur");
     grimeController.saveImage("./output/koalaB.ppm", "testBlur");
     assertArrayEquals(Files.readAllBytes(Path.of("./input/koala-brighten.ppm")),
-            Files.readAllBytes(Path.of("output/koalaB.ppm")));
+        Files.readAllBytes(Path.of("output/koalaB.ppm")));
   }
 
   @Test
-  public void dither() throws Exception{
+  public void dither() throws Exception {
     grimeController.loadImage("./input/ms.jpg", "test");
     grimeController.dither("test", "testBlur");
     grimeController.saveImage("output/msd.png", "testBlur");
@@ -64,8 +66,7 @@ public class GRIMEControllerTest {
   }
 
   @Test
-  public void greyscale() throws Exception{
-
+  public void greyscale() throws Exception {
     grimeController.loadImage("input/koala.ppm", "test");
     grimeController.greyscale("test", "testBlur", "red-component");
     grimeController.saveImage("output/ms-red.png", "testBlur");
@@ -74,12 +75,10 @@ public class GRIMEControllerTest {
     BufferedImage img2 = ImageIO.read(new File("output/ms-red.png"));
 
     assertEquals(0.0, compareImages(img1, img2), 0.0);
-
   }
 
   @Test
   public void greyscaleColorTransform() throws Exception {
-
     grimeController.loadImage("input/koala.ppm", "test");
     grimeController.greyscaleColorTransform("test", "testBlur");
     grimeController.saveImage("output/koalaLuma.bmp", "testBlur");
@@ -88,7 +87,6 @@ public class GRIMEControllerTest {
     BufferedImage img2 = ImageIO.read(new File("output/koalaLuma.bmp"));
 
     assertEquals(0.0, compareImages(img1, img2), 0.0);
-
   }
 
   @Test
@@ -104,7 +102,7 @@ public class GRIMEControllerTest {
   }
 
   @Test
-  public void verticalFlip() throws Exception{
+  public void verticalFlip() throws Exception {
     grimeController.loadImage("input/ms.bmp", "test");
     grimeController.verticalFlip("test", "testBlur");
     grimeController.saveImage("output/msV.png", "testBlur");
@@ -116,8 +114,7 @@ public class GRIMEControllerTest {
   }
 
   @Test
-  public void sepiaColorTransform() throws Exception{
-
+  public void sepiaColorTransform() throws Exception {
     grimeController.loadImage("input/ms.bmp", "test");
     grimeController.sepiaColorTransform("test", "testBlur");
     grimeController.saveImage("output/mssepia.png", "testBlur");
@@ -141,11 +138,11 @@ public class GRIMEControllerTest {
   }
 
   @Test
-  public void rgbSplitandCombine() throws Exception{
+  public void rgbSplitAndCombine() throws Exception {
     grimeController.loadImage("input/koala.ppm", "test");
     grimeController.rgbSplit("test", "testRed", "testGreen", "testBlue");
     grimeController.rgbCombine("testBlur", new ArrayList<String>(
-            Arrays.asList("input/koala-red.ppm", "input/koala-green.ppm", "input/koala-blue.ppm")));
+        Arrays.asList("input/koala-red.ppm", "input/koala-green.ppm", "input/koala-blue.ppm")));
     grimeController.saveImage("output/msCombine.bmp", "testBlur");
 
     BufferedImage img1 = ImageIO.read(new File("input/msCombine.png"));

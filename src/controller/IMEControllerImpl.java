@@ -32,10 +32,10 @@ import service.imagefilesaver.SaveHelper;
  */
 public class IMEControllerImpl implements IMEController {
 
-  protected final Map<String, IMEModel> objectMap;
+  private final Map<String, IMEModel> objectMap;
   private final Readable in;
   private final Appendable out;
-  protected final Map<String, Function<String[], IMEModelCommand>> knownCommands;
+  private final Map<String, Function<String[], IMEModelCommand>> knownCommands;
 
   /**
    * This is a constructor which is used to instantiate the above class.
