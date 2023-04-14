@@ -172,15 +172,15 @@ public class JFrameView extends JFrame implements IView {
   @Override
   public void addFeatures(Features features) {
     loadImageButton.addActionListener(evt -> {
-        String filePath = new File("").getAbsolutePath();
-        final JFileChooser jFileChooser = new JFileChooser();
-        FileNameExtensionFilter filter = new FileNameExtensionFilter(
-            "Images", "jpg", "png", "bmp", "ppm", "jpeg");
-        jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        jFileChooser.setFileFilter(filter);
-        int state = jFileChooser.showOpenDialog(JFrameView.this);
-        if (state == JFileChooser.APPROVE_OPTION) {
-          File f = jFileChooser.getSelectedFile();
+      String filePath = new File("").getAbsolutePath();
+      final JFileChooser jFileChooser = new JFileChooser();
+      FileNameExtensionFilter filter = new FileNameExtensionFilter(
+          "Images", "jpg", "png", "bmp", "ppm", "jpeg");
+      jFileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+      jFileChooser.setFileFilter(filter);
+      int state = jFileChooser.showOpenDialog(JFrameView.this);
+      if (state == JFileChooser.APPROVE_OPTION) {
+        File f = jFileChooser.getSelectedFile();
         this.currentImage = randomUUID().toString();
         String imagePath = f.getAbsolutePath();
         features.loadImage(imagePath, currentImage);
@@ -591,7 +591,7 @@ public class JFrameView extends JFrame implements IView {
         imagePath.set(f.getAbsolutePath());
         String path = f.getAbsolutePath().replace("\\", "/");
         String[] splitPath = path.split("/");
-        loadLabel.setText( ".../" + splitPath[splitPath.length - 1]);
+        loadLabel.setText(".../" + splitPath[splitPath.length - 1]);
       }
     });
   }
@@ -615,6 +615,6 @@ public class JFrameView extends JFrame implements IView {
   @Override
   public void showErrorMessage(String message) {
     JOptionPane.showMessageDialog(this, message, "Error!", JOptionPane.ERROR_MESSAGE,
-            new ImageIcon(getClass().getResource("error.png")));
+        new ImageIcon(getClass().getResource("error.png")));
   }
 }
